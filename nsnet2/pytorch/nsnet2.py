@@ -61,6 +61,8 @@ class NsNet2_npy(torch.nn.Module):
         # fully connected 1
         fc1MatMul = np.matmul(self.onnxMatMul_166, x)
         fc1Add = np.add(fc1MatMul, self.fc1bias)
+        print(f"max: {max(self.fc1bias)}")
+        print(f"min: {min(self.fc1bias)}")
         
         # gru 1
         gru1_a_ = np.matmul(self.Wir_1, fc1Add)
