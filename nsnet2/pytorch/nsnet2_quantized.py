@@ -26,7 +26,9 @@ class Q_NsNet2_npy(torch.nn.Module):
         super(Q_NsNet2_npy, self).__init__()
 
         self.calib = {}
-        self.calib['x'] = CalibrationParam(8, False, -2.5095, 2.2181)
+        self.calib['x'] = CalibrationParam(8, False, -0.0025095, 0.0022181)
+        self.calib['onnxMatMul_166'] = CalibrationParam(8, False, -0.22075387835502625, 0.208940327167511)
+        self.calib['fc1MatMul'] = CalibrationParam(8, False, -0.00291599917, 0.0017367251)
 
         # weights
 
@@ -83,13 +85,26 @@ class Q_NsNet2_npy(torch.nn.Module):
         x = x.squeeze()
         c = self.calib['x']
         x_q = self._quantize(x, c.S(), c.Z())
-        xd = self._dequantize(x_q, c.S(), c.Z())
 
         h1 = h1.squeeze()
         h2 = h2.squeeze()
 
         # fully connected 1
+        ca = self.calib['onnxMatMul_166']
+        cb = self.calib['x']
+        cy = self.calib['fc1MatMul']
+        onnxMatMul_166_q = self._quantize(self.onnxMatMul_166, ca.S(), ca.Z())
+        
+        fc1MatMul_q = np.round((ca.S()*cb.S() / cy.S()) * ( np.matmul(onnxMatMul_166_q, x_q)[:,None] -cb.Z()*onnxMatMul_166_q -ca.Z()*x_q + ca.Z()*cb.Z() ) + cy.Z())
+        fc1MatMul_q = np.round((ca.S()*cb.S() / cy.S()) * ( np.matmul(onnxMatMul_166_q, x_q)[:,None] -cb.Z()*onnxMatMul_166_q -ca.Z()*x_q + ca.Z()*cb.Z() ) + cy.Z())
+        fc1MatMul_q = np.round(
+            (ca.S()*cb.S() / cy.S()) * np.matmul(onnxMatMul_166_q - ca.Z(), x_q - cb.Z()) + cy.Z()
+        )
+        #print(self._dequantize(fc1MatMul_q, cy.S(), cy.Z()))
         fc1MatMul = np.matmul(self.onnxMatMul_166, x)
+
+        # matmul
+
         fc1Add = np.add(fc1MatMul, self.fc1bias)
         
         # gru 1
