@@ -40,7 +40,13 @@ class Q_NsNet2_npy(torch.nn.Module):
 
         # weights
 
+        # onnxMatMul_166
         self.onnxMatMul_166 = np.load('onnx__MatMul_166.npy').transpose()
+        c = self.calib['onnxMatMul_166']
+        self.onnxMatMul_166_q = self._quantize(self.onnxMatMul_166, c.S(), c.Z())
+        self._compare(self.onnxMatMul_166, self.onnxMatMul_166_q, c)
+        
+        
         self.fc1bias = np.load('fc1_bias.npy')
 
         self.onnxGRU_184 = np.load('onnx__GRU_184.npy')
@@ -108,12 +114,8 @@ class Q_NsNet2_npy(torch.nn.Module):
         ca = self.calib['onnxMatMul_166']
         cb = self.calib['x']
         cy = self.calib['fc1MatMul']
-        onnxMatMul_166_q = self._quantize(self.onnxMatMul_166, ca.S(), ca.Z())
-        
-        #fc1MatMul_q = np.round((ca.S()*cb.S() / cy.S()) * ( np.matmul(onnxMatMul_166_q, x_q)[:,None] -cb.Z()*onnxMatMul_166_q -ca.Z()*x_q + ca.Z()*cb.Z() ) + cy.Z())
-        #fc1MatMul_q = np.round((ca.S()*cb.S() / cy.S()) * ( np.matmul(onnxMatMul_166_q, x_q)[:,None] -cb.Z()*onnxMatMul_166_q -ca.Z()*x_q + ca.Z()*cb.Z() ) + cy.Z())
         fc1MatMul_q = np.round(
-            (ca.S()*cb.S() / cy.S()) * np.matmul(onnxMatMul_166_q - ca.Z(), x_q - cb.Z()) + cy.Z()
+            (ca.S()*cb.S() / cy.S()) * np.matmul(self.onnxMatMul_166_q - ca.Z(), x_q - cb.Z()) + cy.Z()
         )
 
         # to remove (float32)
