@@ -31,6 +31,8 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['fc1MatMul'] = CalibrationParam(8, False, -0.00291599917, 0.0017367251)
         self.calib['fc1bias'] = CalibrationParam(8, False, -0.48688140511512756, 0.5176185369491577)
         self.calib['fc1Add'] = CalibrationParam(8, False, -0.48778465390205383, 0.5181604027748108)
+        self.calib['Wir_1'] = CalibrationParam(8, False, -0.34401071071624756, 0.29191476106643677)
+        self.calib['gru1_a_'] = CalibrationParam(8, False, -0.6389939785003662, 0.7715625762939453)
 
         # weights
 
@@ -97,8 +99,8 @@ class Q_NsNet2_npy(torch.nn.Module):
         cy = self.calib['fc1MatMul']
         onnxMatMul_166_q = self._quantize(self.onnxMatMul_166, ca.S(), ca.Z())
         
-        fc1MatMul_q = np.round((ca.S()*cb.S() / cy.S()) * ( np.matmul(onnxMatMul_166_q, x_q)[:,None] -cb.Z()*onnxMatMul_166_q -ca.Z()*x_q + ca.Z()*cb.Z() ) + cy.Z())
-        fc1MatMul_q = np.round((ca.S()*cb.S() / cy.S()) * ( np.matmul(onnxMatMul_166_q, x_q)[:,None] -cb.Z()*onnxMatMul_166_q -ca.Z()*x_q + ca.Z()*cb.Z() ) + cy.Z())
+        #fc1MatMul_q = np.round((ca.S()*cb.S() / cy.S()) * ( np.matmul(onnxMatMul_166_q, x_q)[:,None] -cb.Z()*onnxMatMul_166_q -ca.Z()*x_q + ca.Z()*cb.Z() ) + cy.Z())
+        #fc1MatMul_q = np.round((ca.S()*cb.S() / cy.S()) * ( np.matmul(onnxMatMul_166_q, x_q)[:,None] -cb.Z()*onnxMatMul_166_q -ca.Z()*x_q + ca.Z()*cb.Z() ) + cy.Z())
         fc1MatMul_q = np.round(
             (ca.S()*cb.S() / cy.S()) * np.matmul(onnxMatMul_166_q - ca.Z(), x_q - cb.Z()) + cy.Z()
         )
@@ -116,8 +118,18 @@ class Q_NsNet2_npy(torch.nn.Module):
         # to remove (float32)
         fc1Add = np.add(fc1MatMul, self.fc1bias)
         
-        # gru 1
+        # gru1_a_
+        ca = self.calib['Wir_1']
+        cb = self.calib['fc1Add']
+        cy = self.calib['gru1_a_']
+        Wir_1_q = self._quantize(self.Wir_1, ca.S(), ca.Z())
+        gru1_a__q = np.round(
+            (ca.S()*cb.S() / cy.S()) * np.matmul(Wir_1_q - ca.Z(), fc1Add_q - cb.Z()) + cy.Z()
+        )
+        
+        # to remove (float32)
         gru1_a_ = np.matmul(self.Wir_1, fc1Add)
+        
         gru1_a = np.add(gru1_a_, self.bir_1)
         gru1_b_ = np.matmul(self.Whr_1, h1)
         gru1_b = np.add(gru1_b_, self.bhr_1)
