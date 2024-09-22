@@ -50,10 +50,14 @@ class Q_NsNet2_npy(torch.nn.Module):
         c = self.calib['fc1bias']
         self.fc1bias_q = self._quantize(self.fc1bias, c.S(), c.Z())
 
+        # Wiz_1, Wir_1, Win_1
         self.onnxGRU_184 = np.load('onnx__GRU_184.npy')
         self.Wiz_1 = self.onnxGRU_184[:,:400,:]
         self.Wir_1 = self.onnxGRU_184[:,400:800,:]
         self.Win_1 = self.onnxGRU_184[:,800:,:]
+
+        c = self.calib['Wir_1']
+        self.Wir_1_q = self._quantize(self.Wir_1, c.S(), c.Z())
 
         self.onnxGRU_185 = np.load('onnx__GRU_185.npy')
         self.Whz_1 = self.onnxGRU_185[:,:400,:]
@@ -126,8 +130,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         ca = self.calib['fc1MatMul']
         cb = self.calib['fc1bias']
         cy = self.calib['fc1Add']
-        fc1bias_q = self._quantize(self.fc1bias, cb.S(), cb.Z())
-        fc1Add_q = (ca.S() / cy.S()) * (fc1MatMul_q - ca.Z()) + (cb.S() / cy.S()) * (fc1bias_q - cb.Z()) + cy.Z()
+        fc1Add_q = (ca.S() / cy.S()) * (fc1MatMul_q - ca.Z()) + (cb.S() / cy.S()) * (self.fc1bias_q - cb.Z()) + cy.Z()
         
         # to remove (float32)
         fc1Add = np.add(fc1MatMul, self.fc1bias)
@@ -136,9 +139,8 @@ class Q_NsNet2_npy(torch.nn.Module):
         ca = self.calib['Wir_1']
         cb = self.calib['fc1Add']
         cy = self.calib['gru1_a_']
-        Wir_1_q = self._quantize(self.Wir_1, ca.S(), ca.Z())
         gru1_a__q = np.round(
-            (ca.S()*cb.S() / cy.S()) * np.matmul(Wir_1_q - ca.Z(), fc1Add_q - cb.Z()) + cy.Z()
+            (ca.S()*cb.S() / cy.S()) * np.matmul(self.Wir_1_q - ca.Z(), fc1Add_q - cb.Z()) + cy.Z()
         )
         
         # to remove (float32)
