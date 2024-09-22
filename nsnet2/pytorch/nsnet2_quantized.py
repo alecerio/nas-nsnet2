@@ -44,10 +44,11 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.onnxMatMul_166 = np.load('onnx__MatMul_166.npy').transpose()
         c = self.calib['onnxMatMul_166']
         self.onnxMatMul_166_q = self._quantize(self.onnxMatMul_166, c.S(), c.Z())
-        self._compare(self.onnxMatMul_166, self.onnxMatMul_166_q, c)
         
-        
+        # fc1bias
         self.fc1bias = np.load('fc1_bias.npy')
+        c = self.calib['fc1bias']
+        self.fc1bias_q = self._quantize(self.fc1bias, c.S(), c.Z())
 
         self.onnxGRU_184 = np.load('onnx__GRU_184.npy')
         self.Wiz_1 = self.onnxGRU_184[:,:400,:]
@@ -110,7 +111,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         c = self.calib['h2']
         h2_q = self._quantize(h2, c.S(), c.Z())
 
-        # process fc1MatMul_q
+        # fc1MatMul_q
         ca = self.calib['onnxMatMul_166']
         cb = self.calib['x']
         cy = self.calib['fc1MatMul']
