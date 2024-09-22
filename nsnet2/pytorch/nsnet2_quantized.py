@@ -64,6 +64,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.Whr_1 = self.onnxGRU_185[:,400:800,:]
         self.Whn_1 = self.onnxGRU_185[:,800:,:]
 
+        # biz_1, bir_1, bin_1, bhz_1, bhr_1, bhn_1
         self.onnxGRU_186 = np.load('onnx__GRU_186.npy')
         self.biz_1 = self.onnxGRU_186[:,:400]
         self.bir_1 = self.onnxGRU_186[:,400:800]
@@ -71,6 +72,9 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.bhz_1 = self.onnxGRU_186[:,1200:1600]
         self.bhr_1 = self.onnxGRU_186[:,1600:2000]
         self.bhn_1 = self.onnxGRU_186[:,2000:]
+
+        c = self.calib['bir_1']
+        self.bir_1_q = self._quantize(self.bir_1, c.S(), c.Z())
 
         self.onnxGRU_204 = np.load('onnx__GRU_204.npy')
         self.Wiz_2 = self.onnxGRU_204[:,:400,:]
@@ -151,8 +155,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         ca = self.calib['gru1_a_']
         cb = self.calib['bir_1']
         cy = self.calib['gru1_a']
-        bir_1_q = self._quantize(self.bir_1, cb.S(), cb.Z())
-        gru1_a_q = (ca.S() / cy.S()) * (gru1_a__q - ca.Z()) + (cb.S() / cy.S()) * (bir_1_q - cb.Z()) + cy.Z()
+        gru1_a_q = (ca.S() / cy.S()) * (gru1_a__q - ca.Z()) + (cb.S() / cy.S()) * (self.bir_1_q - cb.Z()) + cy.Z()
 
         # gru1_b_
         gru1_b_ = np.matmul(self.Whr_1, h1)
