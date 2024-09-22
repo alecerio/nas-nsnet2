@@ -35,6 +35,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['gru1_a_'] = CalibrationParam(8, False, -0.6389939785003662, 0.7715625762939453)
         self.calib['bir_1'] = CalibrationParam(8, False, -0.07920225709676743, 0.20611026883125305)
         self.calib['gru1_a'] = CalibrationParam(8, False, -0.6046768426895142, 0.8871182203292847)
+        self.calib['h1'] = CalibrationParam(8, False, -0.002647488145157695, 0.0028339680284261703)
 
         # weights
 
@@ -92,7 +93,11 @@ class Q_NsNet2_npy(torch.nn.Module):
         c = self.calib['x']
         x_q = self._quantize(x, c.S(), c.Z())
 
+        # h1
         h1 = h1.squeeze()
+        c = self.calib['h1']
+        h1_q = self._quantize(h1, c.S(), c.Z())
+
         h2 = h2.squeeze()
 
         # process fc1MatMul_q
@@ -140,7 +145,11 @@ class Q_NsNet2_npy(torch.nn.Module):
         bir_1_q = self._quantize(self.bir_1, cb.S(), cb.Z())
         gru1_a_q = (ca.S() / cy.S()) * (gru1_a__q - ca.Z()) + (cb.S() / cy.S()) * (bir_1_q - cb.Z()) + cy.Z()
 
+        # gru1_b_
         gru1_b_ = np.matmul(self.Whr_1, h1)
+
+
+
         gru1_b = np.add(gru1_b_, self.bhr_1)
         gru1_c_ = np.matmul(self.Wiz_1, fc1Add)
         gru1_c = np.add(gru1_c_, self.biz_1)
