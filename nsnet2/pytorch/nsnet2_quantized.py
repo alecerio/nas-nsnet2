@@ -36,6 +36,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['bir_1'] = CalibrationParam(8, False, -0.07920225709676743, 0.20611026883125305)
         self.calib['gru1_a'] = CalibrationParam(8, False, -0.6046768426895142, 0.8871182203292847)
         self.calib['h1'] = CalibrationParam(8, False, -0.002647488145157695, 0.0028339680284261703)
+        self.calib['h2'] = CalibrationParam(8, False, -0.0031016061548143625, 0.0030250486452132463)
 
         # weights
 
@@ -98,7 +99,10 @@ class Q_NsNet2_npy(torch.nn.Module):
         c = self.calib['h1']
         h1_q = self._quantize(h1, c.S(), c.Z())
 
+        # h2
         h2 = h2.squeeze()
+        c = self.calib['h2']
+        h2_q = self._quantize(h2, c.S(), c.Z())
 
         # process fc1MatMul_q
         ca = self.calib['onnxMatMul_166']
