@@ -33,6 +33,8 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['fc1Add'] = CalibrationParam(8, False, -0.48778465390205383, 0.5181604027748108)
         self.calib['Wir_1'] = CalibrationParam(8, False, -0.34401071071624756, 0.29191476106643677)
         self.calib['gru1_a_'] = CalibrationParam(8, False, -0.6389939785003662, 0.7715625762939453)
+        self.calib['bir_1'] = CalibrationParam(8, False, -0.07920225709676743, 0.20611026883125305)
+        self.calib['gru1_a'] = CalibrationParam(8, False, -0.6046768426895142, 0.8871182203292847)
 
         # weights
 
@@ -130,7 +132,14 @@ class Q_NsNet2_npy(torch.nn.Module):
         # to remove (float32)
         gru1_a_ = np.matmul(self.Wir_1, fc1Add)
         
+        # gru1_a
         gru1_a = np.add(gru1_a_, self.bir_1)
+        ca = self.calib['gru1_a_']
+        cb = self.calib['bir_1']
+        cy = self.calib['gru1_a']
+        bir_1_q = self._quantize(self.bir_1, cb.S(), cb.Z())
+        gru1_a_q = (ca.S() / cy.S()) * (gru1_a__q - ca.Z()) + (cb.S() / cy.S()) * (bir_1_q - cb.Z()) + cy.Z()
+
         gru1_b_ = np.matmul(self.Whr_1, h1)
         gru1_b = np.add(gru1_b_, self.bhr_1)
         gru1_c_ = np.matmul(self.Wiz_1, fc1Add)
@@ -210,3 +219,6 @@ class Q_NsNet2_npy(torch.nn.Module):
     
     def _dequantize(self, tensor_i8, S, z):
         return (tensor_i8 - z) * S
+
+    def _compare(self, tensor_f32, tensor_int, calib):
+        print(np.mean(np.abs(tensor_f32 - self._dequantize(tensor_int, calib.S(), calib.Z()))))
