@@ -42,13 +42,11 @@ class Q_NsNet2_npy(torch.nn.Module):
 
         # onnxMatMul_166
         self.onnxMatMul_166 = np.load('onnx__MatMul_166.npy').transpose()
-        c = self.calib['onnxMatMul_166']
-        self.onnxMatMul_166_q = self._quantize(self.onnxMatMul_166, c.S(), c.Z())
+        self.onnxMatMul_166_q = self._quantize_tensor(self.onnxMatMul_166, 'onnxMatMul_166')
         
         # fc1bias
         self.fc1bias = np.load('fc1_bias.npy')
-        c = self.calib['fc1bias']
-        self.fc1bias_q = self._quantize(self.fc1bias, c.S(), c.Z())
+        self.fc1bias_q = self._quantize_tensor(self.fc1bias, 'fc1bias')
 
         # Wiz_1, Wir_1, Win_1
         self.onnxGRU_184 = np.load('onnx__GRU_184.npy')
@@ -56,8 +54,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.Wir_1 = self.onnxGRU_184[:,400:800,:]
         self.Win_1 = self.onnxGRU_184[:,800:,:]
 
-        c = self.calib['Wir_1']
-        self.Wir_1_q = self._quantize(self.Wir_1, c.S(), c.Z())
+        self.Wir_1_q = self._quantize_tensor(self.Wir_1, 'Wir_1')
 
         self.onnxGRU_185 = np.load('onnx__GRU_185.npy')
         self.Whz_1 = self.onnxGRU_185[:,:400,:]
@@ -73,8 +70,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.bhr_1 = self.onnxGRU_186[:,1600:2000]
         self.bhn_1 = self.onnxGRU_186[:,2000:]
 
-        c = self.calib['bir_1']
-        self.bir_1_q = self._quantize(self.bir_1, c.S(), c.Z())
+        self.bir_1_q = self._quantize_tensor(self.bir_1, 'bir_1')
 
         self.onnxGRU_204 = np.load('onnx__GRU_204.npy')
         self.Wiz_2 = self.onnxGRU_204[:,:400,:]
@@ -106,56 +102,32 @@ class Q_NsNet2_npy(torch.nn.Module):
     def forward(self, x, h1, h2):
         # process x
         x = x.squeeze()
-        c = self.calib['x']
-        x_q = self._quantize(x, c.S(), c.Z())
+        x_q = self._quantize_tensor(x, 'x')
 
         # h1
         h1 = h1.squeeze()
-        c = self.calib['h1']
-        h1_q = self._quantize(h1, c.S(), c.Z())
+        h1_q = self._quantize_tensor(h1, 'h1')
 
         # h2
         h2 = h2.squeeze()
-        c = self.calib['h2']
-        h2_q = self._quantize(h2, c.S(), c.Z())
+        h2_q = self._quantize_tensor(h2, 'h2')
 
         # fc1MatMul_q
-        ca = self.calib['onnxMatMul_166']
-        cb = self.calib['x']
-        cy = self.calib['fc1MatMul']
-        fc1MatMul_q = np.round(
-            (ca.S()*cb.S() / cy.S()) * np.matmul(self.onnxMatMul_166_q - ca.Z(), x_q - cb.Z()) + cy.Z()
-        )
-
-        # to remove (float32)
-        fc1MatMul = np.matmul(self.onnxMatMul_166, x)
+        fc1MatMul_q = self._quantize_matmul(self.onnxMatMul_166_q, x_q, 'onnxMatMul_166', 'x', 'fc1MatMul')
+        fc1MatMul = np.matmul(self.onnxMatMul_166, x) # to remove
 
         # fc1Add_q
-        ca = self.calib['fc1MatMul']
-        cb = self.calib['fc1bias']
-        cy = self.calib['fc1Add']
-        fc1Add_q = (ca.S() / cy.S()) * (fc1MatMul_q - ca.Z()) + (cb.S() / cy.S()) * (self.fc1bias_q - cb.Z()) + cy.Z()
-        
-        # to remove (float32)
-        fc1Add = np.add(fc1MatMul, self.fc1bias)
+        fc1Add_q = self._quantize_add(fc1MatMul_q, self.fc1bias_q, 'fc1MatMul', 'fc1bias', 'fc1Add')
+        fc1Add = np.add(fc1MatMul, self.fc1bias) # to remove
         
         # gru1_a_
-        ca = self.calib['Wir_1']
-        cb = self.calib['fc1Add']
-        cy = self.calib['gru1_a_']
-        gru1_a__q = np.round(
-            (ca.S()*cb.S() / cy.S()) * np.matmul(self.Wir_1_q - ca.Z(), fc1Add_q - cb.Z()) + cy.Z()
-        )
-        
-        # to remove (float32)
-        gru1_a_ = np.matmul(self.Wir_1, fc1Add)
+        gru1_a__q = self._quantize_matmul(self.Wir_1_q, fc1Add_q, 'Wir_1', 'fc1Add', 'gru1_a_')
+        gru1_a_ = np.matmul(self.Wir_1, fc1Add) # to remove
         
         # gru1_a
+        gru1_a_q = self._quantize_add(gru1_a__q, self.bir_1_q, 'gru1_a_', 'bir_1', 'gru1_a')
         gru1_a = np.add(gru1_a_, self.bir_1)
-        ca = self.calib['gru1_a_']
-        cb = self.calib['bir_1']
-        cy = self.calib['gru1_a']
-        gru1_a_q = (ca.S() / cy.S()) * (gru1_a__q - ca.Z()) + (cb.S() / cy.S()) * (self.bir_1_q - cb.Z()) + cy.Z()
+        self._compare(gru1_a, gru1_a_q, self.calib['gru1_a'])
 
         # gru1_b_
         gru1_b_ = np.matmul(self.Whr_1, h1)
@@ -243,3 +215,21 @@ class Q_NsNet2_npy(torch.nn.Module):
 
     def _compare(self, tensor_f32, tensor_int, calib):
         print(np.mean(np.abs(tensor_f32 - self._dequantize(tensor_int, calib.S(), calib.Z()))))
+    
+    def _quantize_tensor(self, tensor_f32, c_key):
+        c = self.calib[c_key]
+        return self._quantize(tensor_f32, c.S(), c.Z())
+    
+    def _quantize_matmul(self, A, B, ca_key, cb_key, cy_key):
+        ca = self.calib[ca_key]
+        cb = self.calib[cb_key]
+        cy = self.calib[cy_key]
+        return np.round(
+            (ca.S()*cb.S() / cy.S()) * np.matmul(A - ca.Z(), B - cb.Z()) + cy.Z()
+        )
+    
+    def _quantize_add(self, A, B, ca_key, cb_key, cy_key):
+        ca = self.calib[ca_key]
+        cb = self.calib[cb_key]
+        cy = self.calib[cy_key]
+        return (ca.S() / cy.S()) * (A - ca.Z()) + (cb.S() / cy.S()) * (B - cb.Z()) + cy.Z()
