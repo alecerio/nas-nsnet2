@@ -53,6 +53,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['Win_2'] = CalibrationParam(8, False, -0.4721935987472534, 0.48561596870422363)
         self.calib['Whz_2'] = CalibrationParam(8, False, -1.2992678880691528, 1.2991048097610474)
         self.calib['Whr_2'] = CalibrationParam(8, False, -0.8318714499473572, 1.1085889339447021)
+        self.calib['Whn_2'] = CalibrationParam(8, False, -0.955470085144043, 1.046797513961792)
 
         # weights
 
@@ -113,11 +114,12 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.Whr_2 = self.onnxGRU_205[:,400:800,:]
         self.Whn_2 = self.onnxGRU_205[:,800:,:]
 
-        print(f"min: {np.min(self.Whr_2)}")
-        print(f"max: {np.max(self.Whr_2)}")
+        print(f"min: {np.min(self.Whn_2)}")
+        print(f"max: {np.max(self.Whn_2)}")
         self.Whz_2_q = self._quantize_tensor(self.Whz_2, 'Whz_2')
         self.Whr_2_q = self._quantize_tensor(self.Whr_2, 'Whr_2')
-        self._compare(self.Whr_2, self.Whr_2_q, self.calib['Whr_2'])
+        self.Whn_2_q = self._quantize_tensor(self.Whn_2, 'Whn_2')
+        self._compare(self.Whn_2, self.Whn_2_q, self.calib['Whn_2'])
 
         self.onnxGRU_206 = np.load('onnx__GRU_206.npy')
         self.biz_2 = self.onnxGRU_206[:,:400]
