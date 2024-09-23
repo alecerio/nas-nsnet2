@@ -47,6 +47,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['bin_1'] = CalibrationParam(8, False, -0.5539973378181458, 0.17938342690467834)
         self.calib['bhz_1'] = CalibrationParam(8, False, -0.5337516665458679, 0.4148772358894348)
         self.calib['bhr_1'] = CalibrationParam(8, False, -0.07688436657190323, 0.14814253151416779)
+        self.calib['bhn_1'] = CalibrationParam(8, False, -0.7828555107116699, 0.9008108973503113)
 
         # weights
 
@@ -86,14 +87,15 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.bhr_1 = self.onnxGRU_186[:,1600:2000]
         self.bhn_1 = self.onnxGRU_186[:,2000:]
 
-        print(f"min: {np.min(self.bhr_1)}")
-        print(f"max: {np.max(self.bhr_1)}")
+        print(f"min: {np.min(self.bhn_1)}")
+        print(f"max: {np.max(self.bhn_1)}")
         self.biz_1_q = self._quantize_tensor(self.biz_1, 'biz_1')
         self.bir_1_q = self._quantize_tensor(self.bir_1, 'bir_1')
         self.bin_1_q = self._quantize_tensor(self.bin_1, 'bin_1')
         self.bhz_1_q = self._quantize_tensor(self.bhz_1, 'bhz_1')
         self.bhr_1_q = self._quantize_tensor(self.bhr_1, 'bhr_1')
-        self._compare(self.bhr_1, self.bhr_1_q, self.calib['bhr_1'])
+        self.bhn_1_q = self._quantize_tensor(self.bhn_1, 'bhn_1')
+        self._compare(self.bhn_1, self.bhn_1_q, self.calib['bhn_1'])
 
         self.onnxGRU_204 = np.load('onnx__GRU_204.npy')
         self.Wiz_2 = self.onnxGRU_204[:,:400,:]
