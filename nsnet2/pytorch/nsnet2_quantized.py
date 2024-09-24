@@ -61,6 +61,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['bhr_2'] = CalibrationParam(8, False, -0.09617264568805695, 0.07690174877643585)
         self.calib['bhn_2'] = CalibrationParam(8, False, -0.17204178869724274, 0.19739042222499847)
         self.calib['onnxMatMul_207'] = CalibrationParam(8, False, -1.3657219409942627, 1.158295750617981)
+        self.calib['fc2bias'] = CalibrationParam(8, False, -0.1750922054052353, 0.1385071724653244)
 
         # weights
 
@@ -141,11 +142,14 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.bhn_2_q = self._quantize_tensor(self.bhn_2, 'bhn_2')
 
         self.onnxMatMul_207 = np.load('onnx__MatMul_207.npy').transpose()
-        print(f"min: {np.min(self.onnxMatMul_207)}")
-        print(f"max: {np.max(self.onnxMatMul_207)}")
         self.onnxMatMul_207_q = self._quantize_tensor(self.onnxMatMul_207, 'onnxMatMul_207')
         self._compare(self.onnxMatMul_207, self.onnxMatMul_207_q, self.calib['onnxMatMul_207'])
+        
         self.fc2bias = np.load('fc2_bias.npy')
+        print(f"min: {np.min(self.fc2bias)}")
+        print(f"max: {np.max(self.fc2bias)}")
+        self.fc2bias_q = self._quantize_tensor(self.fc2bias, 'fc2bias')
+        self._compare(self.fc2bias, self.fc2bias_q, self.calib['fc2bias'])
 
         self.onnxMatMul_208 = np.load('onnx__MatMul_208.npy').transpose()
         self.fc3bias = np.load('fc3_bias.npy')
