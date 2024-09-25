@@ -73,6 +73,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['gru1_d_'] = CalibrationParam(8, False, -0.008429044857621193, 0.006403823848813772)
         self.calib['gru1_d'] = CalibrationParam(8, False, -0.5529640316963196, 0.41507571935653687)
         self.calib['gru1_e_'] = CalibrationParam(8, False, -1.3637111186981201, 1.018247127532959)
+        self.calib['gru1_e'] = CalibrationParam(8, False, -1.8583884239196777, 1.1587692499160767)
         
 
         # weights
@@ -230,12 +231,15 @@ class Q_NsNet2_npy(torch.nn.Module):
         # gru1_e_
         gru1_e__q = self._quantize_matmul(self.Win_1_q, fc1Add_q, 'Win_1', 'fc1Add', 'gru1_e_')
         gru1_e_ = np.matmul(self.Win_1, fc1Add)
-        print(f"min: {np.min(gru1_e_)}")
-        print(f"max: {np.max(gru1_e_)}")
         self._compare(gru1_e_, gru1_e__q, self.calib['gru1_e_'])
         
-        
+        # gru1_e
+        gru1_e_q = self._quantize_add(gru1_e__q, self.bin_1_q, 'gru1_e_', 'bin_1', 'gru1_e')
         gru1_e = np.add(gru1_e_, self.bin_1)
+        print(f"min: {np.min(gru1_e)}")
+        print(f"max: {np.max(gru1_e)}")
+        self._compare(gru1_e, gru1_e_q, self.calib['gru1_e'])
+        
         gru1_f_ = np.matmul(self.Whn_1, h1)
         gru1_f = np.add(gru1_f_, self.bhn_1)
 
