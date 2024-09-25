@@ -76,6 +76,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['gru1_e'] = CalibrationParam(8, False, -1.8583884239196777, 1.1587692499160767)
         self.calib['gru1_f_'] = CalibrationParam(8, False, -0.005411399528384209, 0.0061536869034171104)
         self.calib['gru1_f'] = CalibrationParam(8, False, -0.7833794355392456, 0.8978855013847351)
+        self.calib['gru1_r_'] = CalibrationParam(8, False, -0.6226556301116943, 0.9800534844398499)
         
 
         # weights
@@ -242,11 +243,15 @@ class Q_NsNet2_npy(torch.nn.Module):
         # gru1_f
         gru1_f_q = self._quantize_add(gru1_f__q, self.bhn_1_q, 'gru1_f_', 'bhn_1', 'gru1_f')
         gru1_f = np.add(gru1_f_, self.bhn_1)
-        print(f"min: {np.min(gru1_f)}")
-        print(f"max: {np.max(gru1_f)}")
-        self._compare(gru1_f, gru1_f_q, self.calib['gru1_f'])
 
+        # gru1_r_
+        gru1_r__q = self._quantize_add(gru1_a_q, gru1_b_q, 'gru1_a', 'gru1_b', 'gru1_r_')
         gru1_r_ = np.add(gru1_a, gru1_b)
+        print(f"min: {np.min(gru1_r_)}")
+        print(f"max: {np.max(gru1_r_)}")
+        self._compare(gru1_r_, gru1_r__q, self.calib['gru1_r_'])
+
+
         gru1_r = 1 / (1 + np.exp(-gru1_r_))
 
         gru1_z_ = np.add(gru1_c, gru1_d)
