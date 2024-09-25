@@ -65,6 +65,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['onnxMatMul_208'] = CalibrationParam(8, False, -3.1666038036346436, 2.5026357173919678)
         self.calib['fc3bias'] = CalibrationParam(8, False, -0.10188056528568268, 0.0899151861667633)
         self.calib['onnxMatMul_209'] = CalibrationParam(8, False, -1.300571084022522, 1.928941249847412)
+        self.calib['fc4bias'] = CalibrationParam(8, False, -0.10699586570262909, 0.04597663879394531)
         
 
         # weights
@@ -158,12 +159,13 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.fc3bias_q = self._quantize_tensor(self.fc3bias, 'fc3bias')
 
         self.onnxMatMul_209 = np.load('onnx__MatMul_209.npy').transpose()
-        print(f"min: {np.min(self.onnxMatMul_209)}")
-        print(f"max: {np.max(self.onnxMatMul_209)}")
         self.onnxMatMul_209_q = self._quantize_tensor(self.onnxMatMul_209, 'onnxMatMul_209')
-        self._compare(self.onnxMatMul_209, self.onnxMatMul_209_q, self.calib['onnxMatMul_209'])
         
         self.fc4bias = np.load('fc4_bias.npy')
+        print(f"min: {np.min(self.fc4bias)}")
+        print(f"max: {np.max(self.fc4bias)}")
+        self.fc4bias_q = self._quantize_tensor(self.fc4bias, 'fc4bias')
+        self._compare(self.fc4bias, self.fc4bias_q, self.calib['fc4bias'])
 
     def forward(self, x, h1, h2):
         # process x
