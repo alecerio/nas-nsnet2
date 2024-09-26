@@ -117,6 +117,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['fc3Add'] = CalibrationParam(8, False, -2.890881061553955, 0.8957681655883789)
         self.calib['relu_1'] = CalibrationParam(8, False, 0.0, 0.8957681655883789)
         self.calib['fc4MatMul'] = CalibrationParam(8, False, -2.5626792907714844, -0.9808969497680664)
+        self.calib['fc4Add'] = CalibrationParam(8, False, -2.569243907928467, -0.9619374871253967)
 
         # weights
 
@@ -466,12 +467,15 @@ class Q_NsNet2_npy(torch.nn.Module):
         # fc4MatMul
         fc4MatMul_q = self._quantize_matmul(self.onnxMatMul_209_q, relu_1_q, 'onnxMatMul_209', 'relu_1', 'fc4MatMul')
         fc4MatMul = np.matmul(self.onnxMatMul_209, relu_1)
-        print(f"min: {np.min(fc4MatMul)}")
-        print(f"max: {np.max(fc4MatMul)}")
-        self._compare(fc4MatMul, fc4MatMul_q, self.calib['fc4MatMul'])
         
-        
+        # fc4Add
+        fc4Add_q = self._quantize_add(fc4MatMul_q, self.fc4bias_q, 'fc4MatMul', 'fc4bias', 'fc4Add')
         fc4Add = np.add(fc4MatMul, self.fc4bias)
+        print(f"min: {np.min(fc4Add)}")
+        print(f"max: {np.max(fc4Add)}")
+        self._compare(fc4Add, fc4Add_q, self.calib['fc4Add'])
+
+
         sigmoid = 1 / (1 + np.exp(-fc4Add))
 
         return sigmoid
