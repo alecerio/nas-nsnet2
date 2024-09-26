@@ -2,9 +2,8 @@ import onnxruntime as ort
 import numpy as np
 
 class NsNetORT():
-    def __init__(self):
+    def __init__(self, onnx_model_path):
         super(NsNetORT, self).__init__()
-        onnx_model_path = 'nsnet2.onnx'
         self.session = ort.InferenceSession(onnx_model_path)
         self.input_names = [input.name for input in self.session.get_inputs()]
         self.output_name = self.session.get_outputs()[0].name
