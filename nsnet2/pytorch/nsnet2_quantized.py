@@ -112,6 +112,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['rnn2GRU'] = CalibrationParam(8, False, -0.6825807690620422, 0.35169717669487)
         self.calib['fc2MatMul'] = CalibrationParam(8, False, -0.769360363483429, 0.43505313992500305)
         self.calib['fc2Add'] = CalibrationParam(8, False, -0.9315677881240845, 0.5329311490058899)
+        self.calib['relu'] = CalibrationParam(8, False, 0.0, 0.5329311490058899)
 
         # weights
 
@@ -441,11 +442,13 @@ class Q_NsNet2_npy(torch.nn.Module):
         # fc2Add
         fc2Add_q = self._quantize_add(fc2MatMul_q, self.fc2bias_q, 'fc2MatMul', 'fc2bias', 'fc2Add')
         fc2Add = np.add(fc2MatMul, self.fc2bias)
-        print(f"min: {np.min(fc2Add)}")
-        print(f"max: {np.max(fc2Add)}")
-        self._compare(fc2Add, fc2Add_q, self.calib['fc2Add'])
         
+        # relu
+        relu_q = self._quantize_relu(fc2Add_q, 'fc2Add', 'relu')
         relu = np.maximum(0, fc2Add)
+        print(f"min: {np.min(relu)}")
+        print(f"max: {np.max(relu)}")
+        self._compare(relu, relu_q, self.calib['relu'])
 
         # fully connected 3
         fc3MatMul = np.matmul(self.onnxMatMul_208, relu)
@@ -497,3 +500,10 @@ class Q_NsNet2_npy(torch.nn.Module):
         cy = self.calib[cy_key]
         one_q = self._quantize(np.ones(X.shape), cx.S(), cx.Z())
         return (cx.S() / cy.S()) * (one_q - X) + cy.Z()
+    
+    def _quantize_relu(self, X_q, cx_key, cy_key):
+        cx = self.calib[cx_key]
+        cy = self.calib[cy_key]
+        X = self._dequantize(X_q, cx.S(), cx.Z())
+        Y = np.maximum(0, X)
+        return self._quantize(Y, cy.S(), cy.Z())
