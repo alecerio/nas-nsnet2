@@ -1,9 +1,7 @@
 import torch
 import numpy as np
 from nsnet2.pytorch.nsnet2.nsnet2 import NsNet2_npy
-#from nsnet2 import NsNet2_npy
 from nsnet2.pytorch.nsnet2_ort.nsnet2_ort import NsNetORT
-#from nsnet2_ort import NsNetORT
 
 numpy_weights_path = '/home/alessandro/Desktop/nas-nsnet2/nsnet2/pytorch/numpy_weights/'
 onnx_model_path = '/home/alessandro/Desktop/nas-nsnet2/nsnet2/pytorch/nsnet2_ort/nsnet2.onnx'
