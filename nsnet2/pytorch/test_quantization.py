@@ -11,8 +11,9 @@ h2 = torch.randn(1, 1, 400).numpy()*0.001
 print(min(x.squeeze()))
 print(max(x.squeeze()))
 
-baseline = NsNet2_npy()
+numpy_weights_path = '/home/alessandro/Desktop/nas-nsnet2/nsnet2/pytorch/numpy_weights/'
+baseline = NsNet2_npy(numpy_weights_path)
 y = baseline(x, h1, h2)
 
-quantized = Q_NsNet2_npy()
+quantized = Q_NsNet2_npy(numpy_weights_path)
 yq = quantized(x, h1, h2)

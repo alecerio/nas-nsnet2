@@ -2,22 +2,23 @@ import torch
 import numpy as np
 
 class NsNet2_npy(torch.nn.Module):
-    def __init__(self):
+    def __init__(self, numpy_weights_path):
         super(NsNet2_npy, self).__init__()
-        self.onnxMatMul_166 = np.load('onnx__MatMul_166.npy').transpose()
-        self.fc1bias = np.load('fc1_bias.npy')
 
-        self.onnxGRU_184 = np.load('onnx__GRU_184.npy')
+        self.onnxMatMul_166 = np.load(numpy_weights_path + 'onnx__MatMul_166.npy').transpose()
+        self.fc1bias = np.load(numpy_weights_path + 'fc1_bias.npy')
+
+        self.onnxGRU_184 = np.load(numpy_weights_path + 'onnx__GRU_184.npy')
         self.Wiz_1 = self.onnxGRU_184[:,:400,:]
         self.Wir_1 = self.onnxGRU_184[:,400:800,:]
         self.Win_1 = self.onnxGRU_184[:,800:,:]
 
-        self.onnxGRU_185 = np.load('onnx__GRU_185.npy')
+        self.onnxGRU_185 = np.load(numpy_weights_path + 'onnx__GRU_185.npy')
         self.Whz_1 = self.onnxGRU_185[:,:400,:]
         self.Whr_1 = self.onnxGRU_185[:,400:800,:]
         self.Whn_1 = self.onnxGRU_185[:,800:,:]
 
-        self.onnxGRU_186 = np.load('onnx__GRU_186.npy')
+        self.onnxGRU_186 = np.load(numpy_weights_path + 'onnx__GRU_186.npy')
         self.biz_1 = self.onnxGRU_186[:,:400]
         self.bir_1 = self.onnxGRU_186[:,400:800]
         self.bin_1 = self.onnxGRU_186[:,800:1200]
@@ -25,17 +26,17 @@ class NsNet2_npy(torch.nn.Module):
         self.bhr_1 = self.onnxGRU_186[:,1600:2000]
         self.bhn_1 = self.onnxGRU_186[:,2000:]
 
-        self.onnxGRU_204 = np.load('onnx__GRU_204.npy')
+        self.onnxGRU_204 = np.load(numpy_weights_path + 'onnx__GRU_204.npy')
         self.Wiz_2 = self.onnxGRU_204[:,:400,:]
         self.Wir_2 = self.onnxGRU_204[:,400:800,:]
         self.Win_2 = self.onnxGRU_204[:,800:,:]
 
-        self.onnxGRU_205 = np.load('onnx__GRU_205.npy')
+        self.onnxGRU_205 = np.load(numpy_weights_path + 'onnx__GRU_205.npy')
         self.Whz_2 = self.onnxGRU_205[:,:400,:]
         self.Whr_2 = self.onnxGRU_205[:,400:800,:]
         self.Whn_2 = self.onnxGRU_205[:,800:,:]
 
-        self.onnxGRU_206 = np.load('onnx__GRU_206.npy')
+        self.onnxGRU_206 = np.load(numpy_weights_path + 'onnx__GRU_206.npy')
         self.biz_2 = self.onnxGRU_206[:,:400]
         self.bir_2 = self.onnxGRU_206[:,400:800]
         self.bin_2 = self.onnxGRU_206[:,800:1200]
@@ -43,14 +44,14 @@ class NsNet2_npy(torch.nn.Module):
         self.bhr_2 = self.onnxGRU_206[:,1600:2000]
         self.bhn_2 = self.onnxGRU_206[:,2000:]
 
-        self.onnxMatMul_207 = np.load('onnx__MatMul_207.npy').transpose()
-        self.fc2bias = np.load('fc2_bias.npy')
+        self.onnxMatMul_207 = np.load(numpy_weights_path + 'onnx__MatMul_207.npy').transpose()
+        self.fc2bias = np.load(numpy_weights_path + 'fc2_bias.npy')
 
-        self.onnxMatMul_208 = np.load('onnx__MatMul_208.npy').transpose()
-        self.fc3bias = np.load('fc3_bias.npy')
+        self.onnxMatMul_208 = np.load(numpy_weights_path + 'onnx__MatMul_208.npy').transpose()
+        self.fc3bias = np.load(numpy_weights_path + 'fc3_bias.npy')
 
-        self.onnxMatMul_209 = np.load('onnx__MatMul_209.npy').transpose()
-        self.fc4bias = np.load('fc4_bias.npy')
+        self.onnxMatMul_209 = np.load(numpy_weights_path + 'onnx__MatMul_209.npy').transpose()
+        self.fc4bias = np.load(numpy_weights_path + 'fc4_bias.npy')
     
     def forward(self, x, h1, h2):
         torch.set_printoptions(precision=8)
@@ -61,8 +62,6 @@ class NsNet2_npy(torch.nn.Module):
         # fully connected 1
         fc1MatMul = np.matmul(self.onnxMatMul_166, x)
         fc1Add = np.add(fc1MatMul, self.fc1bias)
-        print(f"max: {max(self.fc1bias)}")
-        print(f"min: {min(self.fc1bias)}")
         
         # gru 1
         gru1_a_ = np.matmul(self.Wir_1, fc1Add)

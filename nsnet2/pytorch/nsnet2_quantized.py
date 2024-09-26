@@ -22,7 +22,7 @@ class CalibrationParam():
 
 
 class Q_NsNet2_npy(torch.nn.Module):
-    def __init__(self):
+    def __init__(self, numpy_weights_path):
         super(Q_NsNet2_npy, self).__init__()
 
         self.calib = {}
@@ -123,15 +123,15 @@ class Q_NsNet2_npy(torch.nn.Module):
         # weights
 
         # onnxMatMul_166
-        self.onnxMatMul_166 = np.load('onnx__MatMul_166.npy').transpose()
+        self.onnxMatMul_166 = np.load(numpy_weights_path + 'onnx__MatMul_166.npy').transpose()
         self.onnxMatMul_166_q = self._quantize_tensor(self.onnxMatMul_166, 'onnxMatMul_166')
         
         # fc1bias
-        self.fc1bias = np.load('fc1_bias.npy')
+        self.fc1bias = np.load(numpy_weights_path + 'fc1_bias.npy')
         self.fc1bias_q = self._quantize_tensor(self.fc1bias, 'fc1bias')
 
         # Wiz_1, Wir_1, Win_1
-        self.onnxGRU_184 = np.load('onnx__GRU_184.npy')
+        self.onnxGRU_184 = np.load(numpy_weights_path + 'onnx__GRU_184.npy')
         self.Wiz_1 = self.onnxGRU_184[:,:400,:]
         self.Wir_1 = self.onnxGRU_184[:,400:800,:]
         self.Win_1 = self.onnxGRU_184[:,800:,:]
@@ -140,7 +140,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.Wir_1_q = self._quantize_tensor(self.Wir_1, 'Wir_1')
         self.Win_1_q = self._quantize_tensor(self.Win_1, 'Win_1')
 
-        self.onnxGRU_185 = np.load('onnx__GRU_185.npy')
+        self.onnxGRU_185 = np.load(numpy_weights_path + 'onnx__GRU_185.npy')
         self.Whz_1 = self.onnxGRU_185[:,:400,:]
         self.Whr_1 = self.onnxGRU_185[:,400:800,:]
         self.Whn_1 = self.onnxGRU_185[:,800:,:]
@@ -150,7 +150,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.Whn_1_q = self._quantize_tensor(self.Whn_1, 'Whn_1')
 
         # biz_1, bir_1, bin_1, bhz_1, bhr_1, bhn_1
-        self.onnxGRU_186 = np.load('onnx__GRU_186.npy')
+        self.onnxGRU_186 = np.load(numpy_weights_path + 'onnx__GRU_186.npy')
         self.biz_1 = self.onnxGRU_186[:,:400]
         self.bir_1 = self.onnxGRU_186[:,400:800]
         self.bin_1 = self.onnxGRU_186[:,800:1200]
@@ -165,7 +165,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.bhr_1_q = self._quantize_tensor(self.bhr_1, 'bhr_1')
         self.bhn_1_q = self._quantize_tensor(self.bhn_1, 'bhn_1')
 
-        self.onnxGRU_204 = np.load('onnx__GRU_204.npy')
+        self.onnxGRU_204 = np.load(numpy_weights_path + 'onnx__GRU_204.npy')
         self.Wiz_2 = self.onnxGRU_204[:,:400,:]
         self.Wir_2 = self.onnxGRU_204[:,400:800,:]
         self.Win_2 = self.onnxGRU_204[:,800:,:]
@@ -174,7 +174,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.Wir_2_q = self._quantize_tensor(self.Wir_2, 'Wir_2')
         self.Win_2_q = self._quantize_tensor(self.Win_2, 'Win_2')
 
-        self.onnxGRU_205 = np.load('onnx__GRU_205.npy')
+        self.onnxGRU_205 = np.load(numpy_weights_path + 'onnx__GRU_205.npy')
         self.Whz_2 = self.onnxGRU_205[:,:400,:]
         self.Whr_2 = self.onnxGRU_205[:,400:800,:]
         self.Whn_2 = self.onnxGRU_205[:,800:,:]
@@ -183,7 +183,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.Whr_2_q = self._quantize_tensor(self.Whr_2, 'Whr_2')
         self.Whn_2_q = self._quantize_tensor(self.Whn_2, 'Whn_2')
 
-        self.onnxGRU_206 = np.load('onnx__GRU_206.npy')
+        self.onnxGRU_206 = np.load(numpy_weights_path + 'onnx__GRU_206.npy')
         self.biz_2 = self.onnxGRU_206[:,:400]
         self.bir_2 = self.onnxGRU_206[:,400:800]
         self.bin_2 = self.onnxGRU_206[:,800:1200]
@@ -198,22 +198,22 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.bhr_2_q = self._quantize_tensor(self.bhr_2, 'bhr_2')
         self.bhn_2_q = self._quantize_tensor(self.bhn_2, 'bhn_2')
 
-        self.onnxMatMul_207 = np.load('onnx__MatMul_207.npy').transpose()
+        self.onnxMatMul_207 = np.load(numpy_weights_path + 'onnx__MatMul_207.npy').transpose()
         self.onnxMatMul_207_q = self._quantize_tensor(self.onnxMatMul_207, 'onnxMatMul_207')
         
-        self.fc2bias = np.load('fc2_bias.npy')
+        self.fc2bias = np.load(numpy_weights_path + 'fc2_bias.npy')
         self.fc2bias_q = self._quantize_tensor(self.fc2bias, 'fc2bias')
 
-        self.onnxMatMul_208 = np.load('onnx__MatMul_208.npy').transpose()
+        self.onnxMatMul_208 = np.load(numpy_weights_path + 'onnx__MatMul_208.npy').transpose()
         self.onnxMatMul_208_q = self._quantize_tensor(self.onnxMatMul_208, 'onnxMatMul_208')
         
-        self.fc3bias = np.load('fc3_bias.npy')
+        self.fc3bias = np.load(numpy_weights_path + 'fc3_bias.npy')
         self.fc3bias_q = self._quantize_tensor(self.fc3bias, 'fc3bias')
 
-        self.onnxMatMul_209 = np.load('onnx__MatMul_209.npy').transpose()
+        self.onnxMatMul_209 = np.load(numpy_weights_path + 'onnx__MatMul_209.npy').transpose()
         self.onnxMatMul_209_q = self._quantize_tensor(self.onnxMatMul_209, 'onnxMatMul_209')
         
-        self.fc4bias = np.load('fc4_bias.npy')
+        self.fc4bias = np.load(numpy_weights_path + 'fc4_bias.npy')
         self.fc4bias_q = self._quantize_tensor(self.fc4bias, 'fc4bias')
 
     def forward(self, x, h1, h2):
