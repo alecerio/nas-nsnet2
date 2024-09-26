@@ -1,126 +1,12 @@
 import numpy as np
 import torch
-
-class CalibrationParam():
-    def __init__(self, bitwidth, signed, minimum, maximum) -> None:
-        self.bitwidth = bitwidth
-        self.signed = signed
-        self.minimum = minimum
-        self.maximum = maximum
-    
-    def S(self):
-        if self.signed:
-            return (self.maximum - self.minimum) / (2 ** (self.bitwidth-1) - 1)
-        else:
-            return (self.maximum - self.minimum) / (2 ** (self.bitwidth) - 1)
-    
-    def Z(self):
-        if self.signed:
-            return 0
-        else:
-            return round(-(self.minimum / self.S()))
-
+from nsnet2.pytorch.nsnet2_q.calibration_param import init_calibration
 
 class Q_NsNet2_npy(torch.nn.Module):
     def __init__(self, numpy_weights_path):
         super(Q_NsNet2_npy, self).__init__()
 
-        self.calib = {}
-        self.calib['x'] = CalibrationParam(8, False, -0.0025095, 0.0022181)
-        self.calib['onnxMatMul_166'] = CalibrationParam(8, False, -0.22075387835502625, 0.208940327167511)
-        self.calib['fc1MatMul'] = CalibrationParam(8, False, -0.00291599917, 0.0017367251)
-        self.calib['fc1bias'] = CalibrationParam(8, False, -0.48688140511512756, 0.5176185369491577)
-        self.calib['fc1Add'] = CalibrationParam(8, False, -0.48778465390205383, 0.5181604027748108)
-        self.calib['Wir_1'] = CalibrationParam(8, False, -0.34401071071624756, 0.29191476106643677)
-        self.calib['gru1_a_'] = CalibrationParam(8, False, -0.6389939785003662, 0.7715625762939453)
-        self.calib['bir_1'] = CalibrationParam(8, False, -0.07920225709676743, 0.20611026883125305)
-        self.calib['gru1_a'] = CalibrationParam(8, False, -0.6046768426895142, 0.8871182203292847)
-        self.calib['h1'] = CalibrationParam(8, False, -0.002647488145157695, 0.0028339680284261703)
-        self.calib['h2'] = CalibrationParam(8, False, -0.0031016061548143625, 0.0030250486452132463)
-        self.calib['gru1_b_'] = CalibrationParam(8, False, -0.004922409541904926, 0.004103424027562141)
-        self.calib['Wiz_1'] = CalibrationParam(8, False, -0.43284985423088074, 0.46175122261047363)
-        self.calib['Win_1'] = CalibrationParam(8, False, -0.3236880302429199, 0.39607325196266174)
-        self.calib['Whz_1'] = CalibrationParam(8, False, -1.8417714834213257, 1.7173254489898682)
-        self.calib['Whr_1'] = CalibrationParam(8, False, -1.1574513912200928, 1.0300449132919312)
-        self.calib['Whn_1'] = CalibrationParam(8, False, -0.7756922245025635, 0.9530389308929443)
-        self.calib['biz_1'] = CalibrationParam(8, False, -0.5063393712043762, 0.36664387583732605)
-        self.calib['bin_1'] = CalibrationParam(8, False, -0.5539973378181458, 0.17938342690467834)
-        self.calib['bhz_1'] = CalibrationParam(8, False, -0.5337516665458679, 0.4148772358894348)
-        self.calib['bhr_1'] = CalibrationParam(8, False, -0.07688436657190323, 0.14814253151416779)
-        self.calib['bhn_1'] = CalibrationParam(8, False, -0.7828555107116699, 0.9008108973503113)
-        self.calib['Wiz_2'] = CalibrationParam(8, False, -0.9102030992507935, 0.9408696889877319)
-        self.calib['Wir_2'] = CalibrationParam(8, False, -0.9560997486114502, 0.6683358550071716)
-        self.calib['Win_2'] = CalibrationParam(8, False, -0.4721935987472534, 0.48561596870422363)
-        self.calib['Whz_2'] = CalibrationParam(8, False, -1.2992678880691528, 1.2991048097610474)
-        self.calib['Whr_2'] = CalibrationParam(8, False, -0.8318714499473572, 1.1085889339447021)
-        self.calib['Whn_2'] = CalibrationParam(8, False, -0.955470085144043, 1.046797513961792)
-        self.calib['biz_2'] = CalibrationParam(8, False, -0.44805487990379333, 0.1560053527355194)
-        self.calib['bir_2'] = CalibrationParam(8, False, -0.08767592161893845, 0.11347303539514542)
-        self.calib['bin_2'] = CalibrationParam(8, False, -0.239909827709198, 0.12033259868621826)
-        self.calib['bhz_2'] = CalibrationParam(8, False, -0.43745461106300354, 0.12699371576309204)
-        self.calib['bhr_2'] = CalibrationParam(8, False, -0.09617264568805695, 0.07690174877643585)
-        self.calib['bhn_2'] = CalibrationParam(8, False, -0.17204178869724274, 0.19739042222499847)
-        self.calib['onnxMatMul_207'] = CalibrationParam(8, False, -1.3657219409942627, 1.158295750617981)
-        self.calib['fc2bias'] = CalibrationParam(8, False, -0.1750922054052353, 0.1385071724653244)
-        self.calib['onnxMatMul_208'] = CalibrationParam(32, False, -3.1666038036346436, 2.5026357173919678)
-        self.calib['fc3bias'] = CalibrationParam(8, False, -0.10188056528568268, 0.0899151861667633)
-        self.calib['onnxMatMul_209'] = CalibrationParam(32, False, -1.300571084022522, 1.928941249847412)
-        self.calib['fc4bias'] = CalibrationParam(8, False, -0.10699586570262909, 0.04597663879394531)
-        self.calib['gru1_b_'] = CalibrationParam(8, False, -0.004922409541904926, 0.004103424027562141)
-        self.calib['gru1_b'] = CalibrationParam(8, False, -0.07475128024816513, 0.14630259573459625)
-        self.calib['gru1_c_'] = CalibrationParam(8, False, -1.5660111904144287, 1.0454494953155518)
-        self.calib['gru1_c'] = CalibrationParam(8, False, -1.9779117107391357, 1.3700535297393799)
-        self.calib['gru1_d_'] = CalibrationParam(8, False, -0.008429044857621193, 0.006403823848813772)
-        self.calib['gru1_d'] = CalibrationParam(8, False, -0.5529640316963196, 0.41507571935653687)
-        self.calib['gru1_e_'] = CalibrationParam(8, False, -1.3637111186981201, 1.018247127532959)
-        self.calib['gru1_e'] = CalibrationParam(8, False, -1.8583884239196777, 1.1587692499160767)
-        self.calib['gru1_f_'] = CalibrationParam(8, False, -0.005411399528384209, 0.0061536869034171104)
-        self.calib['gru1_f'] = CalibrationParam(8, False, -0.7833794355392456, 0.8978855013847351)
-        self.calib['gru1_r_'] = CalibrationParam(8, False, -0.6226556301116943, 0.9800534844398499)
-        self.calib['gru1_r'] = CalibrationParam(8, False, 0.3491777181625366, 0.7271188497543335)
-        self.calib['gru1_z_'] = CalibrationParam(8, False, -2.392332077026367, 1.7851293087005615)
-        self.calib['gru1_z'] = CalibrationParam(8, False, 0.08375928550958633, 0.856329083442688)
-        self.calib['gru1_n1'] = CalibrationParam(8, False, -0.5516456365585327, 0.4556601643562317)
-        self.calib['gru1_n2'] = CalibrationParam(8, False, -2.4100341796875, 1.1423156261444092)
-        self.calib['gru1_n'] = CalibrationParam(8, False, -0.983996570110321, 0.8151924014091492)
-        self.calib['gru1_hn1'] = CalibrationParam(8, False, 0.143670916557312, 0.9162406921386719)
-        self.calib['gru1_hn2'] = CalibrationParam(8, False, -0.9015777111053467, 0.45391541719436646)
-        self.calib['gru1_hn3'] = CalibrationParam(8, False, -0.0016954239690676332, 0.0016671211924403906)
-        self.calib['rnn1GRU'] = CalibrationParam(8, False, -0.9016271829605103, 0.4546271562576294)
-        self.calib['gru2_a_'] = CalibrationParam(8, False, -0.681461751461029, 0.9113116264343262)
-        self.calib['gru2_a'] = CalibrationParam(8, False, -0.7149235010147095, 0.908741295337677)
-        self.calib['gru2_b_'] = CalibrationParam(8, False, -0.005148397758603096, 0.011014967225492)
-        self.calib['gru2_b'] = CalibrationParam(8, False, -0.09436552226543427, 0.07623167335987091)
-        self.calib['gru2_c_'] = CalibrationParam(8, False, -1.2279887199401855, 1.1102137565612793)
-        self.calib['gru2_c'] = CalibrationParam(8, False, -1.6760436296463013, 1.200895071029663)
-        self.calib['gru2_d_'] = CalibrationParam(8, False, -0.008141756057739258, 0.00894666276872158)
-        self.calib['gru2_d'] = CalibrationParam(8, False, -0.43875735998153687, 0.1262134611606598)
-        self.calib['gru2_e_'] = CalibrationParam(8, False, -0.6732944250106812, 0.6314664483070374)
-        self.calib['gru2_e'] = CalibrationParam(8, False, -0.9132042527198792, 0.7054852247238159)
-        self.calib['gru2_f_'] = CalibrationParam(8, False, -0.0040821353904902935, 0.005842617247253656)
-        self.calib['gru2_f'] = CalibrationParam(8, False, -0.17201536893844604, 0.19645990431308746)
-        self.calib['gru2_r_'] = CalibrationParam(8, False, -0.7412133812904358, 0.8698829412460327)
-        self.calib['gru2_r'] = CalibrationParam(8, False, 0.3227388560771942, 0.7047213315963745)
-        self.calib['gru2_z_'] = CalibrationParam(8, False, -2.1148009300231934, 1.2168352603912354)
-        self.calib['gru2_z'] = CalibrationParam(8, False, 0.10766655951738358, 0.771506130695343)
-        self.calib['gru2_n1'] = CalibrationParam(8, False, -0.09494832903146744, 0.07928616553544998)
-        self.calib['gru2_n2'] = CalibrationParam(8, False, -1.0081526041030884, 0.7076360583305359)
-        self.calib['gru2_n'] = CalibrationParam(8, False, -0.7649968266487122, 0.6091923117637634)
-        self.calib['gru2_hn1'] = CalibrationParam(8, False, 0.22849386930465698, 0.892333447933197)
-        self.calib['gru2_hn2'] = CalibrationParam(8, False, -0.6826322674751282, 0.35149604082107544)
-        self.calib['gru2_hn3'] = CalibrationParam(8, False, -0.0016349913785234094, 0.0018691568402573466)
-        self.calib['rnn2GRU'] = CalibrationParam(8, False, -0.6825807690620422, 0.35169717669487)
-        self.calib['fc2MatMul'] = CalibrationParam(8, False, -0.769360363483429, 0.43505313992500305)
-        self.calib['fc2Add'] = CalibrationParam(8, False, -0.9315677881240845, 0.5329311490058899)
-        self.calib['relu'] = CalibrationParam(8, False, 0.0, 0.5329311490058899)
-        self.calib['fc3MatMul'] = CalibrationParam(8, False, -2.872364044189453, 0.898455798625946)
-        self.calib['fc3Add'] = CalibrationParam(8, False, -2.890881061553955, 0.8957681655883789)
-        self.calib['relu_1'] = CalibrationParam(8, False, 0.0, 0.8957681655883789)
-        self.calib['fc4MatMul'] = CalibrationParam(8, False, -2.5626792907714844, -0.9808969497680664)
-        self.calib['fc4Add'] = CalibrationParam(8, False, -2.569243907928467, -0.9619374871253967)
-        self.calib['sigmoid'] = CalibrationParam(8, False, 0.07114425301551819, 0.2764904499053955)
-
-        # weights
+        self.calib = init_calibration()
 
         # onnxMatMul_166
         self.onnxMatMul_166 = np.load(numpy_weights_path + 'onnx__MatMul_166.npy').transpose()
@@ -231,7 +117,7 @@ class Q_NsNet2_npy(torch.nn.Module):
 
         # fc1MatMul_q
         fc1MatMul_q = self._quantize_matmul(self.onnxMatMul_166_q, x_q, 'onnxMatMul_166', 'x', 'fc1MatMul')
-        fc1MatMul = np.matmul(self.onnxMatMul_166, x) # to remove
+        fc1MatMul = np.matmul(self.onnxMatMul_166, x)
 
         # fc1Add_q
         fc1Add_q = self._quantize_add(fc1MatMul_q, self.fc1bias_q, 'fc1MatMul', 'fc1bias', 'fc1Add')
@@ -252,7 +138,6 @@ class Q_NsNet2_npy(torch.nn.Module):
         # gru1_b
         gru1_b_q = self._quantize_add(gru1_b__q, self.bhr_1_q, 'gru1_b_', 'bhr_1', 'gru1_b')
         gru1_b = np.add(gru1_b_, self.bhr_1)
-        self._compare(gru1_b, gru1_b_q, self.calib['gru1_b'])
 
         # gru1_c_
         gru1_c__q = self._quantize_matmul(self.Wiz_1_q, fc1Add_q, 'Wiz_1', 'fc1Add', 'gru1_c_')
@@ -272,7 +157,8 @@ class Q_NsNet2_npy(torch.nn.Module):
 
         # gru1_e_
         gru1_e__q = self._quantize_matmul(self.Win_1_q, fc1Add_q, 'Win_1', 'fc1Add', 'gru1_e_')
-        gru1_e_ = np.matmul(self.Win_1, fc1Add)        
+        gru1_e_ = np.matmul(self.Win_1, fc1Add) 
+
         # gru1_e
         gru1_e_q = self._quantize_add(gru1_e__q, self.bin_1_q, 'gru1_e_', 'bin_1', 'gru1_e')
         gru1_e = np.add(gru1_e_, self.bin_1)
@@ -420,7 +306,6 @@ class Q_NsNet2_npy(torch.nn.Module):
         temp_y = np.tanh(temp_x)
         gru2_n_q = self._quantize(temp_y, self.calib['gru2_n'].S(), self.calib['gru2_n'].Z())
         gru2_n = np.tanh(gru2_n2)
-        self._compare(gru2_n, gru2_n_q, self.calib['gru2_n'])
 
         # gru2_hn1
         gru2_hn1_q = self._quantize_one_minus_x(gru2_z_q, 'gru2_z', 'gru2_hn1')
@@ -476,11 +361,8 @@ class Q_NsNet2_npy(torch.nn.Module):
         # sigmoid
         sigmoid_q = self._quantize_sigmoid(fc4Add_q, 'fc4Add', 'sigmoid')
         sigmoid = 1 / (1 + np.exp(-fc4Add))
-        print(f"min: {np.min(sigmoid)}")
-        print(f"max: {np.max(sigmoid)}")
-        self._compare(sigmoid, sigmoid_q, self.calib['sigmoid'])
 
-        return sigmoid
+        return sigmoid_q
     
     def _quantize(self, tensor_fp32, S, z):
         return np.floor(tensor_fp32 / S) + z
