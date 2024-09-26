@@ -118,6 +118,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['relu_1'] = CalibrationParam(8, False, 0.0, 0.8957681655883789)
         self.calib['fc4MatMul'] = CalibrationParam(8, False, -2.5626792907714844, -0.9808969497680664)
         self.calib['fc4Add'] = CalibrationParam(8, False, -2.569243907928467, -0.9619374871253967)
+        self.calib['sigmoid'] = CalibrationParam(8, False, 0.07114425301551819, 0.2764904499053955)
 
         # weights
 
@@ -471,12 +472,13 @@ class Q_NsNet2_npy(torch.nn.Module):
         # fc4Add
         fc4Add_q = self._quantize_add(fc4MatMul_q, self.fc4bias_q, 'fc4MatMul', 'fc4bias', 'fc4Add')
         fc4Add = np.add(fc4MatMul, self.fc4bias)
-        print(f"min: {np.min(fc4Add)}")
-        print(f"max: {np.max(fc4Add)}")
-        self._compare(fc4Add, fc4Add_q, self.calib['fc4Add'])
 
-
+        # sigmoid
+        sigmoid_q = self._quantize_sigmoid(fc4Add_q, 'fc4Add', 'sigmoid')
         sigmoid = 1 / (1 + np.exp(-fc4Add))
+        print(f"min: {np.min(sigmoid)}")
+        print(f"max: {np.max(sigmoid)}")
+        self._compare(sigmoid, sigmoid_q, self.calib['sigmoid'])
 
         return sigmoid
     
@@ -524,4 +526,11 @@ class Q_NsNet2_npy(torch.nn.Module):
         cy = self.calib[cy_key]
         X = self._dequantize(X_q, cx.S(), cx.Z())
         Y = np.maximum(0, X)
+        return self._quantize(Y, cy.S(), cy.Z())
+    
+    def _quantize_sigmoid(self, X_q, cx_key, cy_key):
+        cx = self.calib[cx_key]
+        cy = self.calib[cy_key]
+        X = self._dequantize(X_q, cx.S(), cx.Z())
+        Y = 1 / (1 + np.exp(-X))
         return self._quantize(Y, cy.S(), cy.Z())
