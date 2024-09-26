@@ -62,7 +62,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['bhn_2'] = CalibrationParam(8, False, -0.17204178869724274, 0.19739042222499847)
         self.calib['onnxMatMul_207'] = CalibrationParam(8, False, -1.3657219409942627, 1.158295750617981)
         self.calib['fc2bias'] = CalibrationParam(8, False, -0.1750922054052353, 0.1385071724653244)
-        self.calib['onnxMatMul_208'] = CalibrationParam(8, False, -3.1666038036346436, 2.5026357173919678)
+        self.calib['onnxMatMul_208'] = CalibrationParam(32, False, -3.1666038036346436, 2.5026357173919678)
         self.calib['fc3bias'] = CalibrationParam(8, False, -0.10188056528568268, 0.0899151861667633)
         self.calib['onnxMatMul_209'] = CalibrationParam(8, False, -1.300571084022522, 1.928941249847412)
         self.calib['fc4bias'] = CalibrationParam(8, False, -0.10699586570262909, 0.04597663879394531)
@@ -113,6 +113,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['fc2MatMul'] = CalibrationParam(8, False, -0.769360363483429, 0.43505313992500305)
         self.calib['fc2Add'] = CalibrationParam(8, False, -0.9315677881240845, 0.5329311490058899)
         self.calib['relu'] = CalibrationParam(8, False, 0.0, 0.5329311490058899)
+        self.calib['fc3MatMul'] = CalibrationParam(8, False, -2.872364044189453, 0.898455798625946)
 
         # weights
 
@@ -446,12 +447,16 @@ class Q_NsNet2_npy(torch.nn.Module):
         # relu
         relu_q = self._quantize_relu(fc2Add_q, 'fc2Add', 'relu')
         relu = np.maximum(0, fc2Add)
-        print(f"min: {np.min(relu)}")
-        print(f"max: {np.max(relu)}")
-        self._compare(relu, relu_q, self.calib['relu'])
+        self._compare(self.onnxMatMul_208, self.onnxMatMul_208_q, self.calib['onnxMatMul_208'])
 
-        # fully connected 3
+        # fc3MatMul
+        fc3MatMul_q = self._quantize_matmul(self.onnxMatMul_208_q, relu_q, 'onnxMatMul_208', 'relu', 'fc3MatMul')
         fc3MatMul = np.matmul(self.onnxMatMul_208, relu)
+        print(f"min: {np.min(self.onnxMatMul_208)}")
+        print(f"max: {np.max(self.onnxMatMul_208)}")
+        self._compare(fc3MatMul, fc3MatMul_q, self.calib['fc3MatMul'])
+
+
         fc3Add = np.add(fc3MatMul, self.fc3bias)
         relu_1 = np.maximum(0, fc3Add)
 
