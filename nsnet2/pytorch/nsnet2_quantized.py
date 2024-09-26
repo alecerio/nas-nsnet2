@@ -64,7 +64,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['fc2bias'] = CalibrationParam(8, False, -0.1750922054052353, 0.1385071724653244)
         self.calib['onnxMatMul_208'] = CalibrationParam(32, False, -3.1666038036346436, 2.5026357173919678)
         self.calib['fc3bias'] = CalibrationParam(8, False, -0.10188056528568268, 0.0899151861667633)
-        self.calib['onnxMatMul_209'] = CalibrationParam(8, False, -1.300571084022522, 1.928941249847412)
+        self.calib['onnxMatMul_209'] = CalibrationParam(32, False, -1.300571084022522, 1.928941249847412)
         self.calib['fc4bias'] = CalibrationParam(8, False, -0.10699586570262909, 0.04597663879394531)
         self.calib['gru1_b_'] = CalibrationParam(8, False, -0.004922409541904926, 0.004103424027562141)
         self.calib['gru1_b'] = CalibrationParam(8, False, -0.07475128024816513, 0.14630259573459625)
@@ -116,6 +116,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['fc3MatMul'] = CalibrationParam(8, False, -2.872364044189453, 0.898455798625946)
         self.calib['fc3Add'] = CalibrationParam(8, False, -2.890881061553955, 0.8957681655883789)
         self.calib['relu_1'] = CalibrationParam(8, False, 0.0, 0.8957681655883789)
+        self.calib['fc4MatMul'] = CalibrationParam(8, False, -2.5626792907714844, -0.9808969497680664)
 
         # weights
 
@@ -461,12 +462,15 @@ class Q_NsNet2_npy(torch.nn.Module):
         # relu_1
         relu_1_q = self._quantize_relu(fc3Add_q, 'fc3Add', 'relu_1')
         relu_1 = np.maximum(0, fc3Add)
-        print(f"min: {np.min(relu_1)}")
-        print(f"max: {np.max(relu_1)}")
-        self._compare(relu_1, relu_1_q, self.calib['relu_1'])
 
-        # fully connected 4
+        # fc4MatMul
+        fc4MatMul_q = self._quantize_matmul(self.onnxMatMul_209_q, relu_1_q, 'onnxMatMul_209', 'relu_1', 'fc4MatMul')
         fc4MatMul = np.matmul(self.onnxMatMul_209, relu_1)
+        print(f"min: {np.min(fc4MatMul)}")
+        print(f"max: {np.max(fc4MatMul)}")
+        self._compare(fc4MatMul, fc4MatMul_q, self.calib['fc4MatMul'])
+        
+        
         fc4Add = np.add(fc4MatMul, self.fc4bias)
         sigmoid = 1 / (1 + np.exp(-fc4Add))
 
