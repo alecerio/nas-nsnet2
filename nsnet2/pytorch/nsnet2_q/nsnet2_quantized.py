@@ -3,10 +3,10 @@ import torch
 from nsnet2.pytorch.nsnet2_q.calibration_param import init_calibration
 
 class Q_NsNet2_npy(torch.nn.Module):
-    def __init__(self, numpy_weights_path):
+    def __init__(self, numpy_weights_path, mpq_config):
         super(Q_NsNet2_npy, self).__init__()
 
-        self.calib = init_calibration()
+        self.calib = init_calibration(mpq_config)
 
         # onnxMatMul_166
         self.onnxMatMul_166 = np.load(numpy_weights_path + 'onnx__MatMul_166.npy').transpose()
@@ -361,6 +361,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         # sigmoid
         sigmoid_q = self._quantize_sigmoid(fc4Add_q, 'fc4Add', 'sigmoid')
         sigmoid = 1 / (1 + np.exp(-fc4Add))
+        #self._compare(sigmoid, sigmoid_q, self.calib['sigmoid'])
 
         return sigmoid_q
     
