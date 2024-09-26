@@ -1,5 +1,5 @@
-from nsnet2 import NsNet2_npy
-from nsnet2_quantized import Q_NsNet2_npy
+from nsnet2.pytorch.nsnet2.nsnet2 import NsNet2_npy
+from nsnet2.pytorch.nsnet2_q.nsnet2_quantized import Q_NsNet2_npy
 import numpy as np
 import torch
 
