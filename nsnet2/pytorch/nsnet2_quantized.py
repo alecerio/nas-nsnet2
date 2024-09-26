@@ -110,6 +110,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['gru2_hn2'] = CalibrationParam(8, False, -0.6826322674751282, 0.35149604082107544)
         self.calib['gru2_hn3'] = CalibrationParam(8, False, -0.0016349913785234094, 0.0018691568402573466)
         self.calib['rnn2GRU'] = CalibrationParam(8, False, -0.6825807690620422, 0.35169717669487)
+        self.calib['fc2MatMul'] = CalibrationParam(8, False, -0.769360363483429, 0.43505313992500305)
 
         # weights
 
@@ -428,15 +429,18 @@ class Q_NsNet2_npy(torch.nn.Module):
         # rnn2GRU
         rnn2GRU_q = self._quantize_add(gru2_hn2_q, gru2_hn3_q, 'gru2_hn2', 'gru2_hn3', 'rnn2GRU')
         rnn2GRU = np.add(gru2_hn2, gru2_hn3)
-        print(f"min: {np.min(rnn2GRU)}")
-        print(f"max: {np.max(rnn2GRU)}")
-        self._compare(rnn2GRU, rnn2GRU_q, self.calib['rnn2GRU'])
-
 
         rnn2GRU = rnn2GRU.squeeze()
+        rnn2GRU_q = rnn2GRU_q.squeeze()
 
-        # fully connected 2
+        # fc2MatMul
+        fc2MatMul_q = self._quantize_matmul(self.onnxMatMul_207_q, rnn2GRU_q, 'onnxMatMul_207', 'rnn2GRU', 'fc2MatMul')
         fc2MatMul = np.matmul(self.onnxMatMul_207, rnn2GRU)
+        print(f"min: {np.min(fc2MatMul)}")
+        print(f"max: {np.max(fc2MatMul)}")
+        self._compare(fc2MatMul, fc2MatMul_q, self.calib['fc2MatMul'])
+        
+        
         fc2Add = np.add(fc2MatMul, self.fc2bias)
         relu = np.maximum(0, fc2Add)
 
