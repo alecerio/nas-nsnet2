@@ -115,6 +115,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.calib['relu'] = CalibrationParam(8, False, 0.0, 0.5329311490058899)
         self.calib['fc3MatMul'] = CalibrationParam(8, False, -2.872364044189453, 0.898455798625946)
         self.calib['fc3Add'] = CalibrationParam(8, False, -2.890881061553955, 0.8957681655883789)
+        self.calib['relu_1'] = CalibrationParam(8, False, 0.0, 0.8957681655883789)
 
         # weights
 
@@ -456,11 +457,13 @@ class Q_NsNet2_npy(torch.nn.Module):
         # fc3Add
         fc3Add_q = self._quantize_add(fc3MatMul_q, self.fc3bias_q, 'fc3MatMul', 'fc3bias', 'fc3Add')
         fc3Add = np.add(fc3MatMul, self.fc3bias)
-        print(f"min: {np.min(fc3Add)}")
-        print(f"max: {np.max(fc3Add)}")
-        self._compare(fc3Add, fc3Add_q, self.calib['fc3Add'])
         
+        # relu_1
+        relu_1_q = self._quantize_relu(fc3Add_q, 'fc3Add', 'relu_1')
         relu_1 = np.maximum(0, fc3Add)
+        print(f"min: {np.min(relu_1)}")
+        print(f"max: {np.max(relu_1)}")
+        self._compare(relu_1, relu_1_q, self.calib['relu_1'])
 
         # fully connected 4
         fc4MatMul = np.matmul(self.onnxMatMul_209, relu_1)
