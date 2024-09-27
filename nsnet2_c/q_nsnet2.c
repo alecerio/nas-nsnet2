@@ -83,8 +83,16 @@ int setup_nsnet2(const char* weights_path) {
             data_Whr_1[i*400+j] = data_onnx__GRU_185[400*400+i*400+j];
         }
     }
-    PRINT_TENSOR(data_Whr_1, 400*400, "%f ")
     free(data_Whr_1);
+
+    data_Whn_1 = (float*) malloc(sizeof(float)*400*400);
+    for(int i=0; i<400; i++) {
+        for(int j=0; j<400; j++) {
+            data_Whn_1[i*400+j] = data_onnx__GRU_185[800*400+i*400+j];
+        }
+    }
+    PRINT_TENSOR(data_Whn_1, 400*400, "%f ")
+    free(data_Whn_1);
 
 
     

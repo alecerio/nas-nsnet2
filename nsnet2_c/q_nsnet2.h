@@ -60,6 +60,7 @@ static int size_onnx__GRU_184;
 static float* data_onnx__GRU_185;
 static float* data_Whz_1;
 static float* data_Whr_1;
+static float* data_Whn_1;
 static int size_onnx__GRU_185;
 
 static float* data_onnx__GRU_186;
