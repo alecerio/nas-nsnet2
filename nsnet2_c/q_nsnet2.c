@@ -48,10 +48,18 @@ int setup_nsnet2(const char* weights_path) {
             data_Wir_1[i*400+j] = data_onnx__GRU_184[400*400+i*400+j];
         }
     }
-    for(int i=0; i<5; i++) {
-        printf("%f ", data_Wir_1[i]);
-    }
     free(data_Wir_1);
+
+    data_Win_1 = (float*) malloc(sizeof(float)*400*400);
+    for(int i=0; i<400; i++) {
+        for(int j=0; j<400; j++) {
+            data_Win_1[i*400+j] = data_onnx__GRU_184[800*400+i*400+j];
+        }
+    }
+    for(int i=0; i<400*400; i++) {
+        printf("%f ", data_Win_1[i]);
+    }
+    free(data_Win_1);
     
     // onnx__GRU_185
     flag = read_weights(weights_path, "onnx__GRU_185.npy", &data_onnx__GRU_185, &size_onnx__GRU_185);
