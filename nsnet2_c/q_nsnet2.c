@@ -18,6 +18,11 @@ int setup_nsnet2(const char* weights_path) {
     if(flag != 0)
         return -1;
     
+    // fc4_bias
+    flag = read_weights(weights_path, "fc4_bias.npy", &data_fc4_bias, &size_fc4_bias);
+    if(flag != 0)
+        return -1;
+    
     
     /*printf("size: %d\n", size_fc1_bias);
     for(int i=0; i<size_fc1_bias; i++) {
@@ -31,6 +36,7 @@ void free_nsnet2() {
     free(data_fc1_bias);
     free(data_fc2_bias);
     free(data_fc3_bias);
+    free(data_fc4_bias);
 }
 
 int read_weights(const char* weights_path, const char* weights_name, float** data, int* size) {
