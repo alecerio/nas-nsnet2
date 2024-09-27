@@ -28,6 +28,31 @@ int setup_nsnet2(const char* weights_path) {
     if(flag != 0)
         return -1;
     
+    // onnx__GRU_185
+    flag = read_weights(weights_path, "onnx__GRU_185.npy", &data_onnx__GRU_185, &size_onnx__GRU_185);
+    if(flag != 0)
+        return -1;
+    
+    // onnx__GRU_186
+    flag = read_weights(weights_path, "onnx__GRU_186.npy", &data_onnx__GRU_186, &size_onnx__GRU_186);
+    if(flag != 0)
+        return -1;
+    
+    // onnx__GRU_204
+    flag = read_weights(weights_path, "onnx__GRU_204.npy", &data_onnx__GRU_204, &size_onnx__GRU_204);
+    if(flag != 0)
+        return -1;
+    
+    // onnx__GRU_205
+    flag = read_weights(weights_path, "onnx__GRU_205.npy", &data_onnx__GRU_205, &size_onnx__GRU_205);
+    if(flag != 0)
+        return -1;
+    
+    // onnx__GRU_206
+    flag = read_weights(weights_path, "onnx__GRU_206.npy", &data_onnx__GRU_206, &size_onnx__GRU_206);
+    if(flag != 0)
+        return -1;
+    
     
     /*printf("size: %d\n", size_onnx__GRU_184);
     for(int i=0; i<size_onnx__GRU_184; i++) {
