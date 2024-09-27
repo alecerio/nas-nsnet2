@@ -79,6 +79,7 @@ static WHN_1_TYPE* data_Whn_1_q;
 static int size_onnx__GRU_185;
 
 static float* data_onnx__GRU_186;
+static float* data_biz_1;
 static int size_onnx__GRU_186;
 
 static float* data_onnx__GRU_204;

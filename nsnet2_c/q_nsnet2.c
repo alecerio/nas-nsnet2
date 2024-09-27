@@ -97,16 +97,20 @@ int setup_nsnet2(const char* weights_path) {
     }
     data_Whn_1_q = (WHN_1_TYPE*) malloc(sizeof(WHN_1_TYPE)*400*400);
     QUANTIZE(data_Whn_1, data_Whn_1_q, WHN_1_S, WHN_1_Z, 400*400)
-    PRINT_TENSOR(data_Whn_1_q, 5, "%d ")
     free(data_Whn_1);
-
-
     
     // onnx__GRU_186
     flag = read_weights(weights_path, "onnx__GRU_186.npy", &data_onnx__GRU_186, &size_onnx__GRU_186);
     if(flag != 0)
         return -1;
     
+    data_biz_1 = (float*) malloc(sizeof(float)*400);
+    for(int i=0; i<400; i++) {
+        data_biz_1[i] = data_onnx__GRU_186[i];
+    }
+    PRINT_TENSOR(data_biz_1, 400, "%f ")
+    free(data_biz_1);
+
     // onnx__GRU_204
     flag = read_weights(weights_path, "onnx__GRU_204.npy", &data_onnx__GRU_204, &size_onnx__GRU_204);
     if(flag != 0)
