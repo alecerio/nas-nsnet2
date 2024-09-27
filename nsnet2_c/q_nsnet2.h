@@ -32,6 +32,7 @@ static float* data_fc4_bias;
 static int size_fc4_bias;
 
 static float* data_onnx__GRU_184;
+static float* data_Wiz_1;
 static int size_onnx__GRU_184;
 
 static float* data_onnx__GRU_185;
