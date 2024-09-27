@@ -7,11 +7,22 @@ int setup_nsnet2(const char* weights_path) {
     flag = read_weights(weights_path, "fc1_bias.npy", &data_fc1_bias, &size_fc1_bias);
     if(flag != 0)
         return -1;
+    data_fc1_bias_q = (FC1_BIAS_TYPE*) malloc(sizeof(FC1_BIAS_TYPE) * size_fc1_bias);
+    QUANTIZE(data_fc1_bias,data_fc1_bias_q,FC1_BIAS_S,FC1_BIAS_Z,size_fc1_bias)
+    free(data_fc1_bias);
     
     // fc2_bias
     flag = read_weights(weights_path, "fc2_bias.npy", &data_fc2_bias, &size_fc2_bias);
     if(flag != 0)
         return -1;
+    data_fc2_bias_q = (FC2_BIAS_TYPE*) malloc(sizeof(FC2_BIAS_TYPE) * size_fc2_bias);
+    QUANTIZE(data_fc2_bias,data_fc2_bias_q,FC2_BIAS_S,FC2_BIAS_Z,size_fc2_bias)
+    free(data_fc2_bias);
+    
+    printf("%d\n", size_fc2_bias);
+    for(int i=0; i<size_fc2_bias; i++) {
+        printf("%d ", data_fc2_bias_q[i]);
+    }
     
     // fc3_bias
     flag = read_weights(weights_path, "fc3_bias.npy", &data_fc3_bias, &size_fc3_bias);
@@ -83,11 +94,11 @@ int setup_nsnet2(const char* weights_path) {
 }
 
 void free_nsnet2() {
-    free(data_fc1_bias);
-    free(data_fc2_bias);
-    free(data_fc3_bias);
-    free(data_fc4_bias);
-    free(data_onnx__GRU_184);
+    free(data_fc1_bias_q);
+    free(data_fc2_bias_q);
+    //free(data_fc3_bias);
+    //free(data_fc4_bias);
+    //free(data_onnx__GRU_184);
 }
 
 int read_weights(const char* weights_path, const char* weights_name, float** data, int* size) {
