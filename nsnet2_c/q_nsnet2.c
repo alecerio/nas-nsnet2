@@ -58,6 +58,21 @@ int setup_nsnet2(const char* weights_path) {
     if(flag != 0)
         return -1;
     
+    // onnx__MatMul_207
+    flag = read_weights(weights_path, "onnx__MatMul_207.npy", &data_onnx__MatMul_207, &size_onnx__MatMul_207);
+    if(flag != 0)
+        return -1;
+    
+    // onnx__MatMul_208
+    flag = read_weights(weights_path, "onnx__MatMul_208.npy", &data_onnx__MatMul_208, &size_onnx__MatMul_208);
+    if(flag != 0)
+        return -1;
+    
+    // onnx__MatMul_209
+    flag = read_weights(weights_path, "onnx__MatMul_209.npy", &data_onnx__MatMul_209, &size_onnx__MatMul_209);
+    if(flag != 0)
+        return -1;
+    
     
     /*printf("size: %d\n", size_onnx__GRU_184);
     for(int i=0; i<size_onnx__MatMul_166; i++) {
