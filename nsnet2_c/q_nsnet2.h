@@ -30,6 +30,10 @@ for(int i=0; i<size; i++) { \
 #define WIR_1_S (0.0024938253795399384)
 #define WIR_1_Z (138)
 
+#define WIN_1_TYPE uint8_t
+#define WIN_1_S (0.0028225932635513006)
+#define WIN_1_Z (115)
+
 static float* data_fc1_bias;
 static FC1_BIAS_TYPE* data_fc1_bias_q;
 static int size_fc1_bias;
@@ -50,6 +54,7 @@ static float* data_Wir_1;
 static float* data_Win_1;
 static WIZ_1_TYPE* data_Wiz_1_q;
 static WIR_1_TYPE* data_Wir_1_q;
+static WIN_1_TYPE* data_Win_1_q;
 static int size_onnx__GRU_184;
 
 static float* data_onnx__GRU_185;
