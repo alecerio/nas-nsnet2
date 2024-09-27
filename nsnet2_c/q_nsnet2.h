@@ -58,6 +58,7 @@ static WIN_1_TYPE* data_Win_1_q;
 static int size_onnx__GRU_184;
 
 static float* data_onnx__GRU_185;
+static float* data_Whz_1;
 static int size_onnx__GRU_185;
 
 static float* data_onnx__GRU_186;
