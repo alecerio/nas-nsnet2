@@ -10,6 +10,8 @@ static float* data_fc3_bias;
 static int size_fc3_bias;
 static float* data_fc4_bias;
 static int size_fc4_bias;
+static float* data_onnx__GRU_184;
+static int size_onnx__GRU_184;
 
 int setup_nsnet2(const char* weights_path);
 void free_nsnet2();

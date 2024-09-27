@@ -35,19 +35,25 @@ int read_npy_file(FILE *file, float** data, int* size) {
     int ndim = 0;
     if (shape_str != NULL) {
         char *ptr = shape_str + strlen("'shape': (");
-        while (*ptr != ')') {
-            sscanf(ptr, "%d", &shape[ndim++]);
-            ptr = strchr(ptr, ',');
-            if (ptr) {
-                ptr++;
+        char *ptr_ = ptr;
+        int len_str = strlen(ptr);
+        int start = 0, end;
+        for(int i=0; i<len_str; i++) {
+            if(*ptr == ',' || *ptr == ')') {
+                end = i;
+                char* substr = (char*) malloc(sizeof(char) * (end - start));
+                for(int j=0; j<(end-start); j++)
+                    substr[j] = ptr_[start+j];
+                int dim = atoi(substr);
+                shape[ndim++] = dim;
+                free(substr);
+                if(*ptr == ')' || (*ptr == ',' && *(ptr+1) == ')'))
+                    break;
+                else
+                    start = i+1;
             }
+            ptr++;
         }
-        /*printf("Shape: (");
-        for (int i = 0; i < ndim; i++) {
-            printf("%d", shape[i]);
-            if (i < ndim - 1) printf(", ");
-        }
-        printf(")\n");*/
     }
     
     free(header);

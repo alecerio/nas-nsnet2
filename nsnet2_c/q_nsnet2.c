@@ -22,11 +22,16 @@ int setup_nsnet2(const char* weights_path) {
     flag = read_weights(weights_path, "fc4_bias.npy", &data_fc4_bias, &size_fc4_bias);
     if(flag != 0)
         return -1;
+
+    // onnx__GRU_184
+    flag = read_weights(weights_path, "onnx__GRU_184.npy", &data_onnx__GRU_184, &size_onnx__GRU_184);
+    if(flag != 0)
+        return -1;
     
     
-    /*printf("size: %d\n", size_fc1_bias);
-    for(int i=0; i<size_fc1_bias; i++) {
-        printf("%f ", data_fc1_bias[i]);
+    /*printf("size: %d\n", size_onnx__GRU_184);
+    for(int i=0; i<size_onnx__GRU_184; i++) {
+        printf("%f ", data_onnx__GRU_184[i]);
     }*/
 
     return 0;
@@ -37,6 +42,7 @@ void free_nsnet2() {
     free(data_fc2_bias);
     free(data_fc3_bias);
     free(data_fc4_bias);
+    free(data_onnx__GRU_184);
 }
 
 int read_weights(const char* weights_path, const char* weights_name, float** data, int* size) {
