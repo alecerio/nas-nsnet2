@@ -121,11 +121,11 @@ class Q_NsNet2_npy(torch.nn.Module):
 
         # fc1Add_q
         fc1Add_q = self._quantize_add(fc1MatMul_q, self.fc1bias_q, 'fc1MatMul', 'fc1bias', 'fc1Add')
-        fc1Add = np.add(fc1MatMul, self.fc1bias) # to remove
+        fc1Add = np.add(fc1MatMul, self.fc1bias)
         
         # gru1_a_
         gru1_a__q = self._quantize_matmul(self.Wir_1_q, fc1Add_q, 'Wir_1', 'fc1Add', 'gru1_a_')
-        gru1_a_ = np.matmul(self.Wir_1, fc1Add) # to remove
+        gru1_a_ = np.matmul(self.Wir_1, fc1Add)
         
         # gru1_a
         gru1_a_q = self._quantize_add(gru1_a__q, self.bir_1_q, 'gru1_a_', 'bir_1', 'gru1_a')
