@@ -22,6 +22,8 @@ static float* data_onnx__GRU_205;
 static int size_onnx__GRU_205;
 static float* data_onnx__GRU_206;
 static int size_onnx__GRU_206;
+static float* data_onnx__MatMul_166;
+static int size_onnx__MatMul_166;
 
 int setup_nsnet2(const char* weights_path);
 void free_nsnet2();
