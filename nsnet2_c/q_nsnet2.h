@@ -4,6 +4,11 @@
 #include <stdint.h>
 #include <math.h>
 
+#define PRINT_TENSOR(tensor,size,type) \
+for(int i=0; i<size; i++) { \
+    printf(type, tensor[i]); \
+}
+
 #define QUANTIZE(tensor_fp32,tensor_i,S,Z,size) \
 for(int i=0; i<size; i++) { \
     tensor_i[i] = (int32_t)(floor(tensor_fp32[i] / S)) + Z; \
@@ -16,6 +21,10 @@ for(int i=0; i<size; i++) { \
 #define FC2_BIAS_TYPE uint8_t
 #define FC2_BIAS_S (0.001229801481845332f)
 #define FC2_BIAS_Z (142)
+
+#define WIZ_1_TYPE uint8_t
+#define WIZ_1_S (0.003508239517024919)
+#define WIZ_1_Z (123)
 
 static float* data_fc1_bias;
 static FC1_BIAS_TYPE* data_fc1_bias_q;
@@ -35,6 +44,7 @@ static float* data_onnx__GRU_184;
 static float* data_Wiz_1;
 static float* data_Wir_1;
 static float* data_Win_1;
+static WIZ_1_TYPE* data_Wiz_1_q;
 static int size_onnx__GRU_184;
 
 static float* data_onnx__GRU_185;
