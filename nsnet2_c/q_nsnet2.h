@@ -4,10 +4,11 @@
 #include <stdint.h>
 #include <math.h>
 
-#define PRINT_TENSOR(tensor,size,type) \
-for(int i=0; i<size; i++) { \
+#define PRINT_TENSOR(tensor,start,end,type,sep) \
+for(int i=start; i<end; i++) { \
     printf(type, tensor[i]); \
-}
+} \
+printf(sep);
 
 #define QUANTIZE(tensor_fp32,tensor_i,S,Z,size) \
 for(int i=0; i<size; i++) { \
@@ -80,6 +81,7 @@ static int size_onnx__GRU_185;
 
 static float* data_onnx__GRU_186;
 static float* data_biz_1;
+static float* data_bir_1;
 static int size_onnx__GRU_186;
 
 static float* data_onnx__GRU_204;
