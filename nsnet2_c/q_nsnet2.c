@@ -1,19 +1,20 @@
 #include "q_nsnet2.h"
 
-// fc1_bias
-static float* data_fc1_bias;
-static int size_fc1_bias;
-
-// fc2_bias
-static float* data_fc2_bias;
-static int size_fc2_bias;
-
 int setup_nsnet2(const char* weights_path) {
     int flag;
 
     // fc1_bias
-    const char* weights_name = "fc1_bias.npy";
     flag = read_weights(weights_path, "fc1_bias.npy", &data_fc1_bias, &size_fc1_bias);
+    if(flag != 0)
+        return -1;
+    
+    // fc2_bias
+    flag = read_weights(weights_path, "fc2_bias.npy", &data_fc2_bias, &size_fc2_bias);
+    if(flag != 0)
+        return -1;
+    
+    // fc3_bias
+    flag = read_weights(weights_path, "fc3_bias.npy", &data_fc3_bias, &size_fc3_bias);
     if(flag != 0)
         return -1;
     
@@ -28,6 +29,8 @@ int setup_nsnet2(const char* weights_path) {
 
 void free_nsnet2() {
     free(data_fc1_bias);
+    free(data_fc2_bias);
+    free(data_fc3_bias);
 }
 
 int read_weights(const char* weights_path, const char* weights_name, float** data, int* size) {
