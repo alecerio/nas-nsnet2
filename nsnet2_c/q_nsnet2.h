@@ -120,6 +120,7 @@ static int size_onnx__GRU_186;
 
 static float* data_onnx__GRU_204;
 static float* data_Wiz_2;
+static float* data_Wir_2;
 static int size_onnx__GRU_204;
 
 static float* data_onnx__GRU_205;
