@@ -40,12 +40,16 @@ for(int i=0; i<size; i++) { \
 #define WHZ_1_Z (132)
 
 #define WHR_1_TYPE uint8_t
-#define WHR_1_S (0.00857841688043931)
+#define WHR_1_S (0.00857841688043931f)
 #define WHR_1_Z (135)
 
 #define WHN_1_TYPE uint8_t
-#define WHN_1_S (0.006779337864296109)
+#define WHN_1_S (0.006779337864296109f)
 #define WHN_1_Z (114)
+
+#define BIZ_1_TYPE uint8_t
+#define BIZ_1_S (0.0034234637138890285f)
+#define BIZ_1_Z (148)
 
 static float* data_fc1_bias;
 static FC1_BIAS_TYPE* data_fc1_bias_q;
@@ -85,6 +89,8 @@ static float* data_bir_1;
 static float* data_bin_1;
 static float* data_bhz_1;
 static float* data_bhr_1;
+static float* data_bhn_1;
+static BIZ_1_TYPE* data_biz_1_q;
 static int size_onnx__GRU_186;
 
 static float* data_onnx__GRU_204;
