@@ -141,6 +141,7 @@ static int size_onnx__GRU_204;
 
 static float* data_onnx__GRU_205;
 static float* data_Whz_2;
+static float* data_Whr_2;
 static int size_onnx__GRU_205;
 
 static float* data_onnx__GRU_206;
