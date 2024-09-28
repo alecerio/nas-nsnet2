@@ -83,6 +83,10 @@ for(int i=0; i<size; i++) { \
 #define WIN_2_S (0.003756115950790106)
 #define WIN_2_Z (126)
 
+#define WHZ_2_TYPE uint8_t
+#define WHZ_2_S (0.01018969685423608f)
+#define WHZ_2_Z (128)
+
 static float* data_fc1_bias;
 static FC1_BIAS_TYPE* data_fc1_bias_q;
 static int size_fc1_bias;
@@ -142,6 +146,8 @@ static int size_onnx__GRU_204;
 static float* data_onnx__GRU_205;
 static float* data_Whz_2;
 static float* data_Whr_2;
+static float* data_Whn_2;
+static WHZ_2_TYPE* data_Whz_2_q;
 static int size_onnx__GRU_205;
 
 static float* data_onnx__GRU_206;
