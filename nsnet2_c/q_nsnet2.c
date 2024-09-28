@@ -126,14 +126,16 @@ int setup_nsnet2(const char* weights_path) {
     }
     data_bin_1_q = (BIN_1_TYPE*) malloc(sizeof(BIN_1_TYPE)*400);
     QUANTIZE(data_bin_1, data_bin_1_q, BIN_1_S, BIN_1_Z, 400)
-    PRINT_TENSOR(data_bin_1_q, 0, 5, "%d ", "\n")
-    PRINT_TENSOR(data_bin_1_q, 395, 400, "%d ", "\n")
     free(data_bin_1);
 
     data_bhz_1 = (float*) malloc(sizeof(float)*400);
     for(int i=0; i<400; i++) {
         data_bhz_1[i] = data_onnx__GRU_186[1200+i];
     }
+    data_bhz_1_q = (BHZ_1_TYPE*) malloc(sizeof(BHZ_1_TYPE)*400);
+    QUANTIZE(data_bhz_1, data_bhz_1_q, BHZ_1_S, BHZ_1_Z, 400)
+    PRINT_TENSOR(data_bhz_1_q, 0, 5, "%d ", "\n")
+    PRINT_TENSOR(data_bhz_1_q, 395, 400, "%d ", "\n")
     free(data_bhz_1);
 
     data_bhr_1 = (float*) malloc(sizeof(float)*400);
