@@ -51,6 +51,10 @@ for(int i=0; i<size; i++) { \
 #define BIZ_1_S (0.0034234637138890285f)
 #define BIZ_1_Z (148)
 
+#define BIR_1_TYPE uint8_t
+#define BIR_1_S (0.0011188726506981194)
+#define BIR_1_Z (71)
+
 static float* data_fc1_bias;
 static FC1_BIAS_TYPE* data_fc1_bias_q;
 static int size_fc1_bias;
@@ -91,6 +95,7 @@ static float* data_bhz_1;
 static float* data_bhr_1;
 static float* data_bhn_1;
 static BIZ_1_TYPE* data_biz_1_q;
+static BIR_1_TYPE* data_bir_1_q;
 static int size_onnx__GRU_186;
 
 static float* data_onnx__GRU_204;
