@@ -126,9 +126,15 @@ int setup_nsnet2(const char* weights_path) {
     for(int i=0; i<400; i++) {
         data_bhz_1[i] = data_onnx__GRU_186[1200+i];
     }
-    PRINT_TENSOR(data_bhz_1, 0, 5, "%f ", "\n")
-    PRINT_TENSOR(data_bhz_1, 395, 400, "%f ", "\n")
     free(data_bhz_1);
+
+    data_bhr_1 = (float*) malloc(sizeof(float)*400);
+    for(int i=0; i<400; i++) {
+        data_bhr_1[i] = data_onnx__GRU_186[1600+i];
+    }
+    PRINT_TENSOR(data_bhr_1, 0, 5, "%f ", "\n")
+    PRINT_TENSOR(data_bhr_1, 395, 400, "%f ", "\n")
+    free(data_bhr_1);
 
     // onnx__GRU_204
     flag = read_weights(weights_path, "onnx__GRU_204.npy", &data_onnx__GRU_204, &size_onnx__GRU_204);
