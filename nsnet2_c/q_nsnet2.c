@@ -150,14 +150,22 @@ int setup_nsnet2(const char* weights_path) {
     }
     data_bhn_1_q = (BHN_1_TYPE*) malloc(sizeof(BHN_1_TYPE)*400);
     QUANTIZE(data_bhn_1, data_bhn_1_q, BHN_1_S, BHN_1_Z, 400)
-    PRINT_TENSOR(data_bhn_1_q, 0, 5, "%d ", "\n")
-    PRINT_TENSOR(data_bhn_1_q, 395, 400, "%d ", "\n")
     free(data_bhn_1);
 
     // onnx__GRU_204
     flag = read_weights(weights_path, "onnx__GRU_204.npy", &data_onnx__GRU_204, &size_onnx__GRU_204);
     if(flag != 0)
         return -1;
+    
+    data_Wiz_2 = (float*) malloc(sizeof(float)*400*400);
+    for(int i=0; i<400; i++) {
+        for(int j=0; j<400; j++) {
+            data_Wiz_2[i*400+j] = data_onnx__GRU_204[i*400+j];
+        }
+    }
+    PRINT_TENSOR(data_Wiz_2, 0, 5, "%f ", "\n")
+    PRINT_TENSOR(data_Wiz_2, 400*400-5, 400*400, "%f ", "\n")
+    free(data_Wiz_2);
     
     // onnx__GRU_205
     flag = read_weights(weights_path, "onnx__GRU_205.npy", &data_onnx__GRU_205, &size_onnx__GRU_205);
