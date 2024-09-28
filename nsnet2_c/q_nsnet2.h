@@ -140,6 +140,7 @@ static WIN_2_TYPE* data_Win_2_q;
 static int size_onnx__GRU_204;
 
 static float* data_onnx__GRU_205;
+static float* data_Whz_2;
 static int size_onnx__GRU_205;
 
 static float* data_onnx__GRU_206;
