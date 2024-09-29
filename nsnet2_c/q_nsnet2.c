@@ -243,9 +243,15 @@ int setup_nsnet2(const char* weights_path) {
     for(int i=0; i<400; i++) {
         data_bin_2[i] = data_onnx__GRU_206[800+i];
     }
-    PRINT_TENSOR(data_bin_2, 0, 5, "%f ", "\n")
-    PRINT_TENSOR(data_bin_2, 400-5, 400, "%f ", "\n")
     free(data_bin_2);
+
+    data_bhz_2 = (float*) malloc(sizeof(float)*400);
+    for(int i=0; i<400; i++) {
+        data_bhz_2[i] = data_onnx__GRU_206[1200+i];
+    }
+    PRINT_TENSOR(data_bhz_2, 0, 5, "%f ", "\n")
+    PRINT_TENSOR(data_bhz_2, 400-5, 400, "%f ", "\n")
+    free(data_bhz_2);
 
     // onnx__MatMul_166
     flag = read_weights(weights_path, "onnx__MatMul_166.npy", &data_onnx__MatMul_166, &size_onnx__MatMul_166);
