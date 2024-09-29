@@ -161,6 +161,7 @@ static WHR_2_TYPE* data_Whn_2_q;
 static int size_onnx__GRU_205;
 
 static float* data_onnx__GRU_206;
+static float* data_biz_2;
 static int size_onnx__GRU_206;
 
 static float* data_onnx__MatMul_166;
