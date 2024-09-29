@@ -159,6 +159,10 @@ free(transposed); \
 #define ONNX__MATMUL_208_S (1.3199726870159115e-09)
 #define ONNX__MATMUL_208_Z (2398991915)
 
+#define ONNX__MATMUL_209_TYPE uint32_t
+#define ONNX__MATMUL_209_S (7.519294355581197e-10)
+#define ONNX__MATMUL_209_Z (1729645127)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -255,6 +259,7 @@ static ONNX__MATMUL_208_TYPE* data_onnx__MatMul_208_q;
 static int size_onnx__MatMul_208;
 
 static double* data_onnx__MatMul_209;
+static ONNX__MATMUL_209_TYPE* data_onnx__MatMul_209_q;
 static int size_onnx__MatMul_209;
 
 static double* data_fc1MatMul;
