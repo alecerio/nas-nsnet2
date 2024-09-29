@@ -300,14 +300,16 @@ int setup_nsnet2(const char* weights_path) {
     if(flag != 0)
         return -1;
     TRANSPOSE(600, 600, data_onnx__MatMul_208, float)
-    PRINT_TENSOR(data_onnx__MatMul_208, 0, 5, "%f ", "\n")
-    PRINT_TENSOR(data_onnx__MatMul_208, 600*600-5, 600*600, "%f ", "\n")
     free(data_onnx__MatMul_208);
     
     // onnx__MatMul_209
     flag = read_weights(weights_path, "onnx__MatMul_209.npy", &data_onnx__MatMul_209, &size_onnx__MatMul_209);
     if(flag != 0)
         return -1;
+    TRANSPOSE(600, 257, data_onnx__MatMul_209, float)
+    PRINT_TENSOR(data_onnx__MatMul_209, 0, 5, "%f ", "\n")
+    PRINT_TENSOR(data_onnx__MatMul_209, 600*257-5, 600*257, "%f ", "\n")
+    free(data_onnx__MatMul_209);
     
     
     /*printf("size: %d\n", size_onnx__GRU_184);
