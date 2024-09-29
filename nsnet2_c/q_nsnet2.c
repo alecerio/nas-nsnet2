@@ -34,13 +34,14 @@ int setup_nsnet2(const char* weights_path) {
     flag = read_weights(weights_path, "fc3_bias.npy", &data_fc3_bias, &size_fc3_bias);
     if(flag != 0)
         return -1;
+    PRINT_TENSOR(data_fc3_bias, 0, 5, "%f ", "\n")
+    PRINT_TENSOR(data_fc3_bias, 600-5, 600, "%f ", "\n")
+    free(data_fc3_bias);
     
     // fc4_bias
     flag = read_weights(weights_path, "fc4_bias.npy", &data_fc4_bias, &size_fc4_bias);
     if(flag != 0)
         return -1;
-    PRINT_TENSOR(data_fc4_bias, 0, 5, "%f ", "\n")
-    PRINT_TENSOR(data_fc4_bias, 257-5, 257, "%f ", "\n")
     free(data_fc4_bias);
 
     // onnx__GRU_184
