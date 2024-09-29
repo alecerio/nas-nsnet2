@@ -115,6 +115,10 @@ for(int i=0; i<size; i++) { \
 #define BHR_2_S (0.0006787231155470306f)
 #define BHR_2_Z (142)
 
+#define BHN_2_TYPE uint8_t
+#define BHN_2_S (0.0014487537683225147f)
+#define BHN_2_Z (119)
+
 static float* data_fc1_bias;
 static FC1_BIAS_TYPE* data_fc1_bias_q;
 static int size_fc1_bias;
@@ -191,7 +195,8 @@ static BIZ_2_TYPE* data_biz_2_q;
 static BIR_2_TYPE* data_bir_2_q;
 static BIN_2_TYPE* data_bin_2_q;
 static BHZ_2_TYPE* data_bhz_2_q;
-static BHZ_2_TYPE* data_bhr_2_q;
+static BHR_2_TYPE* data_bhr_2_q;
+static BHN_2_TYPE* data_bhn_2_q;
 static int size_onnx__GRU_206;
 
 static float* data_onnx__MatMul_166;
