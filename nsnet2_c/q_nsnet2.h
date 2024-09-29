@@ -243,6 +243,7 @@ static ONNX__MATMUL_166_TYPE* data_onnx__MatMul_166_q;
 static int size_onnx__MatMul_166;
 
 static float* data_onnx__MatMul_207;
+static ONNX__MATMUL_207_TYPE* data_onnx__MatMul_207_q;
 static int size_onnx__MatMul_207;
 
 static float* data_onnx__MatMul_208;
