@@ -131,6 +131,10 @@ for (int i = 0; i < rows; i++) { \
 #define BHN_2_S (0.0014487537683225147f)
 #define BHN_2_Z (119)
 
+#define ONNX__MATMUL_166_TYPE uint8_t
+#define ONNX__MATMUL_166_S (0.0016850753157746558f)
+#define ONNX__MATMUL_166_Z (131)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -215,6 +219,7 @@ static BHN_2_TYPE* data_bhn_2_q;
 static int size_onnx__GRU_206;
 
 static float* data_onnx__MatMul_166;
+static ONNX__MATMUL_166_TYPE* data_onnx__MatMul_166_q;
 static int size_onnx__MatMul_166;
 
 static float* data_onnx__MatMul_207;
