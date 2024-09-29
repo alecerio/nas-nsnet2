@@ -165,6 +165,7 @@ static float* data_biz_2;
 static float* data_bir_2;
 static float* data_bin_2;
 static float* data_bhz_2;
+static float* data_bhr_2;
 static int size_onnx__GRU_206;
 
 static float* data_onnx__MatMul_166;
