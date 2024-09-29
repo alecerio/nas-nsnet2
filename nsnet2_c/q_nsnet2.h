@@ -15,6 +15,18 @@ for(int i=0; i<size; i++) { \
     tensor_i[i] = (int32_t)(floor(tensor_fp32[i] / S)) + Z; \
 }
 
+#define MATMUL(rows,cols,matrix,vector,result) \
+for (int i = 0; i < rows; i++) { \
+    result[i] = 0.0; \
+    for (int j = 0; j < cols; j++) { \
+        result[i] += matrix[i*cols+j] * vector[j]; \
+    } \
+}
+
+#define X_TYPE uint8_t
+#define X_S (1.8539607843137257e-05f)
+#define X_Z (135)
+
 #define FC1_BIAS_TYPE uint8_t
 #define FC1_BIAS_S (0.0039392154590756285)
 #define FC1_BIAS_Z (124)
@@ -119,6 +131,9 @@ for(int i=0; i<size; i++) { \
 #define BHN_2_S (0.0014487537683225147f)
 #define BHN_2_Z (119)
 
+static X_TYPE* data_x_q;
+static int size_x = 257;
+
 static float* data_fc1_bias;
 static FC1_BIAS_TYPE* data_fc1_bias_q;
 static int size_fc1_bias;
@@ -211,7 +226,11 @@ static int size_onnx__MatMul_208;
 static float* data_onnx__MatMul_209;
 static int size_onnx__MatMul_209;
 
+static float* data_fc1MatMul;
+static int size_fc1MatMul;
+
 int setup_nsnet2(const char* weights_path);
 void free_nsnet2();
+void run_nsnet2(float* x, float* h1, float* h2);
 
 static int read_weights(const char* weights_path, const char* weights_name, float** data, int* size);
