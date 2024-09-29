@@ -151,6 +151,10 @@ free(transposed); \
 #define ONNX__MATMUL_166_S (0.0016850753157746558f)
 #define ONNX__MATMUL_166_Z (131)
 
+#define ONNX__MATMUL_207_TYPE uint8_t
+#define ONNX__MATMUL_207_S (0.009898108594557819f)
+#define ONNX__MATMUL_207_Z (138)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
