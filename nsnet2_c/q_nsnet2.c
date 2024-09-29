@@ -34,14 +34,16 @@ int setup_nsnet2(const char* weights_path) {
         return -1;
     data_fc3_bias_q = (FC3_BIAS_TYPE*) malloc(sizeof(FC3_BIAS_TYPE) * size_fc3_bias);
     QUANTIZE(data_fc3_bias,data_fc3_bias_q,FC3_BIAS_S,FC3_BIAS_Z,size_fc3_bias)   
-    PRINT_TENSOR(data_fc3_bias_q, 0, 5, "%d ", "\n")
-    PRINT_TENSOR(data_fc3_bias_q, 600-5, 600, "%d ", "\n")
     free(data_fc3_bias);
     
     // fc4_bias
     flag = read_weights(weights_path, "fc4_bias.npy", &data_fc4_bias, &size_fc4_bias);
     if(flag != 0)
         return -1;
+    data_fc4_bias_q = (FC4_BIAS_TYPE*) malloc(sizeof(FC4_BIAS_TYPE) * size_fc4_bias);
+    QUANTIZE(data_fc4_bias,data_fc4_bias_q,FC4_BIAS_S,FC4_BIAS_Z,size_fc4_bias)   
+    PRINT_TENSOR(data_fc4_bias_q, 0, 5, "%d ", "\n")
+    PRINT_TENSOR(data_fc4_bias_q, 257-5, 257, "%d ", "\n")
     free(data_fc4_bias);
 
     // onnx__GRU_184

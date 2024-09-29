@@ -167,6 +167,10 @@ free(transposed); \
 #define FC3_BIAS_S (0.000752140201774298)
 #define FC3_BIAS_Z (135)
 
+#define FC4_BIAS_TYPE uint8_t
+#define FC4_BIAS_S (0.0005998921744963702)
+#define FC4_BIAS_Z (178)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -183,6 +187,7 @@ static FC3_BIAS_TYPE* data_fc3_bias_q;
 static int size_fc3_bias;
 
 static float* data_fc4_bias;
+static FC4_BIAS_TYPE* data_fc4_bias_q;
 static int size_fc4_bias;
 
 static float* data_onnx__GRU_184;
