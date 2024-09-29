@@ -15,6 +15,8 @@ int setup_nsnet2(const char* weights_path) {
     flag = read_weights(weights_path, "onnx__MatMul_166.npy", &data_onnx__MatMul_166, &size_onnx__MatMul_166);
     if(flag != 0)
         return -1;
+
+    TRANSPOSE(257, 400, data_onnx__MatMul_166, float)
     data_onnx__MatMul_166_q = (ONNX__MATMUL_166_TYPE*) malloc(sizeof(ONNX__MATMUL_166_TYPE) * size_onnx__MatMul_166);
     QUANTIZE(data_onnx__MatMul_166, data_onnx__MatMul_166_q, ONNX__MATMUL_166_S, ONNX__MATMUL_166_Z, size_onnx__MatMul_166)
     PRINT_TENSOR(data_onnx__MatMul_166_q, 0, 5, "%d ", "\n")
@@ -285,11 +287,6 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_bhn_2, data_bhn_2_q, BHN_2_S, BHN_2_Z, 400)
     free(data_bhn_2);
 
-    // onnx__MatMul_166
-    flag = read_weights(weights_path, "onnx__MatMul_166.npy", &data_onnx__MatMul_166, &size_onnx__MatMul_166);
-    if(flag != 0)
-        return -1;
-    
     // onnx__MatMul_207
     flag = read_weights(weights_path, "onnx__MatMul_207.npy", &data_onnx__MatMul_207, &size_onnx__MatMul_207);
     if(flag != 0)
@@ -350,6 +347,4 @@ int read_weights(const char* weights_path, const char* weights_name, float** dat
 void run_nsnet2(float* x, float* h1, float* h2) {
     data_x_q = (X_TYPE*) malloc(sizeof(X_TYPE*) * size_x);
     QUANTIZE(x, data_x_q, X_S, X_Z, size_x)
-
-    //MATMUL(data_onnx__MatMul_166_q)
 }

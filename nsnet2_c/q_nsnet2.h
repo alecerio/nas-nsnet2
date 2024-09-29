@@ -23,6 +23,22 @@ for (int i = 0; i < rows; i++) { \
     } \
 }
 
+#define TRANSPOSE(rows,cols,matrix,type) \
+{ \
+type* transposed = (type*) malloc(sizeof(type)*rows*cols); \
+for (int i = 0; i < rows; i++) { \
+    for (int j = 0; j < cols; j++) { \
+        transposed[j*rows+i] = matrix[i*cols+j]; \
+    } \
+} \
+for (int i = 0; i < rows; i++) { \
+    for (int j = 0; j < cols; j++) { \
+        matrix[i*cols+j] = transposed[i*cols+j]; \
+    } \
+} \
+free(transposed); \
+}
+
 #define X_TYPE uint8_t
 #define X_S (1.8539607843137257e-05f)
 #define X_Z (135)
