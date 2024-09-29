@@ -39,6 +39,9 @@ int setup_nsnet2(const char* weights_path) {
     flag = read_weights(weights_path, "fc4_bias.npy", &data_fc4_bias, &size_fc4_bias);
     if(flag != 0)
         return -1;
+    PRINT_TENSOR(data_fc4_bias, 0, 5, "%f ", "\n")
+    PRINT_TENSOR(data_fc4_bias, 257-5, 257, "%f ", "\n")
+    free(data_fc4_bias);
 
     // onnx__GRU_184
     flag = read_weights(weights_path, "onnx__GRU_184.npy", &data_onnx__GRU_184, &size_onnx__GRU_184);
@@ -307,8 +310,6 @@ int setup_nsnet2(const char* weights_path) {
     if(flag != 0)
         return -1;
     TRANSPOSE(600, 257, data_onnx__MatMul_209, float)
-    PRINT_TENSOR(data_onnx__MatMul_209, 0, 5, "%f ", "\n")
-    PRINT_TENSOR(data_onnx__MatMul_209, 600*257-5, 600*257, "%f ", "\n")
     free(data_onnx__MatMul_209);
     
     
