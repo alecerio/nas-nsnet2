@@ -163,48 +163,53 @@ free(transposed); \
 #define ONNX__MATMUL_209_S (7.519294355581197e-10)
 #define ONNX__MATMUL_209_Z (1729645127)
 
+#define FC3_BIAS_TYPE uint8_t
+#define FC3_BIAS_S (0.000752140201774298)
+#define FC3_BIAS_Z (135)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
-static double* data_fc1_bias;
+static float* data_fc1_bias;
 static FC1_BIAS_TYPE* data_fc1_bias_q;
 static int size_fc1_bias;
 
-static double* data_fc2_bias;
+static float* data_fc2_bias;
 static FC2_BIAS_TYPE* data_fc2_bias_q;
 static int size_fc2_bias;
 
-static double* data_fc3_bias;
+static float* data_fc3_bias;
+static FC3_BIAS_TYPE* data_fc3_bias_q;
 static int size_fc3_bias;
 
-static double* data_fc4_bias;
+static float* data_fc4_bias;
 static int size_fc4_bias;
 
-static double* data_onnx__GRU_184;
-static double* data_Wiz_1;
-static double* data_Wir_1;
-static double* data_Win_1;
+static float* data_onnx__GRU_184;
+static float* data_Wiz_1;
+static float* data_Wir_1;
+static float* data_Win_1;
 static WIZ_1_TYPE* data_Wiz_1_q;
 static WIR_1_TYPE* data_Wir_1_q;
 static WIN_1_TYPE* data_Win_1_q;
 static int size_onnx__GRU_184;
 
-static double* data_onnx__GRU_185;
-static double* data_Whz_1;
-static double* data_Whr_1;
-static double* data_Whn_1;
+static float* data_onnx__GRU_185;
+static float* data_Whz_1;
+static float* data_Whr_1;
+static float* data_Whn_1;
 static WHZ_1_TYPE* data_Whz_1_q;
 static WHR_1_TYPE* data_Whr_1_q;
 static WHN_1_TYPE* data_Whn_1_q;
 static int size_onnx__GRU_185;
 
-static double* data_onnx__GRU_186;
-static double* data_biz_1;
-static double* data_bir_1;
-static double* data_bin_1;
-static double* data_bhz_1;
-static double* data_bhr_1;
-static double* data_bhn_1;
+static float* data_onnx__GRU_186;
+static float* data_biz_1;
+static float* data_bir_1;
+static float* data_bin_1;
+static float* data_bhz_1;
+static float* data_bhr_1;
+static float* data_bhn_1;
 static BIZ_1_TYPE* data_biz_1_q;
 static BIR_1_TYPE* data_bir_1_q;
 static BIN_1_TYPE* data_bin_1_q;
@@ -213,31 +218,31 @@ static BHR_1_TYPE* data_bhr_1_q;
 static BHN_1_TYPE* data_bhn_1_q;
 static int size_onnx__GRU_186;
 
-static double* data_Wiz_2;
-static double* data_onnx__GRU_204;
-static double* data_Wir_2;
-static double* data_Win_2;
+static float* data_Wiz_2;
+static float* data_onnx__GRU_204;
+static float* data_Wir_2;
+static float* data_Win_2;
 static WIZ_2_TYPE* data_Wiz_2_q;
 static WIR_2_TYPE* data_Wir_2_q;
 static WIN_2_TYPE* data_Win_2_q;
 static int size_onnx__GRU_204;
 
-static double* data_onnx__GRU_205;
-static double* data_Whz_2;
-static double* data_Whr_2;
-static double* data_Whn_2;
+static float* data_onnx__GRU_205;
+static float* data_Whz_2;
+static float* data_Whr_2;
+static float* data_Whn_2;
 static WHZ_2_TYPE* data_Whz_2_q;
 static WHR_2_TYPE* data_Whr_2_q;
 static WHR_2_TYPE* data_Whn_2_q;
 static int size_onnx__GRU_205;
 
-static double* data_onnx__GRU_206;
-static double* data_biz_2;
-static double* data_bir_2;
-static double* data_bin_2;
-static double* data_bhz_2;
-static double* data_bhr_2;
-static double* data_bhn_2;
+static float* data_onnx__GRU_206;
+static float* data_biz_2;
+static float* data_bir_2;
+static float* data_bin_2;
+static float* data_bhz_2;
+static float* data_bhr_2;
+static float* data_bhn_2;
 static BIZ_2_TYPE* data_biz_2_q;
 static BIR_2_TYPE* data_bir_2_q;
 static BIN_2_TYPE* data_bin_2_q;
@@ -246,27 +251,27 @@ static BHR_2_TYPE* data_bhr_2_q;
 static BHN_2_TYPE* data_bhn_2_q;
 static int size_onnx__GRU_206;
 
-static double* data_onnx__MatMul_166;
+static float* data_onnx__MatMul_166;
 static ONNX__MATMUL_166_TYPE* data_onnx__MatMul_166_q;
 static int size_onnx__MatMul_166;
 
-static double* data_onnx__MatMul_207;
+static float* data_onnx__MatMul_207;
 static ONNX__MATMUL_207_TYPE* data_onnx__MatMul_207_q;
 static int size_onnx__MatMul_207;
 
-static double* data_onnx__MatMul_208;
+static float* data_onnx__MatMul_208;
 static ONNX__MATMUL_208_TYPE* data_onnx__MatMul_208_q;
 static int size_onnx__MatMul_208;
 
-static double* data_onnx__MatMul_209;
+static float* data_onnx__MatMul_209;
 static ONNX__MATMUL_209_TYPE* data_onnx__MatMul_209_q;
 static int size_onnx__MatMul_209;
 
-static double* data_fc1MatMul;
+static float* data_fc1MatMul;
 static int size_fc1MatMul;
 
 int setup_nsnet2(const char* weights_path);
 void free_nsnet2();
-void run_nsnet2(double* x, double* h1, double* h2);
+void run_nsnet2(float* x, float* h1, float* h2);
 
-static int read_weights(const char* weights_path, const char* weights_name, double** data, int* size);
+static int read_weights(const char* weights_path, const char* weights_name, float** data, int* size);

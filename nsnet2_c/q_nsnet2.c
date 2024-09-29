@@ -15,7 +15,7 @@ int setup_nsnet2(const char* weights_path) {
     flag = read_weights(weights_path, "onnx__MatMul_166.npy", &data_onnx__MatMul_166, &size_onnx__MatMul_166);
     if(flag != 0)
         return -1;
-    TRANSPOSE(257, 400, data_onnx__MatMul_166, double)
+    TRANSPOSE(257, 400, data_onnx__MatMul_166, float)
     data_onnx__MatMul_166_q = (ONNX__MATMUL_166_TYPE*) malloc(sizeof(ONNX__MATMUL_166_TYPE) * size_onnx__MatMul_166);
     QUANTIZE(data_onnx__MatMul_166, data_onnx__MatMul_166_q, ONNX__MATMUL_166_S, ONNX__MATMUL_166_Z, size_onnx__MatMul_166)
     free(data_onnx__MatMul_166);
@@ -32,6 +32,10 @@ int setup_nsnet2(const char* weights_path) {
     flag = read_weights(weights_path, "fc3_bias.npy", &data_fc3_bias, &size_fc3_bias);
     if(flag != 0)
         return -1;
+    data_fc3_bias_q = (FC3_BIAS_TYPE*) malloc(sizeof(FC3_BIAS_TYPE) * size_fc3_bias);
+    QUANTIZE(data_fc3_bias,data_fc3_bias_q,FC3_BIAS_S,FC3_BIAS_Z,size_fc3_bias)   
+    PRINT_TENSOR(data_fc3_bias_q, 0, 5, "%d ", "\n")
+    PRINT_TENSOR(data_fc3_bias_q, 600-5, 600, "%d ", "\n")
     free(data_fc3_bias);
     
     // fc4_bias
@@ -45,7 +49,7 @@ int setup_nsnet2(const char* weights_path) {
     if(flag != 0)
         return -1;
     
-    data_Wiz_1 = (double*) malloc(sizeof(double)*400*400);
+    data_Wiz_1 = (float*) malloc(sizeof(float)*400*400);
     for(int i=0; i<400; i++) {
         for(int j=0; j<400; j++) {
             data_Wiz_1[i*400+j] = data_onnx__GRU_184[i*400+j];
@@ -55,7 +59,7 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_Wiz_1, data_Wiz_1_q, WIZ_1_S, WIZ_1_Z, 400*400)
     free(data_Wiz_1);
 
-    data_Wir_1 = (double*) malloc(sizeof(double)*400*400);
+    data_Wir_1 = (float*) malloc(sizeof(float)*400*400);
     for(int i=0; i<400; i++) {
         for(int j=0; j<400; j++) {
             data_Wir_1[i*400+j] = data_onnx__GRU_184[400*400+i*400+j];
@@ -65,7 +69,7 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_Wir_1, data_Wir_1_q, WIR_1_S, WIR_1_Z, 400*400)
     free(data_Wir_1);
 
-    data_Win_1 = (double*) malloc(sizeof(double)*400*400);
+    data_Win_1 = (float*) malloc(sizeof(float)*400*400);
     for(int i=0; i<400; i++) {
         for(int j=0; j<400; j++) {
             data_Win_1[i*400+j] = data_onnx__GRU_184[800*400+i*400+j];
@@ -80,7 +84,7 @@ int setup_nsnet2(const char* weights_path) {
     if(flag != 0)
         return -1;
     
-    data_Whz_1 = (double*) malloc(sizeof(double)*400*400);
+    data_Whz_1 = (float*) malloc(sizeof(float)*400*400);
     for(int i=0; i<400; i++) {
         for(int j=0; j<400; j++) {
             data_Whz_1[i*400+j] = data_onnx__GRU_185[i*400+j];
@@ -90,7 +94,7 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_Whz_1, data_Whz_1_q, WHZ_1_S, WHZ_1_Z, 400*400)
     free(data_Whz_1);
 
-    data_Whr_1 = (double*) malloc(sizeof(double)*400*400);
+    data_Whr_1 = (float*) malloc(sizeof(float)*400*400);
     for(int i=0; i<400; i++) {
         for(int j=0; j<400; j++) {
             data_Whr_1[i*400+j] = data_onnx__GRU_185[400*400+i*400+j];
@@ -100,7 +104,7 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_Whr_1, data_Whr_1_q, WHR_1_S, WHR_1_Z, 400*400)
     free(data_Whr_1);
 
-    data_Whn_1 = (double*) malloc(sizeof(double)*400*400);
+    data_Whn_1 = (float*) malloc(sizeof(float)*400*400);
     for(int i=0; i<400; i++) {
         for(int j=0; j<400; j++) {
             data_Whn_1[i*400+j] = data_onnx__GRU_185[800*400+i*400+j];
@@ -115,7 +119,7 @@ int setup_nsnet2(const char* weights_path) {
     if(flag != 0)
         return -1;
     
-    data_biz_1 = (double*) malloc(sizeof(double)*400);
+    data_biz_1 = (float*) malloc(sizeof(float)*400);
     for(int i=0; i<400; i++) {
         data_biz_1[i] = data_onnx__GRU_186[i];
     }
@@ -123,7 +127,7 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_biz_1, data_biz_1_q, BIZ_1_S, BIZ_1_Z, 400)
     free(data_biz_1);
 
-    data_bir_1 = (double*) malloc(sizeof(double)*400);
+    data_bir_1 = (float*) malloc(sizeof(float)*400);
     for(int i=0; i<400; i++) {
         data_bir_1[i] = data_onnx__GRU_186[400+i];
     }
@@ -131,7 +135,7 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_bir_1, data_bir_1_q, BIR_1_S, BIR_1_Z, 400)
     free(data_bir_1);
 
-    data_bin_1 = (double*) malloc(sizeof(double)*400);
+    data_bin_1 = (float*) malloc(sizeof(float)*400);
     for(int i=0; i<400; i++) {
         data_bin_1[i] = data_onnx__GRU_186[800+i];
     }
@@ -139,7 +143,7 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_bin_1, data_bin_1_q, BIN_1_S, BIN_1_Z, 400)
     free(data_bin_1);
 
-    data_bhz_1 = (double*) malloc(sizeof(double)*400);
+    data_bhz_1 = (float*) malloc(sizeof(float)*400);
     for(int i=0; i<400; i++) {
         data_bhz_1[i] = data_onnx__GRU_186[1200+i];
     }
@@ -147,7 +151,7 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_bhz_1, data_bhz_1_q, BHZ_1_S, BHZ_1_Z, 400)
     free(data_bhz_1);
 
-    data_bhr_1 = (double*) malloc(sizeof(double)*400);
+    data_bhr_1 = (float*) malloc(sizeof(float)*400);
     for(int i=0; i<400; i++) {
         data_bhr_1[i] = data_onnx__GRU_186[1600+i];
     }
@@ -155,7 +159,7 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_bhr_1, data_bhr_1_q, BHR_1_S, BHR_1_Z, 400)
     free(data_bhr_1);
 
-    data_bhn_1 = (double*) malloc(sizeof(double)*400);
+    data_bhn_1 = (float*) malloc(sizeof(float)*400);
     for(int i=0; i<400; i++) {
         data_bhn_1[i] = data_onnx__GRU_186[2000+i];
     }
@@ -168,7 +172,7 @@ int setup_nsnet2(const char* weights_path) {
     if(flag != 0)
         return -1;
     
-    data_Wiz_2 = (double*) malloc(sizeof(double)*400*400);
+    data_Wiz_2 = (float*) malloc(sizeof(float)*400*400);
     for(int i=0; i<400; i++) {
         for(int j=0; j<400; j++) {
             data_Wiz_2[i*400+j] = data_onnx__GRU_204[i*400+j];
@@ -178,7 +182,7 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_Wiz_2, data_Wiz_2_q, WIZ_2_S, WIZ_2_Z, 400*400)
     free(data_Wiz_2);
 
-    data_Wir_2 = (double*) malloc(sizeof(double)*400*400);
+    data_Wir_2 = (float*) malloc(sizeof(float)*400*400);
     for(int i=0; i<400; i++) {
         for(int j=0; j<400; j++) {
             data_Wir_2[i*400+j] = data_onnx__GRU_204[400*400+i*400+j];
@@ -188,7 +192,7 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_Wir_2, data_Wir_2_q, WIR_2_S, WIR_2_Z, 400*400)
     free(data_Wir_2);
 
-    data_Win_2 = (double*) malloc(sizeof(double)*400*400);
+    data_Win_2 = (float*) malloc(sizeof(float)*400*400);
     for(int i=0; i<400; i++) {
         for(int j=0; j<400; j++) {
             data_Wir_2[i*400+j] = data_onnx__GRU_204[800*400+i*400+j];
@@ -203,7 +207,7 @@ int setup_nsnet2(const char* weights_path) {
     if(flag != 0)
         return -1;
     
-    data_Whz_2 = (double*) malloc(sizeof(double)*400*400);
+    data_Whz_2 = (float*) malloc(sizeof(float)*400*400);
     for(int i=0; i<400; i++) {
         for(int j=0; j<400; j++) {
             data_Whz_2[i*400+j] = data_onnx__GRU_205[i*400+j];
@@ -213,7 +217,7 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_Whz_2, data_Whz_2_q, WHZ_2_S, WHZ_2_Z, 400*400)
     free(data_Whz_2);
 
-    data_Whr_2 = (double*) malloc(sizeof(double)*400*400);
+    data_Whr_2 = (float*) malloc(sizeof(float)*400*400);
     for(int i=0; i<400; i++) {
         for(int j=0; j<400; j++) {
             data_Whr_2[i*400+j] = data_onnx__GRU_205[400*400+i*400+j];
@@ -223,7 +227,7 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_Whr_2, data_Whr_2_q, WHR_2_S, WHR_2_Z, 400*400)
     free(data_Whr_2);
 
-    data_Whn_2 = (double*) malloc(sizeof(double)*400*400);
+    data_Whn_2 = (float*) malloc(sizeof(float)*400*400);
     for(int i=0; i<400; i++) {
         for(int j=0; j<400; j++) {
             data_Whn_2[i*400+j] = data_onnx__GRU_205[800*400+i*400+j];
@@ -238,7 +242,7 @@ int setup_nsnet2(const char* weights_path) {
     if(flag != 0)
         return -1;
     
-    data_biz_2 = (double*) malloc(sizeof(double)*400);
+    data_biz_2 = (float*) malloc(sizeof(float)*400);
     for(int i=0; i<400; i++) {
         data_biz_2[i] = data_onnx__GRU_206[i];
     }
@@ -246,7 +250,7 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_biz_2, data_biz_2_q, BIZ_2_S, BIZ_2_Z, 400)
     free(data_biz_2);
 
-    data_bir_2 = (double*) malloc(sizeof(double)*400);
+    data_bir_2 = (float*) malloc(sizeof(float)*400);
     for(int i=0; i<400; i++) {
         data_bir_2[i] = data_onnx__GRU_206[400+i];
     }
@@ -254,7 +258,7 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_bir_2, data_bir_2_q, BIR_2_S, BIR_2_Z, 400)
     free(data_bir_2);
 
-    data_bin_2 = (double*) malloc(sizeof(double)*400);
+    data_bin_2 = (float*) malloc(sizeof(float)*400);
     for(int i=0; i<400; i++) {
         data_bin_2[i] = data_onnx__GRU_206[800+i];
     }
@@ -262,7 +266,7 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_bin_2, data_bin_2_q, BIN_2_S, BIN_2_Z, 400)
     free(data_bin_2);
 
-    data_bhz_2 = (double*) malloc(sizeof(double)*400);
+    data_bhz_2 = (float*) malloc(sizeof(float)*400);
     for(int i=0; i<400; i++) {
         data_bhz_2[i] = data_onnx__GRU_206[1200+i];
     }
@@ -270,7 +274,7 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_bhz_2, data_bhz_2_q, BHZ_2_S, BHZ_2_Z, 400)
     free(data_bhz_2);
 
-    data_bhr_2 = (double*) malloc(sizeof(double)*400);
+    data_bhr_2 = (float*) malloc(sizeof(float)*400);
     for(int i=0; i<400; i++) {
         data_bhr_2[i] = data_onnx__GRU_206[1600+i];
     }
@@ -278,7 +282,7 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_bhr_2, data_bhr_2_q, BHR_2_S, BHR_2_Z, 400)
     free(data_bhr_2);
 
-    data_bhn_2 = (double*) malloc(sizeof(double)*400);
+    data_bhn_2 = (float*) malloc(sizeof(float)*400);
     for(int i=0; i<400; i++) {
         data_bhn_2[i] = data_onnx__GRU_206[2000+i];
     }
@@ -290,7 +294,7 @@ int setup_nsnet2(const char* weights_path) {
     flag = read_weights(weights_path, "onnx__MatMul_207.npy", &data_onnx__MatMul_207, &size_onnx__MatMul_207);
     if(flag != 0)
         return -1;
-    TRANSPOSE(400, 600, data_onnx__MatMul_207, double)
+    TRANSPOSE(400, 600, data_onnx__MatMul_207, float)
     data_onnx__MatMul_207_q = (ONNX__MATMUL_207_TYPE*) malloc(sizeof(ONNX__MATMUL_207_TYPE) * size_onnx__MatMul_207);
     QUANTIZE(data_onnx__MatMul_207, data_onnx__MatMul_207_q, ONNX__MATMUL_207_S, ONNX__MATMUL_207_Z, size_onnx__MatMul_207)
     free(data_onnx__MatMul_207);
@@ -299,7 +303,7 @@ int setup_nsnet2(const char* weights_path) {
     flag = read_weights(weights_path, "onnx__MatMul_208.npy", &data_onnx__MatMul_208, &size_onnx__MatMul_208);
     if(flag != 0)
         return -1;
-    TRANSPOSE(600, 600, data_onnx__MatMul_208, double)
+    TRANSPOSE(600, 600, data_onnx__MatMul_208, float)
     data_onnx__MatMul_208_q = (ONNX__MATMUL_208_TYPE*) malloc(sizeof(ONNX__MATMUL_208_TYPE) * size_onnx__MatMul_208);
     QUANTIZE(data_onnx__MatMul_208, data_onnx__MatMul_208_q, ONNX__MATMUL_208_S, ONNX__MATMUL_208_Z, size_onnx__MatMul_208)
     free(data_onnx__MatMul_208);
@@ -308,11 +312,9 @@ int setup_nsnet2(const char* weights_path) {
     flag = read_weights(weights_path, "onnx__MatMul_209.npy", &data_onnx__MatMul_209, &size_onnx__MatMul_209);
     if(flag != 0)
         return -1;
-    TRANSPOSE(600, 257, data_onnx__MatMul_209, double)
+    TRANSPOSE(600, 257, data_onnx__MatMul_209, float)
     data_onnx__MatMul_209_q = (ONNX__MATMUL_209_TYPE*) malloc(sizeof(ONNX__MATMUL_209_TYPE) * size_onnx__MatMul_209);
     QUANTIZE(data_onnx__MatMul_209, data_onnx__MatMul_209_q, ONNX__MATMUL_209_S, ONNX__MATMUL_209_Z, size_onnx__MatMul_209)
-    PRINT_TENSOR(data_onnx__MatMul_209_q, 0, 5, "%ld ", "\n")
-    PRINT_TENSOR(data_onnx__MatMul_209_q, 600*257-5, 600*257, "%ld ", "\n")
     free(data_onnx__MatMul_209);
     
     
@@ -332,7 +334,7 @@ void free_nsnet2() {
     //free(data_onnx__GRU_184);
 }
 
-int read_weights(const char* weights_path, const char* weights_name, double** data, int* size) {
+int read_weights(const char* weights_path, const char* weights_name, float** data, int* size) {
     int len_name = strlen(weights_name);
     int len_path = strlen(weights_path);
     char* weights_path_full = (char*) malloc(sizeof(char) * (len_path + len_name));
@@ -357,7 +359,7 @@ int read_weights(const char* weights_path, const char* weights_name, double** da
     return 0;
 }
 
-void run_nsnet2(double* x, double* h1, double* h2) {
+void run_nsnet2(float* x, float* h1, float* h2) {
     data_x_q = (X_TYPE*) malloc(sizeof(X_TYPE*) * size_x);
     QUANTIZE(x, data_x_q, X_S, X_Z, size_x)
 }
