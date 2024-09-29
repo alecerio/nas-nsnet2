@@ -171,8 +171,15 @@ free(transposed); \
 #define FC4_BIAS_S (0.0005998921744963702)
 #define FC4_BIAS_Z (178)
 
+#define H1_TYPE uint8_t
+#define H1_S (2.149590656307398e-05)
+#define H1_Z (123)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
+
+static H1_TYPE* data_h1_q;
+static int size_h1 = 400;
 
 static float* data_fc1_bias;
 static FC1_BIAS_TYPE* data_fc1_bias_q;

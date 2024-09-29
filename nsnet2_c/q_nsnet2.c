@@ -42,8 +42,6 @@ int setup_nsnet2(const char* weights_path) {
         return -1;
     data_fc4_bias_q = (FC4_BIAS_TYPE*) malloc(sizeof(FC4_BIAS_TYPE) * size_fc4_bias);
     QUANTIZE(data_fc4_bias,data_fc4_bias_q,FC4_BIAS_S,FC4_BIAS_Z,size_fc4_bias)   
-    PRINT_TENSOR(data_fc4_bias_q, 0, 5, "%d ", "\n")
-    PRINT_TENSOR(data_fc4_bias_q, 257-5, 257, "%d ", "\n")
     free(data_fc4_bias);
 
     // onnx__GRU_184
@@ -364,4 +362,9 @@ int read_weights(const char* weights_path, const char* weights_name, float** dat
 void run_nsnet2(float* x, float* h1, float* h2) {
     data_x_q = (X_TYPE*) malloc(sizeof(X_TYPE*) * size_x);
     QUANTIZE(x, data_x_q, X_S, X_Z, size_x)
+
+    data_h1_q = (H1_TYPE*) malloc(sizeof(H1_TYPE*) * size_h1);
+    QUANTIZE(h1, data_h1_q, H1_S, H1_Z, size_h1)
+    PRINT_TENSOR(data_h1_q, 0, 5, "%d ", "\n")
+    PRINT_TENSOR(data_h1_q, 257-5, 257, "%d ", "\n")
 }
