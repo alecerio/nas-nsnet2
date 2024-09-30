@@ -365,6 +365,9 @@ void run_nsnet2(float* x, float* h1, float* h2) {
 
     data_h1_q = (H1_TYPE*) malloc(sizeof(H1_TYPE*) * size_h1);
     QUANTIZE(h1, data_h1_q, H1_S, H1_Z, size_h1)
-    PRINT_TENSOR(data_h1_q, 0, 5, "%d ", "\n")
-    PRINT_TENSOR(data_h1_q, 257-5, 257, "%d ", "\n")
+
+    data_h2_q = (H2_TYPE*) malloc(sizeof(H2_TYPE*) * size_h2);
+    QUANTIZE(h2, data_h2_q, H2_S, H2_Z, size_h2)
+    PRINT_TENSOR(data_h2_q, 0, 5, "%d ", "\n")
+    PRINT_TENSOR(data_h2_q, 400-5, 400, "%d ", "\n")
 }
