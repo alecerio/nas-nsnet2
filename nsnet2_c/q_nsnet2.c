@@ -368,6 +368,12 @@ void run_nsnet2(float* x, float* h1, float* h2) {
 
     data_h2_q = (H2_TYPE*) malloc(sizeof(H2_TYPE*) * size_h2);
     QUANTIZE(h2, data_h2_q, H2_S, H2_Z, size_h2)
-    PRINT_TENSOR(data_h2_q, 0, 5, "%d ", "\n")
-    PRINT_TENSOR(data_h2_q, 400-5, 400, "%d ", "\n")
+
+    data_fc1MatMul_q = (FC1MATMUL_TYPE*) malloc(sizeof(FC1MATMUL_TYPE*) * size_fc1MatMul);
+    QMATMUL(400, 257, data_onnx__MatMul_166_q, data_x_q, data_fc1MatMul_q, 
+        ONNX__MATMUL_166_S,X_S,FC1MATMUL_S,
+        ONNX__MATMUL_166_Z,X_Z,FC1MATMUL_Z, FC1MATMUL_TYPE)
+    
+    PRINT_TENSOR(data_fc1MatMul_q, 0, 10, "%d ", "\n")
+    PRINT_TENSOR_SUM(data_fc1MatMul_q, 400, int, "%d\n")
 }

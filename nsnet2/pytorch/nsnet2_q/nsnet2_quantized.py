@@ -7,11 +7,13 @@ class Q_NsNet2_npy(torch.nn.Module):
         super(Q_NsNet2_npy, self).__init__()
 
         self.calib = init_calibration(mpq_config)
+        print(self.calib['fc1MatMul'].S())
+        print(self.calib['fc1MatMul'].Z())
 
         # onnxMatMul_166
         self.onnxMatMul_166 = np.load(numpy_weights_path + 'onnx__MatMul_166.npy').transpose()
         self.onnxMatMul_166_q = self._quantize_tensor(self.onnxMatMul_166, 'onnxMatMul_166')
-        
+
         # fc1bias
         self.fc1bias = np.load(numpy_weights_path + 'fc1_bias.npy')
         self.fc1bias_q = self._quantize_tensor(self.fc1bias, 'fc1bias')
@@ -92,13 +94,13 @@ class Q_NsNet2_npy(torch.nn.Module):
 
         self.onnxMatMul_208 = np.load(numpy_weights_path + 'onnx__MatMul_208.npy').transpose()
         self.onnxMatMul_208_q = self._quantize_tensor(self.onnxMatMul_208, 'onnxMatMul_208')
-        
+
         self.fc3bias = np.load(numpy_weights_path + 'fc3_bias.npy')
         self.fc3bias_q = self._quantize_tensor(self.fc3bias, 'fc3bias')
 
         self.onnxMatMul_209 = np.load(numpy_weights_path + 'onnx__MatMul_209.npy').transpose()
         self.onnxMatMul_209_q = self._quantize_tensor(self.onnxMatMul_209, 'onnxMatMul_209')
-        
+
         self.fc4bias = np.load(numpy_weights_path + 'fc4_bias.npy')
         self.fc4bias_q = self._quantize_tensor(self.fc4bias, 'fc4bias')
 
@@ -118,6 +120,10 @@ class Q_NsNet2_npy(torch.nn.Module):
         # fc1MatMul_q
         fc1MatMul_q = self._quantize_matmul(self.onnxMatMul_166_q, x_q, 'onnxMatMul_166', 'x', 'fc1MatMul')
         fc1MatMul = np.matmul(self.onnxMatMul_166, x)
+        print(fc1MatMul_q.flatten()[0:10])
+        #print(fc1MatMul_q.flatten()[0:400])
+        #print(fc1MatMul_q.flatten()[400-5:400])
+        print(np.sum(fc1MatMul_q))
 
         # fc1Add_q
         fc1Add_q = self._quantize_add(fc1MatMul_q, self.fc1bias_q, 'fc1MatMul', 'fc1bias', 'fc1Add')
@@ -178,7 +184,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         # gru1_r
         temp_x = self._dequantize(gru1_r__q, self.calib['gru1_r_'].S(), self.calib['gru1_r_'].Z())
         temp_y = 1 / (1 + np.exp(-temp_x))
-        gru1_r_q = self._quantize(temp_y, self.calib['gru1_r'].S(), self.calib['gru1_r'].Z())
+        gru1_r_q = self._quantize(temp_y, self.calib['gru1_r'].S(), self.calib['gru1_r'].Z(), self.calib['gru1_r'].bitwidth)
         gru1_r = 1 / (1 + np.exp(-gru1_r_))
 
         # gru1_z_
@@ -188,7 +194,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         # gru1_z
         temp_x = self._dequantize(gru1_z__q, self.calib['gru1_z_'].S(), self.calib['gru1_z_'].Z())
         temp_y = 1 / (1 + np.exp(-temp_x))
-        gru1_z_q = self._quantize(temp_y, self.calib['gru1_z'].S(), self.calib['gru1_z'].Z())
+        gru1_z_q = self._quantize(temp_y, self.calib['gru1_z'].S(), self.calib['gru1_z'].Z(), self.calib['gru1_z'].bitwidth)
         gru1_z = 1 / (1 + np.exp(-gru1_z_))
 
         # gru1_n1
@@ -202,7 +208,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         # gru1_n
         temp_x = self._dequantize(gru1_n2_q, self.calib['gru1_n2'].S(), self.calib['gru1_n2'].Z())
         temp_y = np.tanh(temp_x)
-        gru1_n_q = self._quantize(temp_y, self.calib['gru1_n'].S(), self.calib['gru1_n'].Z())
+        gru1_n_q = self._quantize(temp_y, self.calib['gru1_n'].S(), self.calib['gru1_n'].Z(), self.calib['gru1_n'].bitwidth)
         gru1_n = np.tanh(gru1_n2)
 
         # gru1_hn1
@@ -280,7 +286,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         # gru2_r
         temp_x = self._dequantize(gru2_r__q, self.calib['gru2_r_'].S(), self.calib['gru2_r_'].Z())
         temp_y = 1 / (1 + np.exp(-temp_x))
-        gru2_r_q = self._quantize(temp_y, self.calib['gru2_r'].S(), self.calib['gru2_r'].Z())
+        gru2_r_q = self._quantize(temp_y, self.calib['gru2_r'].S(), self.calib['gru2_r'].Z(), self.calib['gru2_r'].bitwidth)
         gru2_r = 1 / (1 + np.exp(-gru2_r_))
 
         # gru2_z_
@@ -290,7 +296,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         # gru2_z
         temp_x = self._dequantize(gru2_z__q, self.calib['gru2_z_'].S(), self.calib['gru2_z_'].Z())
         temp_y = 1 / (1 + np.exp(-temp_x))
-        gru2_z_q = self._quantize(temp_y, self.calib['gru2_z'].S(), self.calib['gru2_z'].Z())
+        gru2_z_q = self._quantize(temp_y, self.calib['gru2_z'].S(), self.calib['gru2_z'].Z(), self.calib['gru2_z'].bitwidth)
         gru2_z = 1 / (1 + np.exp(-gru2_z_))
 
         # gru2_n1
@@ -304,7 +310,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         # gru2_n
         temp_x = self._dequantize(gru2_n2_q, self.calib['gru2_n2'].S(), self.calib['gru2_n2'].Z())
         temp_y = np.tanh(temp_x)
-        gru2_n_q = self._quantize(temp_y, self.calib['gru2_n'].S(), self.calib['gru2_n'].Z())
+        gru2_n_q = self._quantize(temp_y, self.calib['gru2_n'].S(), self.calib['gru2_n'].Z(), self.calib['gru2_n'].bitwidth)
         gru2_n = np.tanh(gru2_n2)
 
         # gru2_hn1
@@ -365,8 +371,10 @@ class Q_NsNet2_npy(torch.nn.Module):
 
         return sigmoid_q
     
-    def _quantize(self, tensor_fp32, S, z):
-        return np.floor(tensor_fp32 / S) + z
+    def _quantize(self, tensor_fp32, S, z, n_bits):
+        q = np.floor(tensor_fp32 / S) + z
+        q = q % (2**n_bits)
+        return q
     
     def _dequantize(self, tensor_i8, S, z):
         return (tensor_i8 - z) * S
@@ -376,14 +384,15 @@ class Q_NsNet2_npy(torch.nn.Module):
     
     def _quantize_tensor(self, tensor_f32, c_key):
         c = self.calib[c_key]
-        return self._quantize(tensor_f32, c.S(), c.Z())
+        return self._quantize(tensor_f32, c.S(), c.Z(), c.bitwidth)
     
     def _quantize_matmul(self, A, B, ca_key, cb_key, cy_key):
         ca = self.calib[ca_key]
         cb = self.calib[cb_key]
         cy = self.calib[cy_key]
+        S = (ca.S()*cb.S() / cy.S())
         return np.round(
-            (ca.S()*cb.S() / cy.S()) * np.matmul(A - ca.Z(), B - cb.Z()) + cy.Z()
+            S * np.matmul(A-ca.Z(), B-cb.Z()) + cy.Z()
         )
     
     def _quantize_add(self, A, B, ca_key, cb_key, cy_key):
@@ -401,7 +410,7 @@ class Q_NsNet2_npy(torch.nn.Module):
     def _quantize_one_minus_x(self, X, cx_key, cy_key):
         cx = self.calib[cx_key]
         cy = self.calib[cy_key]
-        one_q = self._quantize(np.ones(X.shape), cx.S(), cx.Z())
+        one_q = self._quantize(np.ones(X.shape), cx.S(), cx.Z(), cx.bitwidth)
         return (cx.S() / cy.S()) * (one_q - X) + cy.Z()
     
     def _quantize_relu(self, X_q, cx_key, cy_key):
@@ -409,11 +418,11 @@ class Q_NsNet2_npy(torch.nn.Module):
         cy = self.calib[cy_key]
         X = self._dequantize(X_q, cx.S(), cx.Z())
         Y = np.maximum(0, X)
-        return self._quantize(Y, cy.S(), cy.Z())
+        return self._quantize(Y, cy.S(), cy.Z(), cy.bitwidth)
     
     def _quantize_sigmoid(self, X_q, cx_key, cy_key):
         cx = self.calib[cx_key]
         cy = self.calib[cy_key]
         X = self._dequantize(X_q, cx.S(), cx.Z())
         Y = 1 / (1 + np.exp(-X))
-        return self._quantize(Y, cy.S(), cy.Z())
+        return self._quantize(Y, cy.S(), cy.Z(), cy.bitwidth)

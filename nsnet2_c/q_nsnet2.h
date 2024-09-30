@@ -10,6 +10,15 @@ for(int i=start; i<end; i++) { \
 } \
 printf(sep);
 
+#define PRINT_TENSOR_SUM(tensor,size,type,print) \
+{ \
+type sum = 0; \
+for(int i=0; i<size; i++) { \
+    sum += tensor[i]; \
+} \
+printf(print, sum); \
+}
+
 #define QUANTIZE(tensor_fp32,tensor_i,S,Z,size) \
 for(int i=0; i<size; i++) { \
     tensor_i[i] = (int64_t)(floor(tensor_fp32[i] / S)) + (int64_t)Z; \
@@ -21,6 +30,19 @@ for (int i = 0; i < rows; i++) { \
     for (int j = 0; j < cols; j++) { \
         result[i] += matrix[i*cols+j] * vector[j]; \
     } \
+}
+
+#define NCAST_ROUND(X) \
+(X >= 0) ? (int32_t)(X + 0.5) : (int32_t)(X - 0.5)
+
+#define QMATMUL(rows,cols,matrix,vector,result,Sm,Sv,Sr,Zm,Zv,Zr,res_type) \
+double S = (Sm * Sv) / Sr; \
+for (int i = 0; i < rows; i++) { \
+    int32_t acc = 0; \
+    for (int j = 0; j < cols; j++) { \
+        acc += ((int32_t)matrix[i*cols+j]-(int32_t)Zm) * ((int32_t)vector[j]-(int32_t)Zv); \
+    } \
+    result[i] = (res_type)(NCAST_ROUND(S * acc + Zr)); \
 }
 
 #define TRANSPOSE(rows,cols,matrix,type) \
@@ -179,6 +201,10 @@ free(transposed); \
 #define H2_S (2.402609725501023e-05)
 #define H2_Z (129)
 
+#define FC1MATMUL_TYPE uint8_t
+#define FC1MATMUL_S (1.8245977529411765e-05)
+#define FC1MATMUL_Z (160)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -286,8 +312,8 @@ static float* data_onnx__MatMul_209;
 static ONNX__MATMUL_209_TYPE* data_onnx__MatMul_209_q;
 static int size_onnx__MatMul_209;
 
-static float* data_fc1MatMul;
-static int size_fc1MatMul;
+static FC1MATMUL_TYPE* data_fc1MatMul_q;
+static int size_fc1MatMul = 400;
 
 int setup_nsnet2(const char* weights_path);
 void free_nsnet2();
