@@ -36,6 +36,7 @@ for (int i = 0; i < rows; i++) { \
 (X >= 0) ? (int32_t)(X + 0.5) : (int32_t)(X - 0.5)
 
 #define QMATMUL(rows,cols,matrix,vector,result,Sm,Sv,Sr,Zm,Zv,Zr,res_type) \
+{ \
 double S = (Sm * Sv) / Sr; \
 for (int i = 0; i < rows; i++) { \
     int32_t acc = 0; \
@@ -43,6 +44,14 @@ for (int i = 0; i < rows; i++) { \
         acc += ((int32_t)matrix[i*cols+j]-(int32_t)Zm) * ((int32_t)vector[j]-(int32_t)Zv); \
     } \
     result[i] = (res_type)(NCAST_ROUND(S * acc + Zr)); \
+} \
+}
+
+#define QADD(size,A,B,R,Sa,Sb,Sr,Za,Zb,Zr) \
+float Sar = Sa / Sr; \
+float Sbr = Sb / Sr; \
+for(int i=0; i<size; i++) { \
+    R[i] = NCAST_ROUND(Sar * (A[i] - Za) + Sbr * (B[i] - Zb) + Zr); \
 }
 
 #define TRANSPOSE(rows,cols,matrix,type) \
@@ -205,6 +214,10 @@ free(transposed); \
 #define FC1MATMUL_S (1.8245977529411765e-05)
 #define FC1MATMUL_Z (160)
 
+#define FC1ADD_TYPE uint8_t
+#define FC1ADD_S (0.00394488257520339)
+#define FC1ADD_Z (124)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -314,6 +327,9 @@ static int size_onnx__MatMul_209;
 
 static FC1MATMUL_TYPE* data_fc1MatMul_q;
 static int size_fc1MatMul = 400;
+
+static FC1MATMUL_TYPE* data_fc1Add_q;
+static int size_fc1Add = 400;
 
 int setup_nsnet2(const char* weights_path);
 void free_nsnet2();

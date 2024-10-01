@@ -374,6 +374,10 @@ void run_nsnet2(float* x, float* h1, float* h2) {
         ONNX__MATMUL_166_S,X_S,FC1MATMUL_S,
         ONNX__MATMUL_166_Z,X_Z,FC1MATMUL_Z, FC1MATMUL_TYPE)
     
-    PRINT_TENSOR(data_fc1MatMul_q, 0, 10, "%d ", "\n")
-    PRINT_TENSOR_SUM(data_fc1MatMul_q, 400, int, "%d\n")
+    data_fc1Add_q = (FC1ADD_TYPE*) malloc(sizeof(FC1ADD_TYPE) * size_fc1Add);
+    QADD(size_fc1Add, data_fc1MatMul_q, data_fc1_bias_q, data_fc1Add_q, FC1MATMUL_S, FC1_BIAS_S, FC1ADD_S, FC1MATMUL_Z, FC1_BIAS_Z, FC1ADD_Z)
+
+    
+    PRINT_TENSOR(data_fc1Add_q, 0, 10, "%d ", "\n")
+    PRINT_TENSOR_SUM(data_fc1Add_q, 400, int, "%d\n")
 }

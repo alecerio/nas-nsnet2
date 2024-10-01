@@ -7,8 +7,8 @@ class Q_NsNet2_npy(torch.nn.Module):
         super(Q_NsNet2_npy, self).__init__()
 
         self.calib = init_calibration(mpq_config)
-        print(self.calib['fc1MatMul'].S())
-        print(self.calib['fc1MatMul'].Z())
+        print(self.calib['fc1Add'].S())
+        print(self.calib['fc1Add'].Z())
 
         # onnxMatMul_166
         self.onnxMatMul_166 = np.load(numpy_weights_path + 'onnx__MatMul_166.npy').transpose()
@@ -120,14 +120,12 @@ class Q_NsNet2_npy(torch.nn.Module):
         # fc1MatMul_q
         fc1MatMul_q = self._quantize_matmul(self.onnxMatMul_166_q, x_q, 'onnxMatMul_166', 'x', 'fc1MatMul')
         fc1MatMul = np.matmul(self.onnxMatMul_166, x)
-        print(fc1MatMul_q.flatten()[0:10])
-        #print(fc1MatMul_q.flatten()[0:400])
-        #print(fc1MatMul_q.flatten()[400-5:400])
-        print(np.sum(fc1MatMul_q))
 
         # fc1Add_q
         fc1Add_q = self._quantize_add(fc1MatMul_q, self.fc1bias_q, 'fc1MatMul', 'fc1bias', 'fc1Add')
         fc1Add = np.add(fc1MatMul, self.fc1bias)
+        print(fc1Add_q.flatten()[0:10])
+        print(np.sum(fc1Add_q))
         
         # gru1_a_
         gru1_a__q = self._quantize_matmul(self.Wir_1_q, fc1Add_q, 'Wir_1', 'fc1Add', 'gru1_a_')
@@ -399,7 +397,9 @@ class Q_NsNet2_npy(torch.nn.Module):
         ca = self.calib[ca_key]
         cb = self.calib[cb_key]
         cy = self.calib[cy_key]
-        return (ca.S() / cy.S()) * (A - ca.Z()) + (cb.S() / cy.S()) * (B - cb.Z()) + cy.Z()
+        return np.round(
+            (ca.S() / cy.S()) * (A - ca.Z()) + (cb.S() / cy.S()) * (B - cb.Z()) + cy.Z()
+        )
     
     def _quantize_mul(self, A, B, ca_key, cb_key, cy_key):
         ca = self.calib[ca_key]
