@@ -91,6 +91,17 @@ for(int i=0; i<size; i++) { \
 } \
 }
 
+#define QUANTIZE_ONE_MINUS_X(x,y,Sx,Sy,Zx,Zy,size) \
+{ \
+float one[1] = { 1.0f }; \
+int32_t one_q[1]; \
+float S = Sy / Sx; \
+for(int i=0; i<size; i++) { \
+    int32_t = QUANTIZE(one, one_q, Sx, Zx, 1) \
+    y[i] = S * (one_q[0] - x[i]) + Zy; \
+} \   
+}
+
 #define TRANSPOSE(rows,cols,matrix,type) \
 { \
 type* transposed = (type*) malloc(sizeof(type)*rows*cols); \
