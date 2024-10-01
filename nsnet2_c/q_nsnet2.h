@@ -237,6 +237,10 @@ free(transposed); \
 #define GRU1_B_S (0.0008668779450304368)
 #define GRU1_B_Z (86)
 
+#define GRU1_C__TYPE uint8_t
+#define GRU1_C__S (0.010241022296980316)
+#define GRU1_C__Z (153)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -361,6 +365,9 @@ static int size_gru1_b_ = 400;
 
 static GRU1_B_TYPE* data_gru1_b_q;
 static int size_gru1_b = 400;
+
+static GRU1_C__TYPE* data_gru1_c__q;
+static int size_gru1_c_ = 400;
 
 int setup_nsnet2(const char* weights_path);
 void free_nsnet2();
