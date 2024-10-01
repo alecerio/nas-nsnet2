@@ -48,11 +48,14 @@ for (int i = 0; i < rows; i++) { \
 }
 
 #define QADD(size,A,B,R,Sa,Sb,Sr,Za,Zb,Zr) \
+{ \
 float Sar = Sa / Sr; \
 float Sbr = Sb / Sr; \
 for(int i=0; i<size; i++) { \
     R[i] = NCAST_ROUND(Sar * (A[i] - Za) + Sbr * (B[i] - Zb) + Zr); \
+} \
 }
+
 
 #define TRANSPOSE(rows,cols,matrix,type) \
 { \
@@ -222,6 +225,10 @@ free(transposed); \
 #define GRU1_A__S (0.005531594332526712)
 #define GRU1_A__Z (116)
 
+#define GRU1_A_TYPE uint8_t
+#define GRU1_A_S (0.00585017671772078)
+#define GRU1_A_Z (103)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -332,11 +339,14 @@ static int size_onnx__MatMul_209;
 static FC1MATMUL_TYPE* data_fc1MatMul_q;
 static int size_fc1MatMul = 400;
 
-static FC1MATMUL_TYPE* data_fc1Add_q;
+static FC1ADD_TYPE* data_fc1Add_q;
 static int size_fc1Add = 400;
 
-static FC1MATMUL_TYPE* data_gru1_a__q;
+static GRU1_A__TYPE* data_gru1_a__q;
 static int size_gru1_a_ = 400;
+
+static GRU1_A_TYPE* data_gru1_a_q;
+static int size_gru1_a = 400;
 
 int setup_nsnet2(const char* weights_path);
 void free_nsnet2();
