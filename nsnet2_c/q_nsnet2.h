@@ -291,6 +291,10 @@ free(transposed); \
 #define GRU1_R_S (0.0014821220846737131)
 #define GRU1_R_Z (-236)
 
+#define GRU1_Z__TYPE uint8_t
+#define GRU1_Z__S (0.016382201512654623)
+#define GRU1_Z__Z (146)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -445,6 +449,9 @@ static int size_gru1_r_ = 400;
 
 static GRU1_R_TYPE* data_gru1_r_q;
 static int size_gru1_r = 400;
+
+static GRU1_Z__TYPE* data_gru1_z__q;
+static int size_gru1_z_ = 400;
 
 static float* temp_tanh_x;
 static float* temp_tanh_y;
