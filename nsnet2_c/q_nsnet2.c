@@ -323,6 +323,9 @@ int setup_nsnet2(const char* weights_path) {
         printf("%f ", data_onnx__MatMul_166[i]);
     }*/
 
+    temp_tanh_x = (float*) malloc(sizeof(float) * 400);
+    temp_tanh_y = (float*) malloc(sizeof(float) * 400);
+
     return 0;
 }
 
@@ -435,9 +438,11 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     QADD(size_gru1_r_, data_gru1_a_q, data_gru1_b_q, data_gru1_r__q, 
         GRU1_A_S, GRU1_B_S, GRU1_R__S, GRU1_A_Z, GRU1_B_Z, GRU1_R__Z)
     
-    float* temp = (float*) malloc(sizeof(float) * 400);
-    DEQUANTIZE(data_gru1_r__q, temp, GRU1_R__S, GRU1_R__Z, 400)
+    data_gru1_r_q = (GRU1_R_TYPE*) malloc(sizeof(GRU1_R_TYPE) * size_gru1_r);
+    TANH_OP(data_gru1_r__q,data_gru1_r_q,GRU1_R__S,GRU1_R__Z,GRU1_R_S,GRU1_R_Z,
+        size_gru1_r, temp_tanh_x, temp_tanh_y)
 
-    PRINT_TENSOR(temp, 0, 10, "%f ", "\n")
-    PRINT_TENSOR_SUM(temp, 400, float, "%f\n")
+    PRINT_TENSOR(data_gru1_r_q, 0, 10, "%d ", "\n")
+    PRINT_TENSOR_SUM(data_gru1_r_q, 400, int, "%d\n")
+    
 }

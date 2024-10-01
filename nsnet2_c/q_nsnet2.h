@@ -61,6 +61,15 @@ for(int i=0; i<size; i++) { \
 } \
 }
 
+#define TANH_OP(input,output,Si,Zi,So,Zo,size,temp_tanh_x,temp_tanh_y) \
+DEQUANTIZE(input, temp_tanh_x, Si, Zi, size) \
+TANH(temp_tanh_x, temp_tanh_y, size) \
+QUANTIZE(temp_tanh_y,output,So, Zo, size)
+
+#define TANH(tensor_in,tensor_out,size) \
+for(int i=0; i<size; i++) { \
+    tensor_out[i] = 1.0f / (1.0f + exp(-tensor_in[i])); \
+}
 
 #define TRANSPOSE(rows,cols,matrix,type) \
 { \
@@ -278,6 +287,10 @@ free(transposed); \
 #define GRU1_R__S (0.0062851337825550755)
 #define GRU1_R__Z (99)
 
+#define GRU1_R_TYPE uint8_t
+#define GRU1_R_S (0.0014821220846737131)
+#define GRU1_R_Z (-236)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -429,6 +442,12 @@ static int size_gru1_f = 400;
 
 static GRU1_R__TYPE* data_gru1_r__q;
 static int size_gru1_r_ = 400;
+
+static GRU1_R_TYPE* data_gru1_r_q;
+static int size_gru1_r = 400;
+
+static float* temp_tanh_x;
+static float* temp_tanh_y;
 
 int setup_nsnet2(const char* weights_path);
 void free_nsnet2();
