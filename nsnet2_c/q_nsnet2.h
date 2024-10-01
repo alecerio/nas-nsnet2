@@ -24,6 +24,11 @@ for(int i=0; i<size; i++) { \
     tensor_i[i] = (int64_t)(floor(tensor_fp32[i] / S)) + (int64_t)Z; \
 }
 
+#define DEQUANTIZE(tensor_q,tensor_f,S,Z,size) \
+for(int i=0; i<size; i++) { \
+    tensor_f[i] = (float)((tensor_q[i] - Z) * S); \
+}
+
 #define MATMUL(rows,cols,matrix,vector,result) \
 for (int i = 0; i < rows; i++) { \
     result[i] = 0.0; \
