@@ -71,6 +71,14 @@ for(int i=0; i<size; i++) { \
     tensor_out[i] = 1.0f / (1.0f + exp(-tensor_in[i])); \
 }
 
+#define QMUL(A,B,C,Sa,Sb,Sc,Za,Zb,Zc,size) \
+{ \
+float S = (Sa * Sb) / Sc; \
+for(int i=0; i<size; i++) { \
+    C[i] = S * (A[i] - Za) * (B[i] - Zb) + Zc; \
+} \
+}
+
 #define TRANSPOSE(rows,cols,matrix,type) \
 { \
 type* transposed = (type*) malloc(sizeof(type)*rows*cols); \
