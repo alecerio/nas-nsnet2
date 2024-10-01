@@ -7,8 +7,8 @@ class Q_NsNet2_npy(torch.nn.Module):
         super(Q_NsNet2_npy, self).__init__()
 
         self.calib = init_calibration(mpq_config)
-        print(self.calib['gru1_z'].S())
-        print(self.calib['gru1_z'].Z())
+        print(self.calib['gru1_n1'].S())
+        print(self.calib['gru1_n1'].Z())
 
         # onnxMatMul_166
         self.onnxMatMul_166 = np.load(numpy_weights_path + 'onnx__MatMul_166.npy').transpose()
@@ -192,13 +192,13 @@ class Q_NsNet2_npy(torch.nn.Module):
         temp_y = 1 / (1 + np.exp(-temp_x))
         gru1_z_q = self._quantize(temp_y, self.calib['gru1_z'].S(), self.calib['gru1_z'].Z(), self.calib['gru1_z'].bitwidth)
         gru1_z = 1 / (1 + np.exp(-gru1_z_))
-        print(gru1_z_q.shape)
-        print(gru1_z_q.flatten()[0:10])
-        print(np.sum(gru1_z_q))
 
         # gru1_n1
         gru1_n1 = gru1_r * gru1_f
         gru1_n1_q = self._quantize_mul(gru1_r_q, gru1_f_q, 'gru1_r', 'gru1_f', 'gru1_n1')
+        print(gru1_n1_q.shape)
+        print(gru1_n1_q.flatten()[0:10])
+        print(np.sum(gru1_n1_q))
 
         # gru1_n2
         gru1_n2_q = self._quantize_add(gru1_e_q, gru1_n1_q, 'gru1_e', 'gru1_n1', 'gru1_n2')
@@ -410,7 +410,9 @@ class Q_NsNet2_npy(torch.nn.Module):
         ca = self.calib[ca_key]
         cb = self.calib[cb_key]
         cy = self.calib[cy_key]
-        res = (ca.S() * cb.S() / cy.S()) * (A - ca.Z()) * (B - cb.Z()) + cy.Z()
+        res = np.round(
+            (ca.S() * cb.S() / cy.S()) * (A - ca.Z()) * (B - cb.Z()) + cy.Z()
+        )
         res = res % (2**cy.bitwidth)
         return res
     

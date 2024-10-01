@@ -75,7 +75,7 @@ for(int i=0; i<size; i++) { \
 { \
 float S = (Sa * Sb) / Sc; \
 for(int i=0; i<size; i++) { \
-    C[i] = S * (A[i] - Za) * (B[i] - Zb) + Zc; \
+    C[i] = NCAST_ROUND(S * (A[i] - Za) * (B[i] - Zb) + Zc); \
 } \
 }
 
@@ -307,6 +307,10 @@ free(transposed); \
 #define GRU1_Z_S (0.0030296854820905947)
 #define GRU1_Z_Z (-28)
 
+#define GRU1_N1_TYPE uint8_t
+#define GRU1_N1_S (0.003950218827116723)
+#define GRU1_N1_Z (140)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -467,6 +471,9 @@ static int size_gru1_z_ = 400;
 
 static GRU1_Z_TYPE* data_gru1_z_q;
 static int size_gru1_z = 400;
+
+static GRU1_N1_TYPE* data_gru1_n1_q;
+static int size_gru1_n1 = 400;
 
 static float* temp_tanh_x;
 static float* temp_tanh_y;

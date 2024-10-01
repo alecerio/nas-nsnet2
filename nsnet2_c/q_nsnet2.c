@@ -450,7 +450,12 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     TANH_OP(data_gru1_z__q,data_gru1_z_q,GRU1_Z__S,GRU1_Z__Z,GRU1_Z_S,GRU1_Z_Z,
         size_gru1_z, temp_tanh_x, temp_tanh_y)
 
-    PRINT_TENSOR(data_gru1_z_q, 0, 10, "%d ", "\n")
-    PRINT_TENSOR_SUM(data_gru1_z_q, 400, int, "%d\n")
+    data_gru1_n1_q = (GRU1_N1_TYPE*) malloc(sizeof(GRU1_N1_TYPE) * size_gru1_n1);
+    QMUL(data_gru1_r_q, data_gru1_f_q, data_gru1_n1_q,
+        GRU1_R_S, GRU1_F_S, GRU1_N1_S,
+        GRU1_R_Z, GRU1_F_Z, GRU1_N1_Z, size_gru1_n1)
+
+    PRINT_TENSOR(data_gru1_n1_q, 0, 10, "%d ", "\n")
+    PRINT_TENSOR_SUM(data_gru1_n1_q, 400, int, "%d\n")
     
 }
