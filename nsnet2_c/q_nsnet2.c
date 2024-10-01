@@ -418,6 +418,10 @@ void run_nsnet2(float* x, float* h1, float* h2) {
         WIN_1_S,FC1ADD_S,GRU1_E__S,
         WIN_1_Z,FC1ADD_Z,GRU1_E__Z,GRU1_E__TYPE)
 
-    PRINT_TENSOR(data_gru1_e__q, 0, 10, "%d ", "\n")
-    PRINT_TENSOR_SUM(data_gru1_e__q, 400, int, "%d\n")
+    data_gru1_e_q = (GRU1_E_TYPE*) malloc(sizeof(GRU1_E_TYPE) * size_gru1_e);
+    QADD(size_gru1_e, data_gru1_e__q, data_bin_1_q, data_gru1_e_q, 
+        GRU1_E__S, BIN_1_S, GRU1_E_S, GRU1_E__Z, BIN_1_Z, GRU1_E_Z)
+
+    PRINT_TENSOR(data_gru1_e_q, 0, 10, "%d ", "\n")
+    PRINT_TENSOR_SUM(data_gru1_e_q, 400, int, "%d\n")
 }
