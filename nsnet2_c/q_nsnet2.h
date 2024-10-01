@@ -61,14 +61,26 @@ for(int i=0; i<size; i++) { \
 } \
 }
 
-#define TANH_OP(input,output,Si,Zi,So,Zo,size,temp_tanh_x,temp_tanh_y) \
-DEQUANTIZE(input, temp_tanh_x, Si, Zi, size) \
-TANH(temp_tanh_x, temp_tanh_y, size) \
-QUANTIZE(temp_tanh_y,output,So, Zo, size)
+#define SIGMOID_OP(input,output,Si,Zi,So,Zo,size,temp_sigmoid_x,temp_sigmoid_y) \
+DEQUANTIZE(input, temp_sigmoid_x, Si, Zi, size) \
+SIGMOID(temp_sigmoid_x, temp_sigmoid_y, size) \
+QUANTIZE(temp_sigmoid_y,output,So, Zo, size)
+
+#define SIGMOID(tensor_in,tensor_out,size) \
+for(int i=0; i<size; i++) { \
+    tensor_out[i] = 1.0f / (1.0f + exp(-tensor_in[i])); \
+}
+
+#define TANH_OP(input,output,Si,Zi,So,Zo,size,temp_sigmoid_x,temp_sigmoid_y) \
+DEQUANTIZE(input, temp_sigmoid_x, Si, Zi, size) \
+TANH(temp_sigmoid_x, temp_sigmoid_y, size) \
+QUANTIZE(temp_sigmoid_y,output,So, Zo, size)
 
 #define TANH(tensor_in,tensor_out,size) \
 for(int i=0; i<size; i++) { \
-    tensor_out[i] = 1.0f / (1.0f + exp(-tensor_in[i])); \
+    float ex = exp(tensor_in[i]); \
+    float emx = exp(-tensor_in[i]); \
+    tensor_out[i] = (ex - emx) / (ex + emx); \
 }
 
 #define QMUL(A,B,C,Sa,Sb,Sc,Za,Zb,Zc,size) \
@@ -315,6 +327,10 @@ free(transposed); \
 #define GRU1_N2_S (0.013930783552281997)
 #define GRU1_N2_Z (173)
 
+#define GRU1_N_TYPE uint8_t
+#define GRU1_N_S (0.00705564302556655)
+#define GRU1_N_Z (139)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -482,8 +498,11 @@ static int size_gru1_n1 = 400;
 static GRU1_N2_TYPE* data_gru1_n2_q;
 static int size_gru1_n2 = 400;
 
-static float* temp_tanh_x;
-static float* temp_tanh_y;
+static GRU1_N_TYPE* data_gru1_n_q;
+static int size_gru1_n = 400;
+
+static float* temp_sigmoid_x;
+static float* temp_sigmoid_y;
 
 int setup_nsnet2(const char* weights_path);
 void free_nsnet2();

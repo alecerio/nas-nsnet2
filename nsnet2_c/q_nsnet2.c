@@ -323,8 +323,8 @@ int setup_nsnet2(const char* weights_path) {
         printf("%f ", data_onnx__MatMul_166[i]);
     }*/
 
-    temp_tanh_x = (float*) malloc(sizeof(float) * 400);
-    temp_tanh_y = (float*) malloc(sizeof(float) * 400);
+    temp_sigmoid_x = (float*) malloc(sizeof(float) * 400);
+    temp_sigmoid_y = (float*) malloc(sizeof(float) * 400);
 
     return 0;
 }
@@ -439,16 +439,16 @@ void run_nsnet2(float* x, float* h1, float* h2) {
         GRU1_A_S, GRU1_B_S, GRU1_R__S, GRU1_A_Z, GRU1_B_Z, GRU1_R__Z)
     
     data_gru1_r_q = (GRU1_R_TYPE*) malloc(sizeof(GRU1_R_TYPE) * size_gru1_r);
-    TANH_OP(data_gru1_r__q,data_gru1_r_q,GRU1_R__S,GRU1_R__Z,GRU1_R_S,GRU1_R_Z,
-        size_gru1_r, temp_tanh_x, temp_tanh_y)
+    SIGMOID_OP(data_gru1_r__q,data_gru1_r_q,GRU1_R__S,GRU1_R__Z,GRU1_R_S,GRU1_R_Z,
+        size_gru1_r, temp_sigmoid_x, temp_sigmoid_y)
     
     data_gru1_z__q = (GRU1_Z__TYPE*) malloc(sizeof(GRU1_Z__TYPE) * size_gru1_z_);
     QADD(size_gru1_z_, data_gru1_c_q, data_gru1_d_q, data_gru1_z__q, 
         GRU1_C_S, GRU1_D_S, GRU1_Z__S, GRU1_C_Z, GRU1_D_Z, GRU1_Z__Z)
     
     data_gru1_z_q = (GRU1_Z_TYPE*) malloc(sizeof(GRU1_Z_TYPE) * size_gru1_z);
-    TANH_OP(data_gru1_z__q,data_gru1_z_q,GRU1_Z__S,GRU1_Z__Z,GRU1_Z_S,GRU1_Z_Z,
-        size_gru1_z, temp_tanh_x, temp_tanh_y)
+    SIGMOID_OP(data_gru1_z__q,data_gru1_z_q,GRU1_Z__S,GRU1_Z__Z,GRU1_Z_S,GRU1_Z_Z,
+        size_gru1_z, temp_sigmoid_x, temp_sigmoid_y)
 
     data_gru1_n1_q = (GRU1_N1_TYPE*) malloc(sizeof(GRU1_N1_TYPE) * size_gru1_n1);
     QMUL(data_gru1_r_q, data_gru1_f_q, data_gru1_n1_q,
@@ -458,8 +458,12 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     data_gru1_n2_q = (GRU1_N2_TYPE*) malloc(sizeof(GRU1_N2_TYPE) * size_gru1_n2);
     QADD(size_gru1_n2, data_gru1_e_q, data_gru1_n1_q, data_gru1_n2_q, 
         GRU1_E_S, GRU1_N1_S, GRU1_N2_S, GRU1_E_Z, GRU1_N1_Z, GRU1_N2_Z)
+    
+    data_gru1_n_q = (GRU1_N_TYPE*) malloc(sizeof(GRU1_N_TYPE) * size_gru1_n);
+    TANH_OP(data_gru1_n2_q,data_gru1_n_q,GRU1_N2_S,GRU1_N2_Z,GRU1_N_S,GRU1_N_Z,
+        size_gru1_n, temp_sigmoid_x, temp_sigmoid_y)
 
-    PRINT_TENSOR(data_gru1_n2_q, 0, 10, "%d ", "\n")
-    PRINT_TENSOR_SUM(data_gru1_n2_q, 400, int, "%d\n")
+    PRINT_TENSOR(data_gru1_n_q, 0, 10, "%d ", "\n")
+    PRINT_TENSOR_SUM(data_gru1_n_q, 400, int, "%d\n")
     
 }
