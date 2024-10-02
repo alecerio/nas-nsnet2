@@ -7,8 +7,8 @@ class Q_NsNet2_npy(torch.nn.Module):
         super(Q_NsNet2_npy, self).__init__()
 
         self.calib = init_calibration(mpq_config)
-        print(self.calib['gru1_n1'].S())
-        print(self.calib['gru1_n1'].Z())
+        print(self.calib['gru1_hn1'].S())
+        print(self.calib['gru1_hn1'].Z())
 
         # onnxMatMul_166
         self.onnxMatMul_166 = np.load(numpy_weights_path + 'onnx__MatMul_166.npy').transpose()
@@ -196,9 +196,6 @@ class Q_NsNet2_npy(torch.nn.Module):
         # gru1_n1
         gru1_n1 = gru1_r * gru1_f
         gru1_n1_q = self._quantize_mul(gru1_r_q, gru1_f_q, 'gru1_r', 'gru1_f', 'gru1_n1')
-        print(gru1_n1_q.shape)
-        print(gru1_n1_q.flatten()[0:10])
-        print(np.sum(gru1_n1_q))
 
         # gru1_n2
         gru1_n2_q = self._quantize_add(gru1_e_q, gru1_n1_q, 'gru1_e', 'gru1_n1', 'gru1_n2')
@@ -213,6 +210,10 @@ class Q_NsNet2_npy(torch.nn.Module):
         # gru1_hn1
         gru1_hn1_q = self._quantize_one_minus_x(gru1_z_q, 'gru1_z', 'gru1_hn1')
         gru1_hn1 = 1 - gru1_z
+        print(gru1_hn1_q.shape)
+        print(gru1_hn1_q.flatten()[0:3])
+        print(np.sum(gru1_hn1_q))
+        self._compare(gru1_hn1, gru1_hn1_q, self.calib['gru1_hn1'])
 
         # gru_hn2
         gru1_hn2_q = self._quantize_mul(gru1_hn1_q, gru1_n_q, 'gru1_hn1', 'gru1_n', 'gru1_hn2')
@@ -417,10 +418,17 @@ class Q_NsNet2_npy(torch.nn.Module):
         return res
     
     def _quantize_one_minus_x(self, X, cx_key, cy_key):
+        S1 = 1 / 255
+        Z1 = 0
         cx = self.calib[cx_key]
         cy = self.calib[cy_key]
-        one_q = self._quantize(np.ones(X.shape), cx.S(), cx.Z(), cx.bitwidth)
-        return (cx.S() / cy.S()) * (one_q - X) + cy.Z()
+        ones = np.ones(X.shape)
+        q_ones = self._quantize(ones, S1, Z1, 8)
+        res = np.round(
+            (S1 / cy.S()) * (q_ones - Z1) - (cx.S() / cy.S()) * (X - cx.Z()) + cy.Z()
+        )
+        res = res % (2**cy.bitwidth)
+        return res
     
     def _quantize_relu(self, X_q, cx_key, cy_key):
         cx = self.calib[cx_key]

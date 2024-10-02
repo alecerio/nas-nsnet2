@@ -323,8 +323,10 @@ int setup_nsnet2(const char* weights_path) {
         printf("%f ", data_onnx__MatMul_166[i]);
     }*/
 
-    temp_sigmoid_x = (float*) malloc(sizeof(float) * 400);
-    temp_sigmoid_y = (float*) malloc(sizeof(float) * 400);
+    temp_sigmoid_x = (float*) malloc(sizeof(float) * size_h1);
+    temp_sigmoid_y = (float*) malloc(sizeof(float) * size_h1);
+
+    q_ones = 255;
 
     return 0;
 }
@@ -462,8 +464,13 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     data_gru1_n_q = (GRU1_N_TYPE*) malloc(sizeof(GRU1_N_TYPE) * size_gru1_n);
     TANH_OP(data_gru1_n2_q,data_gru1_n_q,GRU1_N2_S,GRU1_N2_Z,GRU1_N_S,GRU1_N_Z,
         size_gru1_n, temp_sigmoid_x, temp_sigmoid_y)
+    
+    data_gru1_hn1_q = (GRU1_HN1_TYPE*) malloc(sizeof(GRU1_HN1_TYPE) * size_gru1_hn1);
+    QUANTIZE_ONE_MINUS_X(data_gru1_z_q,data_gru1_hn1_q,
+        GRU1_Z_S,GRU1_HN1_S,
+        GRU1_Z_Z,GRU1_HN1_Z,size_gru1_hn1)
 
-    PRINT_TENSOR(data_gru1_n_q, 0, 10, "%d ", "\n")
-    PRINT_TENSOR_SUM(data_gru1_n_q, 400, int, "%d\n")
+    PRINT_TENSOR(data_gru1_hn1_q, 0, 10, "%d ", "\n")
+    PRINT_TENSOR_SUM(data_gru1_hn1_q, 400, int, "%d\n")
     
 }

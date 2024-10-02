@@ -93,13 +93,12 @@ for(int i=0; i<size; i++) { \
 
 #define QUANTIZE_ONE_MINUS_X(x,y,Sx,Sy,Zx,Zy,size) \
 { \
-float one[1] = { 1.0f }; \
-int32_t one_q[1]; \
-float S = Sy / Sx; \
+float S1y = S_ones / Sy; \
+float Sxy = Sx / Sy; \
+float alpha = S1y * (q_ones - Z_ones); \
 for(int i=0; i<size; i++) { \
-    int32_t = QUANTIZE(one, one_q, Sx, Zx, 1) \
-    y[i] = S * (one_q[0] - x[i]) + Zy; \
-} \   
+    y[i] = NCAST_ROUND(alpha - Sxy * (x[i] - Zx) + Zy); \
+} \
 }
 
 #define TRANSPOSE(rows,cols,matrix,type) \
@@ -342,6 +341,10 @@ free(transposed); \
 #define GRU1_N_S (0.00705564302556655)
 #define GRU1_N_Z (139)
 
+#define GRU1_HN1_TYPE uint8_t
+#define GRU1_HN1_S (0.0030296853944367054)
+#define GRU1_HN1_Z (-47)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -512,8 +515,15 @@ static int size_gru1_n2 = 400;
 static GRU1_N_TYPE* data_gru1_n_q;
 static int size_gru1_n = 400;
 
+static GRU1_N_TYPE* data_gru1_hn1_q;
+static int size_gru1_hn1 = 400;
+
 static float* temp_sigmoid_x;
 static float* temp_sigmoid_y;
+
+static uint8_t q_ones;
+static float S_ones = 1.0 / 255.0;
+static int32_t Z_ones = 0;
 
 int setup_nsnet2(const char* weights_path);
 void free_nsnet2();
