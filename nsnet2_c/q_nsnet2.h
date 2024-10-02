@@ -349,6 +349,10 @@ free(transposed); \
 #define GRU1_HN2_S (0.005315659326665541)
 #define GRU1_HN2_Z (170)
 
+#define GRU1_HN3_TYPE uint8_t
+#define GRU1_HN3_S (1.3186451613756956e-05)
+#define GRU1_HN3_Z (129)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -524,6 +528,9 @@ static int size_gru1_hn1 = 400;
 
 static GRU1_HN2_TYPE* data_gru1_hn2_q;
 static int size_gru1_hn2 = 400;
+
+static GRU1_HN3_TYPE* data_gru1_hn3_q;
+static int size_gru1_hn3 = 400;
 
 static float* temp_sigmoid_x;
 static float* temp_sigmoid_y;
