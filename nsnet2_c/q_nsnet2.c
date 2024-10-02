@@ -484,8 +484,13 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     QADD(size_rnn1gru, data_gru1_hn2_q, data_gru1_hn3_q, data_rnn1gru_q,
             GRU1_HN2_S, GRU1_HN3_S, RNN1GRU_S,
             GRU1_HN2_Z, GRU1_HN3_Z, RNN1GRU_Z)
+        
+    data_gru2_a__q = (GRU2_A__TYPE*) malloc(sizeof(GRU2_A__TYPE) * size_gru2_a_);
+    QMATMUL(400, 400, data_Wir_2_q, data_rnn1gru_q, data_gru2_a__q,
+            WIR_2_S, RNN1GRU_S, GRU2_A__S,
+            WIR_2_Z, RNN1GRU_Z, GRU2_A__Z, GRU2_A__TYPE)
     
-    PRINT_TENSOR(data_rnn1gru_q, 0, 10, "%d ", "\n")
-    PRINT_TENSOR_SUM(data_rnn1gru_q, 400, int, "%d\n")
+    PRINT_TENSOR(data_gru2_a__q, 0, 10, "%d ", "\n")
+    PRINT_TENSOR_SUM(data_gru2_a__q, 400, int, "%d\n")
     
 }
