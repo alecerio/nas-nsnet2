@@ -595,8 +595,13 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     QADD(size_rnn2gru, data_gru2_hn2_q, data_gru2_hn3_q, data_rnn2gru_q,
             GRU2_HN2_S, GRU2_HN3_S, RNN2GRU_S,
             GRU2_HN2_Z, GRU2_HN3_Z, RNN2GRU_Z)
+    
+    data_fc2MatMul_q = (FC2MATMUL_TYPE*) malloc(sizeof(FC2MATMUL_TYPE*) * size_fc2MatMul);
+    QMATMUL(600, 400, data_onnx__MatMul_207_q, data_rnn2gru_q, data_fc2MatMul_q, 
+        ONNX__MATMUL_207_S,RNN2GRU_S,FC2MATMUL_S,
+        ONNX__MATMUL_207_Z,RNN2GRU_Z,FC2MATMUL_Z, FC2MATMUL_TYPE)
 
-    PRINT_TENSOR(data_rnn2gru_q, 0, 10, "%d ", "\n")
-    PRINT_TENSOR_SUM(data_rnn2gru_q, 400, int, "%d\n")
+    PRINT_TENSOR(data_fc2MatMul_q, 0, 10, "%d ", "\n")
+    PRINT_TENSOR_SUM(data_fc2MatMul_q, 600, int, "%d\n")
     
 }
