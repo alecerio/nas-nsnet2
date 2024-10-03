@@ -580,8 +580,13 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     QUANTIZE_ONE_MINUS_X(data_gru2_z_q,data_gru2_hn1_q,
         GRU2_Z_S,GRU2_HN1_S,
         GRU2_Z_Z,GRU2_HN1_Z,size_gru2_hn1)
+    
+    data_gru2_hn2_q = (GRU2_HN2_TYPE*) malloc(sizeof(GRU2_HN2_TYPE) * size_gru2_hn2);
+    QMUL(data_gru2_hn1_q, data_gru2_n_q, data_gru2_hn2_q, 
+        GRU2_HN1_S, GRU2_N_S, GRU2_HN2_S,
+        GRU2_HN1_Z, GRU2_N_Z, GRU2_HN2_Z, size_gru2_hn2)
 
-    PRINT_TENSOR(data_gru2_hn1_q, 0, 10, "%d ", "\n")
-    PRINT_TENSOR_SUM(data_gru2_hn1_q, 400, int, "%d\n")
+    PRINT_TENSOR(data_gru2_hn2_q, 0, 10, "%d ", "\n")
+    PRINT_TENSOR_SUM(data_gru2_hn2_q, 400, int, "%d\n")
     
 }
