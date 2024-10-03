@@ -445,6 +445,10 @@ free(transposed); \
 #define GRU2_HN3_S (1.3741757720708847e-05)
 #define GRU2_HN3_Z (119)
 
+#define RNN2GRU_TYPE uint8_t
+#define RNN2GRU_S (0.004055991944144754)
+#define RNN2GRU_Z (168)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -692,6 +696,9 @@ static int size_gru2_hn2 = 400;
 
 static GRU2_HN3_TYPE* data_gru2_hn3_q;
 static int size_gru2_hn3 = 400;
+
+static RNN2GRU_TYPE* data_rnn2gru_q;
+static int size_rnn2gru = 400;
 
 static float* temp_sigmoid_x;
 static float* temp_sigmoid_y;
