@@ -101,14 +101,14 @@ for(int i=0; i<size; i++) { \
 } \
 }
 
-#define QRELU(x, y, Sx, Sy, Zx, Zy, size) \
-DEQUANTIZE(x, temp, Sx, Zx, size) \
+#define QRELU(x, y, Sx, Sy, Zx, Zy, size, temp_relu) \
+DEQUANTIZE(x, temp_relu, Sx, Zx, size) \
 for(int i=0; i<size; i++) { \
-    if(temp[i] < 0) { \
-        temp[i] = 0; \
+    if(temp_relu[i] < 0) { \
+        temp_relu[i] = 0; \
     } \
 } \
-QUANTIZE(temp, y, Sy, Zy, size)
+QUANTIZE(temp_relu, y, Sy, Zy, size)
 
 #define TRANSPOSE(rows,cols,matrix,type) \
 { \
@@ -466,6 +466,10 @@ free(transposed); \
 #define FC2ADD_S (0.005743133086784214)
 #define FC2ADD_Z (162)
 
+#define RELU_TYPE uint8_t
+#define RELU_S (0.0020899260745329017)
+#define RELU_Z (0)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -723,8 +727,12 @@ static int size_fc2MatMul = 600;
 static FC2ADD_TYPE* data_fc2Add_q;
 static int size_fc2Add = 600;
 
+static RELU_TYPE* data_relu_q;
+static int size_relu = 600;
+
 static float* temp_sigmoid_x;
 static float* temp_sigmoid_y;
+static float* temp_relu;
 
 static uint8_t q_ones;
 static float S_ones = 1.0 / 255.0;

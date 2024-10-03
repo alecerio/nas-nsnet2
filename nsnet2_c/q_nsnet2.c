@@ -325,6 +325,7 @@ int setup_nsnet2(const char* weights_path) {
 
     temp_sigmoid_x = (float*) malloc(sizeof(float) * size_h1);
     temp_sigmoid_y = (float*) malloc(sizeof(float) * size_h1);
+    temp_relu = (float*) malloc(sizeof(float) * size_relu);
 
     q_ones = 255;
 
@@ -604,8 +605,11 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     data_fc2Add_q = (FC2ADD_TYPE*) malloc(sizeof(FC2ADD_TYPE) * size_fc2Add);
     QADD(size_fc2Add, data_fc2MatMul_q, data_fc2_bias_q, data_fc2Add_q, 
         FC2MATMUL_S, FC2_BIAS_S, FC2ADD_S, FC2MATMUL_Z, FC2_BIAS_Z, FC2ADD_Z)
+    
+    data_relu_q = (RELU_TYPE*) malloc(sizeof(RELU_TYPE) * size_relu);
+    QRELU(data_fc2Add_q, data_relu_q, FC2ADD_S, RELU_S, FC2ADD_Z, RELU_Z, size_relu, temp_relu)
 
-    PRINT_TENSOR(data_fc2Add_q, 0, 10, "%d ", "\n")
-    PRINT_TENSOR_SUM(data_fc2Add_q, 600, int, "%d\n")
+    PRINT_TENSOR(data_relu_q, 0, 10, "%d ", "\n")
+    PRINT_TENSOR_SUM(data_relu_q, 600, int, "%d\n")
     
 }
