@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <math.h>
 
+
+
 #define PRINT_TENSOR(tensor,start,end,type,sep) \
 for(int i=start; i<end; i++) { \
     printf(type, tensor[i]); \
@@ -19,9 +21,20 @@ for(int i=0; i<size; i++) { \
 printf(print, sum); \
 }
 
-#define QUANTIZE(tensor_fp32,tensor_i,S,Z,size) \
+#define PRINT_DEBUG_INFO(x, start, end, size, type, print, sep) \
+PRINT_TENSOR(x, start, end, print, sep) \
+PRINT_TENSOR_SUM(x, size, type, print)
+
+#define CLIP(x, nbits) \
+if(x < 0) \
+    x = 0; \
+else if(x > UINT##nbits##_MAX) \
+    x = UINT##nbits##_MAX;
+
+#define QUANTIZE(tensor_fp32,tensor_i,S,Z,size,nbits) \
 for(int i=0; i<size; i++) { \
     tensor_i[i] = (int64_t)(floor(tensor_fp32[i] / S)) + (int64_t)Z; \
+    CLIP(tensor_i[i], nbits) \
 }
 
 #define DEQUANTIZE(tensor_q,tensor_f,S,Z,size) \
@@ -126,10 +139,12 @@ for (int i = 0; i < rows; i++) { \
 free(transposed); \
 }
 
+#define X_NBITS (8)
 #define X_TYPE uint8_t
 #define X_S (1.8539607843137257e-05)
 #define X_Z (135)
 
+#define FC1_BIAS_NBITS 8
 #define FC1_BIAS_TYPE uint8_t
 #define FC1_BIAS_S (0.0039392154590756285)
 #define FC1_BIAS_Z (124)

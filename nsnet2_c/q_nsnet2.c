@@ -8,11 +8,13 @@ int setup_nsnet2(const char* weights_path) {
     if(flag != 0)
         return -1;
     data_fc1_bias_q = (FC1_BIAS_TYPE*) malloc(sizeof(FC1_BIAS_TYPE) * size_fc1_bias);
-    QUANTIZE(data_fc1_bias,data_fc1_bias_q,FC1_BIAS_S,FC1_BIAS_Z,size_fc1_bias)
+    QUANTIZE(data_fc1_bias,data_fc1_bias_q,FC1_BIAS_S,FC1_BIAS_Z,size_fc1_bias, FC1_BIAS_NBITS)
     free(data_fc1_bias);
 
+    PRINT_DEBUG_INFO(data_fc1_bias_q, 0, 10, 257, int, "%d ", "\n")
+
     // data_onnx__MatMul_166
-    flag = read_weights(weights_path, "onnx__MatMul_166.npy", &data_onnx__MatMul_166, &size_onnx__MatMul_166);
+    /*flag = read_weights(weights_path, "onnx__MatMul_166.npy", &data_onnx__MatMul_166, &size_onnx__MatMul_166);
     if(flag != 0)
         return -1;
     TRANSPOSE(257, 400, data_onnx__MatMul_166, float)
@@ -316,18 +318,14 @@ int setup_nsnet2(const char* weights_path) {
     data_onnx__MatMul_209_q = (ONNX__MATMUL_209_TYPE*) malloc(sizeof(ONNX__MATMUL_209_TYPE) * size_onnx__MatMul_209);
     QUANTIZE(data_onnx__MatMul_209, data_onnx__MatMul_209_q, ONNX__MATMUL_209_S, ONNX__MATMUL_209_Z, size_onnx__MatMul_209)
     free(data_onnx__MatMul_209);
-    
-    
-    /*printf("size: %d\n", size_onnx__GRU_184);
-    for(int i=0; i<size_onnx__MatMul_166; i++) {
-        printf("%f ", data_onnx__MatMul_166[i]);
-    }*/
 
     temp_sigmoid_x = (float*) malloc(sizeof(float) * size_h1);
     temp_sigmoid_y = (float*) malloc(sizeof(float) * size_h1);
     temp_relu = (float*) malloc(sizeof(float) * size_relu);
 
     q_ones = 255;
+
+    */
 
     return 0;
 }
@@ -366,9 +364,9 @@ int read_weights(const char* weights_path, const char* weights_name, float** dat
 }
 
 void run_nsnet2(float* x, float* h1, float* h2) {
-    data_x_q = (X_TYPE*) malloc(sizeof(X_TYPE*) * size_x);
-    QUANTIZE(x, data_x_q, X_S, X_Z, size_x)
-
+    /*data_x_q = (X_TYPE*) malloc(sizeof(X_TYPE*) * size_x);
+    QUANTIZE(x, data_x_q, X_S, X_Z, size_x, X_NBITS)
+    
     data_h1_q = (H1_TYPE*) malloc(sizeof(H1_TYPE*) * size_h1);
     QUANTIZE(h1, data_h1_q, H1_S, H1_Z, size_h1)
 
@@ -615,6 +613,6 @@ void run_nsnet2(float* x, float* h1, float* h2) {
         ONNX__MATMUL_208_Z,RELU_Z,FC3MATMUL_Z, FC3MATMUL_TYPE)
 
     PRINT_TENSOR(data_fc3MatMul_q, 0, 10, "%d ", "\n")
-    PRINT_TENSOR_SUM(data_fc3MatMul_q, 600, int, "%d\n")
+    PRINT_TENSOR_SUM(data_fc3MatMul_q, 600, int, "%d\n")*/
     
 }

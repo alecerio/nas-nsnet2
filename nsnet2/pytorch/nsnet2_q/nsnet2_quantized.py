@@ -15,6 +15,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         # fc1bias
         self.fc1bias = np.load(numpy_weights_path + 'fc1_bias.npy')
         self.fc1bias_q = self._quantize_tensor(self.fc1bias, 'fc1bias')
+        self._print_debug_info(self.fc1bias_q, 'fc1bias')
 
         # Wiz_1, Wir_1, Win_1
         self.onnxGRU_184 = np.load(numpy_weights_path + 'onnx__GRU_184.npy')
@@ -345,7 +346,6 @@ class Q_NsNet2_npy(torch.nn.Module):
         # fc3Add
         fc3Add_q = self._quantize_add(fc3MatMul_q, self.fc3bias_q, 'fc3MatMul', 'fc3bias', 'fc3Add')
         fc3Add = np.add(fc3MatMul, self.fc3bias)
-        self._print_debug_info(fc3Add_q, 'fc3Add')
         
         # relu_1
         relu_1_q = self._quantize_relu(fc3Add_q, 'fc3Add', 'relu_1')

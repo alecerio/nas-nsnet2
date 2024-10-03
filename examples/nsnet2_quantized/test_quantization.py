@@ -12,6 +12,6 @@ numpy_weights_path = '/home/alessandro/Desktop/nas-nsnet2/nsnet2/pytorch/numpy_w
 baseline = NsNet2_npy(numpy_weights_path)
 y = baseline(x, h1, h2)
 
-mpq_config = np.ones(93)*16
+mpq_config = np.ones(93)*8
 quantized = Q_NsNet2_npy(numpy_weights_path, mpq_config)
 yq = quantized(x, h1, h2)
