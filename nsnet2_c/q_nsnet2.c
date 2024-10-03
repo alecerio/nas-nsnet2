@@ -554,7 +554,12 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     SIGMOID_OP(data_gru2_r__q,data_gru2_r_q, GRU2_R__S,GRU2_R__Z,GRU2_R_S,GRU2_R_Z,
         size_gru2_r, temp_sigmoid_x, temp_sigmoid_y)
 
-    PRINT_TENSOR(data_gru2_r_q, 0, 10, "%d ", "\n")
-    PRINT_TENSOR_SUM(data_gru2_r_q, 400, int, "%d\n")
+    data_gru2_z__q = (GRU2_Z__TYPE*) malloc(sizeof(GRU2_Z__TYPE) * size_gru2_z_);
+    QADD(size_gru2_z_, data_gru2_c_q, data_gru2_d_q, data_gru2_z__q,
+            GRU2_C_S, GRU2_D_S, GRU2_Z__S,
+            GRU2_C_Z, GRU2_D_Z, GRU2_Z__Z)
+
+    PRINT_TENSOR(data_gru2_z__q, 0, 10, "%d ", "\n")
+    PRINT_TENSOR_SUM(data_gru2_z__q, 400, int, "%d\n")
     
 }
