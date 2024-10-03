@@ -7,8 +7,6 @@ class Q_NsNet2_npy(torch.nn.Module):
         super(Q_NsNet2_npy, self).__init__()
 
         self.calib = init_calibration(mpq_config)
-        print(self.calib['gru1_hn1'].S())
-        print(self.calib['gru1_hn1'].Z())
 
         # onnxMatMul_166
         self.onnxMatMul_166 = np.load(numpy_weights_path + 'onnx__MatMul_166.npy').transpose()
@@ -210,10 +208,6 @@ class Q_NsNet2_npy(torch.nn.Module):
         # gru1_hn1
         gru1_hn1_q = self._quantize_one_minus_x(gru1_z_q, 'gru1_z', 'gru1_hn1')
         gru1_hn1 = 1 - gru1_z
-        print(gru1_hn1_q.shape)
-        print(gru1_hn1_q.flatten()[0:3])
-        print(np.sum(gru1_hn1_q))
-        self._compare(gru1_hn1, gru1_hn1_q, self.calib['gru1_hn1'])
 
         # gru_hn2
         gru1_hn2_q = self._quantize_mul(gru1_hn1_q, gru1_n_q, 'gru1_hn1', 'gru1_n', 'gru1_hn2')
@@ -351,6 +345,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         # fc3Add
         fc3Add_q = self._quantize_add(fc3MatMul_q, self.fc3bias_q, 'fc3MatMul', 'fc3bias', 'fc3Add')
         fc3Add = np.add(fc3MatMul, self.fc3bias)
+        self._print_debug_info(fc3Add_q, 'fc3Add')
         
         # relu_1
         relu_1_q = self._quantize_relu(fc3Add_q, 'fc3Add', 'relu_1')
@@ -367,20 +362,20 @@ class Q_NsNet2_npy(torch.nn.Module):
         # sigmoid
         sigmoid_q = self._quantize_sigmoid(fc4Add_q, 'fc4Add', 'sigmoid')
         sigmoid = 1 / (1 + np.exp(-fc4Add))
-        #self._compare(sigmoid, sigmoid_q, self.calib['sigmoid'])
+        self._compare(sigmoid, sigmoid_q, self.calib['sigmoid'], "output")
 
         return sigmoid_q
     
     def _quantize(self, tensor_fp32, S, z, n_bits):
         q = np.floor(tensor_fp32 / S) + z
-        q = q % (2**n_bits)
+        q = np.clip(q, 0, 2**(n_bits)-1)
         return q
     
     def _dequantize(self, tensor_i8, S, z):
         return (tensor_i8 - z) * S
 
-    def _compare(self, tensor_f32, tensor_int, calib):
-        print(np.mean(np.abs(tensor_f32 - self._dequantize(tensor_int, calib.S(), calib.Z()))))
+    def _compare(self, tensor_f32, tensor_int, calib, name=""):
+        print(f"{name}: {np.mean(np.abs(tensor_f32 - self._dequantize(tensor_int, calib.S(), calib.Z())))}")
     
     def _quantize_tensor(self, tensor_f32, c_key):
         c = self.calib[c_key]
@@ -394,7 +389,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         res = np.round(
             S * np.matmul(A-ca.Z(), B-cb.Z()) + cy.Z()
         )
-        res = res % (2**cy.bitwidth)
+        res = np.clip(res, 0, 2**(cy.bitwidth)-1)
         return res
     
     def _quantize_add(self, A, B, ca_key, cb_key, cy_key):
@@ -404,7 +399,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         res = np.round(
             (ca.S() / cy.S()) * (A - ca.Z()) + (cb.S() / cy.S()) * (B - cb.Z()) + cy.Z()
         )
-        res = res % (2**cy.bitwidth)
+        res = np.clip(res, 0, 2**(cy.bitwidth)-1)
         return res
     
     def _quantize_mul(self, A, B, ca_key, cb_key, cy_key):
@@ -414,7 +409,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         res = np.round(
             (ca.S() * cb.S() / cy.S()) * (A - ca.Z()) * (B - cb.Z()) + cy.Z()
         )
-        res = res % (2**cy.bitwidth)
+        res = np.clip(res, 0, 2**(cy.bitwidth)-1)
         return res
     
     def _quantize_one_minus_x(self, X, cx_key, cy_key):
@@ -427,7 +422,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         res = np.round(
             (S1 / cy.S()) * (q_ones - Z1) - (cx.S() / cy.S()) * (X - cx.Z()) + cy.Z()
         )
-        res = res % (2**cy.bitwidth)
+        res = np.clip(res, 0, 2**(cy.bitwidth)-1)
         return res
     
     def _quantize_relu(self, X_q, cx_key, cy_key):
@@ -443,3 +438,10 @@ class Q_NsNet2_npy(torch.nn.Module):
         X = self._dequantize(X_q, cx.S(), cx.Z())
         Y = 1 / (1 + np.exp(-X))
         return self._quantize(Y, cy.S(), cy.Z(), cy.bitwidth)
+    
+    def _print_debug_info(self, operator, calib_info):
+        print(self.calib[calib_info].S())
+        print(self.calib[calib_info].Z())
+        print(operator.shape)
+        print(operator.flatten()[0:10])
+        print(np.sum(operator))

@@ -1,3 +1,4 @@
+import numpy as np
 
 class CalibrationParam():
     def __init__(self, bitwidth, signed, minimum, maximum) -> None:
@@ -16,7 +17,7 @@ class CalibrationParam():
         if self.signed:
             return 0
         else:
-            return round(-(self.minimum / self.S()))
+            return np.round(-(self.minimum / self.S()))
     
 
 def init_calibration(mpq_config):
