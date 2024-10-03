@@ -609,7 +609,12 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     data_relu_q = (RELU_TYPE*) malloc(sizeof(RELU_TYPE) * size_relu);
     QRELU(data_fc2Add_q, data_relu_q, FC2ADD_S, RELU_S, FC2ADD_Z, RELU_Z, size_relu, temp_relu)
 
-    PRINT_TENSOR(data_relu_q, 0, 10, "%d ", "\n")
-    PRINT_TENSOR_SUM(data_relu_q, 600, int, "%d\n")
+    data_fc3MatMul_q = (FC3MATMUL_TYPE*) malloc(sizeof(FC3MATMUL_TYPE*) * size_fc3MatMul);
+    QMATMUL(600, 600, data_onnx__MatMul_208_q, data_relu_q, data_fc3MatMul_q, 
+        ONNX__MATMUL_208_S,RELU_S,FC3MATMUL_S,
+        ONNX__MATMUL_208_Z,RELU_Z,FC3MATMUL_Z, FC3MATMUL_TYPE)
+
+    PRINT_TENSOR(data_fc3MatMul_q, 0, 10, "%d ", "\n")
+    PRINT_TENSOR_SUM(data_fc3MatMul_q, 600, int, "%d\n")
     
 }

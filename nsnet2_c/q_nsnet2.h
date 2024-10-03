@@ -38,15 +38,15 @@ for (int i = 0; i < rows; i++) { \
 }
 
 #define NCAST_ROUND(X) \
-(X >= 0) ? (int32_t)(X + 0.5) : (int32_t)(X - 0.5)
+(X >= 0) ? (int64_t)(X + 0.5) : (int64_t)(X - 0.5)
 
 #define QMATMUL(rows,cols,matrix,vector,result,Sm,Sv,Sr,Zm,Zv,Zr,res_type) \
 { \
 double S = (Sm * Sv) / Sr; \
 for (int i = 0; i < rows; i++) { \
-    int32_t acc = 0; \
+    int64_t acc = 0; \
     for (int j = 0; j < cols; j++) { \
-        acc += ((int32_t)matrix[i*cols+j]-(int32_t)Zm) * ((int32_t)vector[j]-(int32_t)Zv); \
+        acc += ((int64_t)matrix[i*cols+j]-(int64_t)Zm) * ((int64_t)vector[j]-(int64_t)Zv); \
     } \
     result[i] = (res_type)(NCAST_ROUND(S * acc + Zr)); \
 } \
@@ -470,6 +470,10 @@ free(transposed); \
 #define RELU_S (0.0020899260745329017)
 #define RELU_Z (0)
 
+#define FC3MATMUL_TYPE uint8_t
+#define FC3MATMUL_S (0.014787528795354507)
+#define FC3MATMUL_Z (194)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -729,6 +733,9 @@ static int size_fc2Add = 600;
 
 static RELU_TYPE* data_relu_q;
 static int size_relu = 600;
+
+static FC3MATMUL_TYPE* data_fc3MatMul_q;
+static int size_fc3MatMul = 600;
 
 static float* temp_sigmoid_x;
 static float* temp_sigmoid_y;
