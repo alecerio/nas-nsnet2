@@ -515,7 +515,12 @@ void run_nsnet2(float* x, float* h1, float* h2) {
             GRU2_C__S, BIZ_2_S, GRU2_C_S,
             GRU2_C__Z, BIZ_2_Z, GRU2_C_Z)
 
-    PRINT_TENSOR(data_gru2_c_q, 0, 10, "%d ", "\n")
-    PRINT_TENSOR_SUM(data_gru2_c_q, 400, int, "%d\n")
+    data_gru2_d__q = (GRU2_D__TYPE*) malloc(sizeof(GRU2_D__TYPE) * size_gru2_d_);
+    QMATMUL(400, 400, data_Whz_2_q, data_h2_q, data_gru2_d__q,
+            WHZ_2_S, H2_S, GRU2_D__S,
+            WHZ_2_Z, H2_Z, GRU2_D__Z, GRU2_D__TYPE)
+
+    PRINT_TENSOR(data_gru2_d__q, 0, 10, "%d ", "\n")
+    PRINT_TENSOR_SUM(data_gru2_d__q, 400, int, "%d\n")
     
 }
