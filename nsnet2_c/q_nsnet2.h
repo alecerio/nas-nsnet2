@@ -453,6 +453,10 @@ free(transposed); \
 #define FC2MATMUL_S (0.004723190209444832)
 #define FC2MATMUL_Z (163)
 
+#define FC2ADD_TYPE uint8_t
+#define FC2ADD_S (0.005743133086784214)
+#define FC2ADD_Z (162)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -705,7 +709,10 @@ static RNN2GRU_TYPE* data_rnn2gru_q;
 static int size_rnn2gru = 400;
 
 static FC2MATMUL_TYPE* data_fc2MatMul_q;
-static int size_fc2MatMul = 400;
+static int size_fc2MatMul = 600;
+
+static FC2ADD_TYPE* data_fc2Add_q;
+static int size_fc2Add = 600;
 
 static float* temp_sigmoid_x;
 static float* temp_sigmoid_y;
