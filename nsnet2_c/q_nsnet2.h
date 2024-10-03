@@ -101,6 +101,15 @@ for(int i=0; i<size; i++) { \
 } \
 }
 
+#define QRELU(x, y, Sx, Sy, Zx, Zy, size) \
+DEQUANTIZE(x, temp, Sx, Zx, size) \
+for(int i=0; i<size; i++) { \
+    if(temp[i] < 0) { \
+        temp[i] = 0; \
+    } \
+} \
+QUANTIZE(temp, y, Sy, Zy, size)
+
 #define TRANSPOSE(rows,cols,matrix,type) \
 { \
 type* transposed = (type*) malloc(sizeof(type)*rows*cols); \
