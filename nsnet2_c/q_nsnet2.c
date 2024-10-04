@@ -19,18 +19,18 @@ int setup_nsnet2(const char* weights_path) {
     data_onnx__MatMul_166_q = (ONNX__MATMUL_166_TYPE*) malloc(sizeof(ONNX__MATMUL_166_TYPE) * size_onnx__MatMul_166);
     QUANTIZE(data_onnx__MatMul_166, data_onnx__MatMul_166_q, ONNX__MATMUL_166_S, ONNX__MATMUL_166_Z, size_onnx__MatMul_166, ONNX__MATMUL_166_NBITS)
     free(data_onnx__MatMul_166);
-    PRINT_DEBUG_INFO(data_onnx__MatMul_166_q, 0, 100, 0, 257*400, int, "%d ", "\n")
 
     // fc2_bias
-    /*flag = read_weights(weights_path, "fc2_bias.npy", &data_fc2_bias, &size_fc2_bias);
+    flag = read_weights(weights_path, "fc2_bias.npy", &data_fc2_bias, &size_fc2_bias);
     if(flag != 0)
         return -1;
     data_fc2_bias_q = (FC2_BIAS_TYPE*) malloc(sizeof(FC2_BIAS_TYPE) * size_fc2_bias);
-    QUANTIZE(data_fc2_bias,data_fc2_bias_q,FC2_BIAS_S,FC2_BIAS_Z,size_fc2_bias)
+    QUANTIZE(data_fc2_bias,data_fc2_bias_q,FC2_BIAS_S,FC2_BIAS_Z,size_fc2_bias, FC2_BIAS_NBITS)
     free(data_fc2_bias);
+    PRINT_DEBUG_INFO(data_fc2_bias_q, 0, 5, 0, 600, int, "%d ", "\n")
     
     // fc3_bias
-    flag = read_weights(weights_path, "fc3_bias.npy", &data_fc3_bias, &size_fc3_bias);
+    /*flag = read_weights(weights_path, "fc3_bias.npy", &data_fc3_bias, &size_fc3_bias);
     if(flag != 0)
         return -1;
     data_fc3_bias_q = (FC3_BIAS_TYPE*) malloc(sizeof(FC3_BIAS_TYPE) * size_fc3_bias);

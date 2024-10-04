@@ -23,7 +23,8 @@ printf(print, sum); \
 
 #define PRINT_DEBUG_INFO(x, start, end, ssum, esum, type, print, sep) \
 PRINT_TENSOR(x, start, end, print, sep) \
-PRINT_TENSOR_SUM(x, ssum, esum, type, print)
+PRINT_TENSOR_SUM(x, ssum, esum, type, print) \
+printf("\n");
 
 #define CLIP(x, nbits) \
 if(x < 0) \
@@ -150,6 +151,7 @@ free(transposed); \
 #define FC1_BIAS_S (0.0039392154590756285)
 #define FC1_BIAS_Z (124)
 
+#define FC2_BIAS_NBITS 8
 #define FC2_BIAS_TYPE uint8_t
 #define FC2_BIAS_S (0.001229801481845332)
 #define FC2_BIAS_Z (142)
