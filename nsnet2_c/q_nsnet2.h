@@ -222,6 +222,7 @@ free(transposed); \
 #define BHR_1_S (0.0008824584238669452)
 #define BHR_1_Z (87)
 
+#define BHN_1_NBITS 8
 #define BHN_1_TYPE uint8_t
 #define BHN_1_S (0.006602613364948946)
 #define BHN_1_Z (119)
