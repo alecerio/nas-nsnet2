@@ -187,6 +187,7 @@ free(transposed); \
 #define WHZ_1_S (0.01395724287220076)
 #define WHZ_1_Z (132)
 
+#define WHR_1_NBITS 8
 #define WHR_1_TYPE uint8_t
 #define WHR_1_S (0.00857841688043931)
 #define WHR_1_Z (135)
