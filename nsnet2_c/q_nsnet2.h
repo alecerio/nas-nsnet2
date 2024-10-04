@@ -274,6 +274,7 @@ free(transposed); \
 #define FC3_BIAS_S (0.000752140201774298)
 #define FC3_BIAS_Z (135)
 
+#define FC4_BIAS_NBITS 8
 #define FC4_BIAS_TYPE uint8_t
 #define FC4_BIAS_S (0.0005998921744963702)
 #define FC4_BIAS_Z (178)
