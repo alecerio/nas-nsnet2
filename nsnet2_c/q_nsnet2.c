@@ -103,20 +103,20 @@ int setup_nsnet2(const char* weights_path) {
     data_Whr_1_q = (WHR_1_TYPE*) malloc(sizeof(WHR_1_TYPE)*400*400);
     QUANTIZE(data_Whr_1, data_Whr_1_q, WHR_1_S, WHR_1_Z, 400*400, WHR_1_NBITS)
     free(data_Whr_1);
-    PRINT_DEBUG_INFO(data_Whr_1_q, 0, 5, 0, 400*400, int, "%d ", "\n")
 
-    /*data_Whn_1 = (float*) malloc(sizeof(float)*400*400);
+    data_Whn_1 = (float*) malloc(sizeof(float)*400*400);
     for(int i=0; i<400; i++) {
         for(int j=0; j<400; j++) {
             data_Whn_1[i*400+j] = data_onnx__GRU_185[800*400+i*400+j];
         }
     }
     data_Whn_1_q = (WHN_1_TYPE*) malloc(sizeof(WHN_1_TYPE)*400*400);
-    QUANTIZE(data_Whn_1, data_Whn_1_q, WHN_1_S, WHN_1_Z, 400*400)
+    QUANTIZE(data_Whn_1, data_Whn_1_q, WHN_1_S, WHN_1_Z, 400*400, WHN_1_NBITS)
     free(data_Whn_1);
+    PRINT_DEBUG_INFO(data_Whn_1_q, 0, 5, 0, 400*400, int, "%d ", "\n")
     
     // onnx__GRU_186
-    flag = read_weights(weights_path, "onnx__GRU_186.npy", &data_onnx__GRU_186, &size_onnx__GRU_186);
+    /*flag = read_weights(weights_path, "onnx__GRU_186.npy", &data_onnx__GRU_186, &size_onnx__GRU_186);
     if(flag != 0)
         return -1;
     
