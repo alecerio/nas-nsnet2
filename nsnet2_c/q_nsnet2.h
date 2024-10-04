@@ -4,7 +4,18 @@
 #include <stdint.h>
 #include <math.h>
 
-
+#define WRITE_TENSOR_TO_TXT_FILE(array,name,size) \
+{ \
+FILE *file = fopen(name, "w"); \
+for (int i = 0; i < size; i++) { \
+    if (i == size - 1) { \
+        fprintf(file, "%d", array[i]); \
+    } else { \
+        fprintf(file, "%d,", array[i]); \
+    } \
+} \
+fclose(file); \
+}
 
 #define PRINT_TENSOR(tensor,start,end,type,sep) \
 for(int i=start; i<end; i++) { \
@@ -156,6 +167,7 @@ free(transposed); \
 #define FC2_BIAS_S (0.001229801481845332)
 #define FC2_BIAS_Z (142)
 
+#define WIZ_1_NBITS 8
 #define WIZ_1_TYPE uint8_t
 #define WIZ_1_S (0.003508239517024919)
 #define WIZ_1_Z (123)
@@ -168,6 +180,7 @@ free(transposed); \
 #define WIN_1_S (0.0028225932635513006)
 #define WIN_1_Z (115)
 
+#define WHZ_1_NBITS 8
 #define WHZ_1_TYPE uint8_t
 #define WHZ_1_S (0.01395724287220076)
 #define WHZ_1_Z (132)

@@ -11,7 +11,6 @@ class Q_NsNet2_npy(torch.nn.Module):
         # onnxMatMul_166
         self.onnxMatMul_166 = np.load(numpy_weights_path + 'onnx__MatMul_166.npy').transpose()
         self.onnxMatMul_166_q = self._quantize_tensor(self.onnxMatMul_166, 'onnxMatMul_166')
-        self._print_debug_info(self.onnxMatMul_166_q, 'onnxMatMul_166', 0, 100, 0, 257*400)
 
         # fc1bias
         self.fc1bias = np.load(numpy_weights_path + 'fc1_bias.npy')
@@ -26,6 +25,8 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.Wiz_1_q = self._quantize_tensor(self.Wiz_1, 'Wiz_1')
         self.Wir_1_q = self._quantize_tensor(self.Wir_1, 'Wir_1')
         self.Win_1_q = self._quantize_tensor(self.Win_1, 'Win_1')
+        self._print_debug_info(self.Wiz_1_q, 'Wiz_1', 0, 5, 0, 400*400)
+        #self._comprare_c_with_python("Wiz.txt", self.Wiz_1_q.flatten())
 
         self.onnxGRU_185 = np.load(numpy_weights_path + 'onnx__GRU_185.npy')
         self.Whz_1 = self.onnxGRU_185[:,:400,:]
@@ -445,3 +446,20 @@ class Q_NsNet2_npy(torch.nn.Module):
         print(operator.shape)
         print(operator.flatten()[start:end])
         print(np.sum(operator.flatten()[start_sum:end_sum]))
+    
+    def _comprare_c_with_python(self, txtfile_c, tensor):
+        try:
+            with open(txtfile_c, 'r') as file:
+                content = file.read()
+                string_numbers = content.split(',')
+                numbers = [int(num) for num in string_numbers]
+                array_numpy = np.array(numbers)
+        except FileNotFoundError:
+            print("Error: file not found.")
+        except Exception as e:
+            print("Error during file reading.")
+        print(f"length C: {len(array_numpy)}, length Python: {len(tensor)}")
+        print(f"sum C: {np.sum(array_numpy)}, sum Python: {np.sum(tensor)}")
+        for i in range(0, len(tensor)):
+            if array_numpy[i] != tensor[i]:
+                print(f"different at {i}: {array_numpy[i]} -- {tensor[i]}")
