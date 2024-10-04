@@ -58,20 +58,19 @@ int setup_nsnet2(const char* weights_path) {
     data_Wiz_1_q = (WIZ_1_TYPE*) malloc(sizeof(WIZ_1_TYPE)*400*400);
     QUANTIZE(data_Wiz_1, data_Wiz_1_q, WIZ_1_S, WIZ_1_Z, 400*400, WIZ_1_NBITS)
     free(data_Wiz_1);
-    PRINT_DEBUG_INFO(data_Wiz_1_q, 0, 5, 0, 400*400, int, "%d ", "\n")
-    WRITE_TENSOR_TO_TXT_FILE(data_Wiz_1_q, "Wiz.txt", 400*400)
 
-    /*data_Wir_1 = (float*) malloc(sizeof(float)*400*400);
+    data_Wir_1 = (float*) malloc(sizeof(float)*400*400);
     for(int i=0; i<400; i++) {
         for(int j=0; j<400; j++) {
             data_Wir_1[i*400+j] = data_onnx__GRU_184[400*400+i*400+j];
         }
     }
     data_Wir_1_q = (WIR_1_TYPE*) malloc(sizeof(WIR_1_TYPE)*400*400);
-    QUANTIZE(data_Wir_1, data_Wir_1_q, WIR_1_S, WIR_1_Z, 400*400)
+    QUANTIZE(data_Wir_1, data_Wir_1_q, WIR_1_S, WIR_1_Z, 400*400, WIR_1_NBITS)
     free(data_Wir_1);
+    PRINT_DEBUG_INFO(data_Wir_1_q, 0, 5, 0, 400*400, int, "%d ", "\n")
 
-    data_Win_1 = (float*) malloc(sizeof(float)*400*400);
+    /*data_Win_1 = (float*) malloc(sizeof(float)*400*400);
     for(int i=0; i<400; i++) {
         for(int j=0; j<400; j++) {
             data_Win_1[i*400+j] = data_onnx__GRU_184[800*400+i*400+j];

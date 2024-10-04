@@ -172,6 +172,7 @@ free(transposed); \
 #define WIZ_1_S (0.003508239517024919)
 #define WIZ_1_Z (123)
 
+#define WIR_1_NBITS 8
 #define WIR_1_TYPE uint8_t
 #define WIR_1_S (0.0024938253795399384)
 #define WIR_1_Z (138)
