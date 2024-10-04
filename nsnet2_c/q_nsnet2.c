@@ -150,17 +150,17 @@ int setup_nsnet2(const char* weights_path) {
     data_bhz_1_q = (BHZ_1_TYPE*) malloc(sizeof(BHZ_1_TYPE)*400);
     QUANTIZE(data_bhz_1, data_bhz_1_q, BHZ_1_S, BHZ_1_Z, 400, BHZ_1_NBITS)
     free(data_bhz_1);
-    PRINT_DEBUG_INFO(data_bhz_1_q, 0, 5, 0, 400, int, "%d ", "\n")
 
-    /*data_bhr_1 = (float*) malloc(sizeof(float)*400);
+    data_bhr_1 = (float*) malloc(sizeof(float)*400);
     for(int i=0; i<400; i++) {
         data_bhr_1[i] = data_onnx__GRU_186[1600+i];
     }
     data_bhr_1_q = (BHR_1_TYPE*) malloc(sizeof(BHR_1_TYPE)*400);
-    QUANTIZE(data_bhr_1, data_bhr_1_q, BHR_1_S, BHR_1_Z, 400)
+    QUANTIZE(data_bhr_1, data_bhr_1_q, BHR_1_S, BHR_1_Z, 400, BHR_1_NBITS)
     free(data_bhr_1);
+    PRINT_DEBUG_INFO(data_bhr_1_q, 0, 5, 0, 400, int, "%d ", "\n")
 
-    data_bhn_1 = (float*) malloc(sizeof(float)*400);
+    /*data_bhn_1 = (float*) malloc(sizeof(float)*400);
     for(int i=0; i<400; i++) {
         data_bhn_1[i] = data_onnx__GRU_186[2000+i];
     }
