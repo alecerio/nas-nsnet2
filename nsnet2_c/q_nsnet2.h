@@ -269,6 +269,7 @@ free(transposed); \
 #define ONNX__MATMUL_209_S (7.519294355581197e-10)
 #define ONNX__MATMUL_209_Z (1729645127)
 
+#define FC3_BIAS_NBITS 8
 #define FC3_BIAS_TYPE uint8_t
 #define FC3_BIAS_S (0.000752140201774298)
 #define FC3_BIAS_Z (135)

@@ -27,18 +27,18 @@ int setup_nsnet2(const char* weights_path) {
     data_fc2_bias_q = (FC2_BIAS_TYPE*) malloc(sizeof(FC2_BIAS_TYPE) * size_fc2_bias);
     QUANTIZE(data_fc2_bias,data_fc2_bias_q,FC2_BIAS_S,FC2_BIAS_Z,size_fc2_bias, FC2_BIAS_NBITS)
     free(data_fc2_bias);
-    PRINT_DEBUG_INFO(data_fc2_bias_q, 0, 5, 0, 600, int, "%d ", "\n")
     
     // fc3_bias
-    /*flag = read_weights(weights_path, "fc3_bias.npy", &data_fc3_bias, &size_fc3_bias);
+    flag = read_weights(weights_path, "fc3_bias.npy", &data_fc3_bias, &size_fc3_bias);
     if(flag != 0)
         return -1;
     data_fc3_bias_q = (FC3_BIAS_TYPE*) malloc(sizeof(FC3_BIAS_TYPE) * size_fc3_bias);
-    QUANTIZE(data_fc3_bias,data_fc3_bias_q,FC3_BIAS_S,FC3_BIAS_Z,size_fc3_bias)   
+    QUANTIZE(data_fc3_bias,data_fc3_bias_q,FC3_BIAS_S,FC3_BIAS_Z,size_fc3_bias,FC3_BIAS_NBITS)   
     free(data_fc3_bias);
+    PRINT_DEBUG_INFO(data_fc3_bias_q, 0, 5, 0, 600, int, "%d ", "\n")
     
     // fc4_bias
-    flag = read_weights(weights_path, "fc4_bias.npy", &data_fc4_bias, &size_fc4_bias);
+    /*flag = read_weights(weights_path, "fc4_bias.npy", &data_fc4_bias, &size_fc4_bias);
     if(flag != 0)
         return -1;
     data_fc4_bias_q = (FC4_BIAS_TYPE*) malloc(sizeof(FC4_BIAS_TYPE) * size_fc4_bias);
