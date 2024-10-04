@@ -212,6 +212,7 @@ free(transposed); \
 #define BIN_1_S (0.0028760029989130355)
 #define BIN_1_Z (193)
 
+#define BHZ_1_NBITS 8
 #define BHZ_1_TYPE uint8_t
 #define BHZ_1_S (0.0037201133428835403)
 #define BHZ_1_Z (143)
