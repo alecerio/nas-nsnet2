@@ -242,6 +242,7 @@ free(transposed); \
 #define WIN_2_S (0.003756115950790106)
 #define WIN_2_Z (126)
 
+#define WHZ_2_NBITS 8
 #define WHZ_2_TYPE uint8_t
 #define WHZ_2_S (0.01018969685423608)
 #define WHZ_2_Z (128)
