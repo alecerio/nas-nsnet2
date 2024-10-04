@@ -216,19 +216,19 @@ int setup_nsnet2(const char* weights_path) {
     data_Whz_2_q = (WHZ_2_TYPE*) malloc(sizeof(WHZ_2_TYPE)*400*400);
     QUANTIZE(data_Whz_2, data_Whz_2_q, WHZ_2_S, WHZ_2_Z, 400*400, WHZ_2_NBITS)
     free(data_Whz_2);
-    PRINT_DEBUG_INFO(data_Whz_2_q, 0, 5, 0, 400*400, int, "%d ", "\n")
 
-    /*data_Whr_2 = (float*) malloc(sizeof(float)*400*400);
+    data_Whr_2 = (float*) malloc(sizeof(float)*400*400);
     for(int i=0; i<400; i++) {
         for(int j=0; j<400; j++) {
             data_Whr_2[i*400+j] = data_onnx__GRU_205[400*400+i*400+j];
         }
     }
     data_Whr_2_q = (WHR_2_TYPE*) malloc(sizeof(WHR_2_TYPE)*400*400);
-    QUANTIZE(data_Whr_2, data_Whr_2_q, WHR_2_S, WHR_2_Z, 400*400)
+    QUANTIZE(data_Whr_2, data_Whr_2_q, WHR_2_S, WHR_2_Z, 400*400, WHR_2_NBITS)
     free(data_Whr_2);
+    PRINT_DEBUG_INFO(data_Whr_2_q, 0, 5, 0, 400*400, int, "%d ", "\n")
 
-    data_Whn_2 = (float*) malloc(sizeof(float)*400*400);
+    /*data_Whn_2 = (float*) malloc(sizeof(float)*400*400);
     for(int i=0; i<400; i++) {
         for(int j=0; j<400; j++) {
             data_Whn_2[i*400+j] = data_onnx__GRU_205[800*400+i*400+j];
