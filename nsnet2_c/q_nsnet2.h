@@ -197,6 +197,7 @@ free(transposed); \
 #define WHN_1_S (0.006779337864296109)
 #define WHN_1_Z (114)
 
+#define BIZ_1_NBITS 8
 #define BIZ_1_TYPE uint8_t
 #define BIZ_1_S (0.0034234637138890285)
 #define BIZ_1_Z (148)
