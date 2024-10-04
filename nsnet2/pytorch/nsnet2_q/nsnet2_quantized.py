@@ -11,11 +11,11 @@ class Q_NsNet2_npy(torch.nn.Module):
         # onnxMatMul_166
         self.onnxMatMul_166 = np.load(numpy_weights_path + 'onnx__MatMul_166.npy').transpose()
         self.onnxMatMul_166_q = self._quantize_tensor(self.onnxMatMul_166, 'onnxMatMul_166')
+        self._print_debug_info(self.onnxMatMul_166_q, 'onnxMatMul_166', 0, 100, 0, 257*400)
 
         # fc1bias
         self.fc1bias = np.load(numpy_weights_path + 'fc1_bias.npy')
         self.fc1bias_q = self._quantize_tensor(self.fc1bias, 'fc1bias')
-        self._print_debug_info(self.fc1bias_q, 'fc1bias')
 
         # Wiz_1, Wir_1, Win_1
         self.onnxGRU_184 = np.load(numpy_weights_path + 'onnx__GRU_184.npy')
@@ -439,9 +439,9 @@ class Q_NsNet2_npy(torch.nn.Module):
         Y = 1 / (1 + np.exp(-X))
         return self._quantize(Y, cy.S(), cy.Z(), cy.bitwidth)
     
-    def _print_debug_info(self, operator, calib_info):
+    def _print_debug_info(self, operator, calib_info, start, end, start_sum, end_sum):
         print(self.calib[calib_info].S())
         print(self.calib[calib_info].Z())
         print(operator.shape)
-        print(operator.flatten()[0:10])
-        print(np.sum(operator))
+        print(operator.flatten()[start:end])
+        print(np.sum(operator.flatten()[start_sum:end_sum]))

@@ -11,19 +11,18 @@ int setup_nsnet2(const char* weights_path) {
     QUANTIZE(data_fc1_bias,data_fc1_bias_q,FC1_BIAS_S,FC1_BIAS_Z,size_fc1_bias, FC1_BIAS_NBITS)
     free(data_fc1_bias);
 
-    PRINT_DEBUG_INFO(data_fc1_bias_q, 0, 10, 257, int, "%d ", "\n")
-
     // data_onnx__MatMul_166
-    /*flag = read_weights(weights_path, "onnx__MatMul_166.npy", &data_onnx__MatMul_166, &size_onnx__MatMul_166);
+    flag = read_weights(weights_path, "onnx__MatMul_166.npy", &data_onnx__MatMul_166, &size_onnx__MatMul_166);
     if(flag != 0)
         return -1;
     TRANSPOSE(257, 400, data_onnx__MatMul_166, float)
     data_onnx__MatMul_166_q = (ONNX__MATMUL_166_TYPE*) malloc(sizeof(ONNX__MATMUL_166_TYPE) * size_onnx__MatMul_166);
-    QUANTIZE(data_onnx__MatMul_166, data_onnx__MatMul_166_q, ONNX__MATMUL_166_S, ONNX__MATMUL_166_Z, size_onnx__MatMul_166)
+    QUANTIZE(data_onnx__MatMul_166, data_onnx__MatMul_166_q, ONNX__MATMUL_166_S, ONNX__MATMUL_166_Z, size_onnx__MatMul_166, ONNX__MATMUL_166_NBITS)
     free(data_onnx__MatMul_166);
-    
+    PRINT_DEBUG_INFO(data_onnx__MatMul_166_q, 0, 100, 0, 257*400, int, "%d ", "\n")
+
     // fc2_bias
-    flag = read_weights(weights_path, "fc2_bias.npy", &data_fc2_bias, &size_fc2_bias);
+    /*flag = read_weights(weights_path, "fc2_bias.npy", &data_fc2_bias, &size_fc2_bias);
     if(flag != 0)
         return -1;
     data_fc2_bias_q = (FC2_BIAS_TYPE*) malloc(sizeof(FC2_BIAS_TYPE) * size_fc2_bias);
