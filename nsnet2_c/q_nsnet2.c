@@ -365,20 +365,20 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     
     data_h1_q = (H1_TYPE*) malloc(sizeof(H1_TYPE*) * size_h1);
     QUANTIZE(h1, data_h1_q, H1_S, H1_Z, size_h1, H1_NBITS)
-    PRINT_DEBUG_INFO(data_h1_q, 0, 5, 0, 400, int, "%d ", "\n")
 
-    /*data_h2_q = (H2_TYPE*) malloc(sizeof(H2_TYPE*) * size_h2);
-    QUANTIZE(h2, data_h2_q, H2_S, H2_Z, size_h2)
+    data_h2_q = (H2_TYPE*) malloc(sizeof(H2_TYPE*) * size_h2);
+    QUANTIZE(h2, data_h2_q, H2_S, H2_Z, size_h2, H2_NBITS)
 
     data_fc1MatMul_q = (FC1MATMUL_TYPE*) malloc(sizeof(FC1MATMUL_TYPE*) * size_fc1MatMul);
     QMATMUL(400, 257, data_onnx__MatMul_166_q, data_x_q, data_fc1MatMul_q, 
         ONNX__MATMUL_166_S,X_S,FC1MATMUL_S,
-        ONNX__MATMUL_166_Z,X_Z,FC1MATMUL_Z, FC1MATMUL_TYPE)
+        ONNX__MATMUL_166_Z,X_Z,FC1MATMUL_Z, FC1MATMUL_TYPE, FC1MATMUL_NBITS)
     
     data_fc1Add_q = (FC1ADD_TYPE*) malloc(sizeof(FC1ADD_TYPE) * size_fc1Add);
-    QADD(size_fc1Add, data_fc1MatMul_q, data_fc1_bias_q, data_fc1Add_q, FC1MATMUL_S, FC1_BIAS_S, FC1ADD_S, FC1MATMUL_Z, FC1_BIAS_Z, FC1ADD_Z)
+    QADD(size_fc1Add, data_fc1MatMul_q, data_fc1_bias_q, data_fc1Add_q, FC1MATMUL_S, FC1_BIAS_S, FC1ADD_S, FC1MATMUL_Z, FC1_BIAS_Z, FC1ADD_Z, FC1ADD_NBITS)
+    PRINT_DEBUG_INFO(data_fc1Add_q, 0, 5, 0, 400, int, "%d ", "\n")
 
-    data_gru1_a__q = (GRU1_A__TYPE*) malloc(sizeof(GRU1_A__TYPE*) * size_gru1_a_);
+    /*data_gru1_a__q = (GRU1_A__TYPE*) malloc(sizeof(GRU1_A__TYPE*) * size_gru1_a_);
     QMATMUL(400, 400, data_Wir_1_q, data_fc1Add_q, data_gru1_a__q, 
         WIR_1_S,FC1ADD_S,GRU1_A__S,
         WIR_1_Z,FC1ADD_Z,GRU1_A__Z,GRU1_A__TYPE)
