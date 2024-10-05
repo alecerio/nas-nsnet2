@@ -362,12 +362,12 @@ int read_weights(const char* weights_path, const char* weights_name, float** dat
 void run_nsnet2(float* x, float* h1, float* h2) {
     data_x_q = (X_TYPE*) malloc(sizeof(X_TYPE*) * size_x);
     QUANTIZE(x, data_x_q, X_S, X_Z, size_x, X_NBITS)
-    PRINT_DEBUG_INFO(data_x_q, 0, 5, 0, 257, int, "%d ", "\n")
     
-    /*data_h1_q = (H1_TYPE*) malloc(sizeof(H1_TYPE*) * size_h1);
-    QUANTIZE(h1, data_h1_q, H1_S, H1_Z, size_h1)
+    data_h1_q = (H1_TYPE*) malloc(sizeof(H1_TYPE*) * size_h1);
+    QUANTIZE(h1, data_h1_q, H1_S, H1_Z, size_h1, H1_NBITS)
+    PRINT_DEBUG_INFO(data_h1_q, 0, 5, 0, 400, int, "%d ", "\n")
 
-    data_h2_q = (H2_TYPE*) malloc(sizeof(H2_TYPE*) * size_h2);
+    /*data_h2_q = (H2_TYPE*) malloc(sizeof(H2_TYPE*) * size_h2);
     QUANTIZE(h2, data_h2_q, H2_S, H2_Z, size_h2)
 
     data_fc1MatMul_q = (FC1MATMUL_TYPE*) malloc(sizeof(FC1MATMUL_TYPE*) * size_fc1MatMul);
