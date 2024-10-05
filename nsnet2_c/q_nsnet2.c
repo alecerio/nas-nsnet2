@@ -281,18 +281,18 @@ int setup_nsnet2(const char* weights_path) {
     data_bhr_2_q = (BHR_2_TYPE*) malloc(sizeof(BHR_2_TYPE)*400);
     QUANTIZE(data_bhr_2, data_bhr_2_q, BHR_2_S, BHR_2_Z, 400, BHR_2_NBITS)
     free(data_bhr_2);
-    PRINT_DEBUG_INFO(data_bhr_2_q, 0, 5, 0, 400, int, "%d ", "\n")
 
-    /*data_bhn_2 = (float*) malloc(sizeof(float)*400);
+    data_bhn_2 = (float*) malloc(sizeof(float)*400);
     for(int i=0; i<400; i++) {
         data_bhn_2[i] = data_onnx__GRU_206[2000+i];
     }
     data_bhn_2_q = (BHN_2_TYPE*) malloc(sizeof(BHN_2_TYPE)*400);
-    QUANTIZE(data_bhn_2, data_bhn_2_q, BHN_2_S, BHN_2_Z, 400)
+    QUANTIZE(data_bhn_2, data_bhn_2_q, BHN_2_S, BHN_2_Z, 400, BHN_2_NBITS)
     free(data_bhn_2);
+    PRINT_DEBUG_INFO(data_bhn_2_q, 0, 5, 0, 400, int, "%d ", "\n")
 
     // onnx__MatMul_207
-    flag = read_weights(weights_path, "onnx__MatMul_207.npy", &data_onnx__MatMul_207, &size_onnx__MatMul_207);
+    /*flag = read_weights(weights_path, "onnx__MatMul_207.npy", &data_onnx__MatMul_207, &size_onnx__MatMul_207);
     if(flag != 0)
         return -1;
     TRANSPOSE(400, 600, data_onnx__MatMul_207, float)
