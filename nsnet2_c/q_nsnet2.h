@@ -92,10 +92,10 @@ for(int i=0; i<size; i++) { \
 } \
 }
 
-#define SIGMOID_OP(input,output,Si,Zi,So,Zo,size,temp_sigmoid_x,temp_sigmoid_y) \
+#define SIGMOID_OP(input,output,Si,Zi,So,Zo,size,temp_sigmoid_x,temp_sigmoid_y,clip_val) \
 DEQUANTIZE(input, temp_sigmoid_x, Si, Zi, size) \
 SIGMOID(temp_sigmoid_x, temp_sigmoid_y, size) \
-QUANTIZE(temp_sigmoid_y,output,So, Zo, size)
+QUANTIZE(temp_sigmoid_y,output,So, Zo, size,clip_val)
 
 #define SIGMOID(tensor_in,tensor_out,size) \
 for(int i=0; i<size; i++) { \

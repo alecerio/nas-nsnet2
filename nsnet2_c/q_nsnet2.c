@@ -435,14 +435,13 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     data_gru1_r__q = (GRU1_R__TYPE*) malloc(sizeof(GRU1_R__TYPE) * size_gru1_r_);
     QADD(size_gru1_r_, data_gru1_a_q, data_gru1_b_q, data_gru1_r__q, 
         GRU1_A_S, GRU1_B_S, GRU1_R__S, GRU1_A_Z, GRU1_B_Z, GRU1_R__Z, GRU1_R__NBITS)
-    PRINT_DEBUG_INFO(data_gru1_r__q, 0, 5, 0, 400, int, "%d ", "\n")
     
-    
-    /*data_gru1_r_q = (GRU1_R_TYPE*) malloc(sizeof(GRU1_R_TYPE) * size_gru1_r);
+    data_gru1_r_q = (GRU1_R_TYPE*) malloc(sizeof(GRU1_R_TYPE) * size_gru1_r);
     SIGMOID_OP(data_gru1_r__q,data_gru1_r_q,GRU1_R__S,GRU1_R__Z,GRU1_R_S,GRU1_R_Z,
-        size_gru1_r, temp_sigmoid_x, temp_sigmoid_y)
+        size_gru1_r, temp_sigmoid_x, temp_sigmoid_y,GRU1_R__NBITS)
+    PRINT_DEBUG_INFO(data_gru1_r_q, 0, 5, 0, 400, int, "%d ", "\n")
     
-    data_gru1_z__q = (GRU1_Z__TYPE*) malloc(sizeof(GRU1_Z__TYPE) * size_gru1_z_);
+    /*data_gru1_z__q = (GRU1_Z__TYPE*) malloc(sizeof(GRU1_Z__TYPE) * size_gru1_z_);
     QADD(size_gru1_z_, data_gru1_c_q, data_gru1_d_q, data_gru1_z__q, 
         GRU1_C_S, GRU1_D_S, GRU1_Z__S, GRU1_C_Z, GRU1_D_Z, GRU1_Z__Z)
     
