@@ -265,14 +265,13 @@ int setup_nsnet2(const char* weights_path) {
     data_bin_2_q = (BIN_2_TYPE*) malloc(sizeof(BIN_2_TYPE)*400);
     QUANTIZE(data_bin_2, data_bin_2_q, BIN_2_S, BIN_2_Z, 400, BIN_2_NBITS)
     free(data_bin_2);
-    PRINT_DEBUG_INFO(data_bin_2_q, 0, 5, 0, 400, int, "%d ", "\n")
 
-    /*data_bhz_2 = (float*) malloc(sizeof(float)*400);
+    data_bhz_2 = (float*) malloc(sizeof(float)*400);
     for(int i=0; i<400; i++) {
         data_bhz_2[i] = data_onnx__GRU_206[1200+i];
     }
     data_bhz_2_q = (BHZ_2_TYPE*) malloc(sizeof(BHZ_2_TYPE)*400);
-    QUANTIZE(data_bhz_2, data_bhz_2_q, BHZ_2_S, BHZ_2_Z, 400)
+    QUANTIZE(data_bhz_2, data_bhz_2_q, BHZ_2_S, BHZ_2_Z, 400, BHZ_2_NBITS)
     free(data_bhz_2);
 
     data_bhr_2 = (float*) malloc(sizeof(float)*400);
@@ -280,10 +279,11 @@ int setup_nsnet2(const char* weights_path) {
         data_bhr_2[i] = data_onnx__GRU_206[1600+i];
     }
     data_bhr_2_q = (BHR_2_TYPE*) malloc(sizeof(BHR_2_TYPE)*400);
-    QUANTIZE(data_bhr_2, data_bhr_2_q, BHR_2_S, BHR_2_Z, 400)
+    QUANTIZE(data_bhr_2, data_bhr_2_q, BHR_2_S, BHR_2_Z, 400, BHR_2_NBITS)
     free(data_bhr_2);
+    PRINT_DEBUG_INFO(data_bhr_2_q, 0, 5, 0, 400, int, "%d ", "\n")
 
-    data_bhn_2 = (float*) malloc(sizeof(float)*400);
+    /*data_bhn_2 = (float*) malloc(sizeof(float)*400);
     for(int i=0; i<400; i++) {
         data_bhn_2[i] = data_onnx__GRU_206[2000+i];
     }

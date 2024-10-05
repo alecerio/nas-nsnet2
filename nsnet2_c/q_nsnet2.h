@@ -272,10 +272,12 @@ free(transposed); \
 #define BIN_2_S (0.0014127153976290835)
 #define BIN_2_Z (170)
 
+#define BHZ_2_NBITS 8
 #define BHZ_2_TYPE uint8_t
 #define BHZ_2_S (0.002213522850298414)
 #define BHZ_2_Z (198)
 
+#define BHR_2_NBITS 8
 #define BHR_2_TYPE uint8_t
 #define BHR_2_S (0.0006787231155470306)
 #define BHR_2_Z (142)
