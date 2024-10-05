@@ -82,11 +82,13 @@ for (int i = 0; i < rows; i++) { \
 
 #define QADD(size,A,B,R,Sa,Sb,Sr,Za,Zb,Zr,clip_val) \
 { \
+int64_t acc; \
 float Sar = Sa / Sr; \
 float Sbr = Sb / Sr; \
 for(int i=0; i<size; i++) { \
-    R[i] = NCAST_ROUND(Sar * (A[i] - Za) + Sbr * (B[i] - Zb) + Zr); \
-    CLIP(R[i], clip_val) \
+    acc = NCAST_ROUND(Sar * (A[i] - Za) + Sbr * (B[i] - Zb) + Zr); \
+    CLIP(acc, clip_val) \
+    R[i] = acc; \
 } \
 }
 

@@ -376,67 +376,69 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     
     data_fc1Add_q = (FC1ADD_TYPE*) malloc(sizeof(FC1ADD_TYPE) * size_fc1Add);
     QADD(size_fc1Add, data_fc1MatMul_q, data_fc1_bias_q, data_fc1Add_q, FC1MATMUL_S, FC1_BIAS_S, FC1ADD_S, FC1MATMUL_Z, FC1_BIAS_Z, FC1ADD_Z, FC1ADD_NBITS)
-    PRINT_DEBUG_INFO(data_fc1Add_q, 0, 5, 0, 400, int, "%d ", "\n")
 
-    /*data_gru1_a__q = (GRU1_A__TYPE*) malloc(sizeof(GRU1_A__TYPE*) * size_gru1_a_);
+    data_gru1_a__q = (GRU1_A__TYPE*) malloc(sizeof(GRU1_A__TYPE*) * size_gru1_a_);
     QMATMUL(400, 400, data_Wir_1_q, data_fc1Add_q, data_gru1_a__q, 
         WIR_1_S,FC1ADD_S,GRU1_A__S,
-        WIR_1_Z,FC1ADD_Z,GRU1_A__Z,GRU1_A__TYPE)
+        WIR_1_Z,FC1ADD_Z,GRU1_A__Z,GRU1_A__TYPE, GRU1_A__NBITS)
     
     data_gru1_a_q = (GRU1_A_TYPE*) malloc(sizeof(GRU1_A_TYPE) * size_gru1_a);
     QADD(size_gru1_a, data_gru1_a__q, data_bir_1_q, data_gru1_a_q, 
-        GRU1_A__S, BIR_1_S, GRU1_A_S, GRU1_A__Z, BIR_1_Z, GRU1_A_Z)
+        GRU1_A__S, BIR_1_S, GRU1_A_S, GRU1_A__Z, BIR_1_Z, GRU1_A_Z, GRU1_A_NBITS)
     
     data_gru1_b__q = (GRU1_B__TYPE*) malloc(sizeof(GRU1_B__TYPE*) * size_gru1_b_);
     QMATMUL(400, 400, data_Whr_1_q, data_h1_q, data_gru1_b__q, 
         WHR_1_S,H1_S,GRU1_B__S,
-        WHR_1_Z,H1_Z,GRU1_B__Z,GRU1_B__TYPE)
+        WHR_1_Z,H1_Z,GRU1_B__Z,GRU1_B__TYPE,GRU1_B__NBITS)
 
     data_gru1_b_q = (GRU1_B_TYPE*) malloc(sizeof(GRU1_B_TYPE) * size_gru1_b);
     QADD(size_gru1_b, data_gru1_b__q, data_bhr_1_q, data_gru1_b_q, 
-        GRU1_B__S, BHR_1_S, GRU1_B_S, GRU1_B__Z, BHR_1_Z, GRU1_B_Z)
+        GRU1_B__S, BHR_1_S, GRU1_B_S, GRU1_B__Z, BHR_1_Z, GRU1_B_Z,GRU1_B_NBITS)
 
     data_gru1_c__q = (GRU1_C__TYPE*) malloc(sizeof(GRU1_C__TYPE*) * size_gru1_c_);
     QMATMUL(400, 400, data_Wiz_1_q, data_fc1Add_q, data_gru1_c__q, 
         WIZ_1_S,FC1ADD_S,GRU1_C__S,
-        WIZ_1_Z,FC1ADD_Z,GRU1_C__Z,GRU1_C__TYPE)
+        WIZ_1_Z,FC1ADD_Z,GRU1_C__Z,GRU1_C__TYPE,GRU1_C__NBITS)
     
     data_gru1_c_q = (GRU1_C_TYPE*) malloc(sizeof(GRU1_C_TYPE) * size_gru1_c);
     QADD(size_gru1_c, data_gru1_c__q, data_biz_1_q, data_gru1_c_q, 
-        GRU1_C__S, BIZ_1_S, GRU1_C_S, GRU1_C__Z, BIZ_1_Z, GRU1_C_Z)
+        GRU1_C__S, BIZ_1_S, GRU1_C_S, GRU1_C__Z, BIZ_1_Z, GRU1_C_Z, GRU1_C_NBITS)
     
     data_gru1_d__q = (GRU1_D__TYPE*) malloc(sizeof(GRU1_D__TYPE*) * size_gru1_d_);
     QMATMUL(400, 400, data_Whz_1_q, data_h1_q, data_gru1_d__q, 
         WHZ_1_S,H1_S,GRU1_D__S,
-        WHZ_1_Z,H1_Z,GRU1_D__Z,GRU1_D__TYPE)
+        WHZ_1_Z,H1_Z,GRU1_D__Z,GRU1_D__TYPE,GRU1_D__NBITS)
     
     data_gru1_d_q = (GRU1_D_TYPE*) malloc(sizeof(GRU1_D_TYPE) * size_gru1_d);
     QADD(size_gru1_d, data_gru1_d__q, data_bhz_1_q, data_gru1_d_q, 
-        GRU1_D__S, BHZ_1_S, GRU1_D_S, GRU1_D__Z, BHZ_1_Z, GRU1_D_Z)
+        GRU1_D__S, BHZ_1_S, GRU1_D_S, GRU1_D__Z, BHZ_1_Z, GRU1_D_Z, GRU1_D_NBITS)
     
     data_gru1_e__q = (GRU1_E__TYPE*) malloc(sizeof(GRU1_E__TYPE*) * size_gru1_e_);
     QMATMUL(400, 400, data_Win_1_q, data_fc1Add_q, data_gru1_e__q, 
         WIN_1_S,FC1ADD_S,GRU1_E__S,
-        WIN_1_Z,FC1ADD_Z,GRU1_E__Z,GRU1_E__TYPE)
+        WIN_1_Z,FC1ADD_Z,GRU1_E__Z,GRU1_E__TYPE, GRU1_E__NBITS)
 
     data_gru1_e_q = (GRU1_E_TYPE*) malloc(sizeof(GRU1_E_TYPE) * size_gru1_e);
     QADD(size_gru1_e, data_gru1_e__q, data_bin_1_q, data_gru1_e_q, 
-        GRU1_E__S, BIN_1_S, GRU1_E_S, GRU1_E__Z, BIN_1_Z, GRU1_E_Z)
+        GRU1_E__S, BIN_1_S, GRU1_E_S, GRU1_E__Z, BIN_1_Z, GRU1_E_Z, GRU1_E_NBITS)
 
     data_gru1_f__q = (GRU1_F__TYPE*) malloc(sizeof(GRU1_F__TYPE*) * size_gru1_f_);
     QMATMUL(400, 400, data_Whn_1_q, data_h1_q, data_gru1_f__q, 
         WHN_1_S,H1_S,GRU1_F__S,
-        WHN_1_Z,H1_Z,GRU1_F__Z,GRU1_F__TYPE)
+        WHN_1_Z,H1_Z,GRU1_F__Z,GRU1_F__TYPE, GRU1_F__NBITS)
     
     data_gru1_f_q = (GRU1_F_TYPE*) malloc(sizeof(GRU1_F_TYPE) * size_gru1_f);
     QADD(size_gru1_f, data_gru1_f__q, data_bhn_1_q, data_gru1_f_q, 
-        GRU1_F__S, BHN_1_S, GRU1_F_S, GRU1_F__Z, BHN_1_Z, GRU1_F_Z)
-    
+        GRU1_F__S, BHN_1_S, GRU1_F_S, GRU1_F__Z, BHN_1_Z, GRU1_F_Z, GRU1_F_NBITS)
+    //WRITE_TENSOR_TO_TXT_FILE(data_gru1_r__q, "data_gru1_f_q.txt", 400)
+
     data_gru1_r__q = (GRU1_R__TYPE*) malloc(sizeof(GRU1_R__TYPE) * size_gru1_r_);
     QADD(size_gru1_r_, data_gru1_a_q, data_gru1_b_q, data_gru1_r__q, 
-        GRU1_A_S, GRU1_B_S, GRU1_R__S, GRU1_A_Z, GRU1_B_Z, GRU1_R__Z)
+        GRU1_A_S, GRU1_B_S, GRU1_R__S, GRU1_A_Z, GRU1_B_Z, GRU1_R__Z, GRU1_R__NBITS)
+    PRINT_DEBUG_INFO(data_gru1_r__q, 0, 5, 0, 400, int, "%d ", "\n")
     
-    data_gru1_r_q = (GRU1_R_TYPE*) malloc(sizeof(GRU1_R_TYPE) * size_gru1_r);
+    
+    /*data_gru1_r_q = (GRU1_R_TYPE*) malloc(sizeof(GRU1_R_TYPE) * size_gru1_r);
     SIGMOID_OP(data_gru1_r__q,data_gru1_r_q,GRU1_R__S,GRU1_R__Z,GRU1_R_S,GRU1_R_Z,
         size_gru1_r, temp_sigmoid_x, temp_sigmoid_y)
     
