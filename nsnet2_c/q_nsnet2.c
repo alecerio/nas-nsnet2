@@ -439,22 +439,22 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     data_gru1_r_q = (GRU1_R_TYPE*) malloc(sizeof(GRU1_R_TYPE) * size_gru1_r);
     SIGMOID_OP(data_gru1_r__q,data_gru1_r_q,GRU1_R__S,GRU1_R__Z,GRU1_R_S,GRU1_R_Z,
         size_gru1_r, temp_sigmoid_x, temp_sigmoid_y,GRU1_R__NBITS)
-    PRINT_DEBUG_INFO(data_gru1_r_q, 0, 5, 0, 400, int, "%d ", "\n")
     
-    /*data_gru1_z__q = (GRU1_Z__TYPE*) malloc(sizeof(GRU1_Z__TYPE) * size_gru1_z_);
+    data_gru1_z__q = (GRU1_Z__TYPE*) malloc(sizeof(GRU1_Z__TYPE) * size_gru1_z_);
     QADD(size_gru1_z_, data_gru1_c_q, data_gru1_d_q, data_gru1_z__q, 
-        GRU1_C_S, GRU1_D_S, GRU1_Z__S, GRU1_C_Z, GRU1_D_Z, GRU1_Z__Z)
+        GRU1_C_S, GRU1_D_S, GRU1_Z__S, GRU1_C_Z, GRU1_D_Z, GRU1_Z__Z, GRU1_Z__NBITS)
     
     data_gru1_z_q = (GRU1_Z_TYPE*) malloc(sizeof(GRU1_Z_TYPE) * size_gru1_z);
     SIGMOID_OP(data_gru1_z__q,data_gru1_z_q,GRU1_Z__S,GRU1_Z__Z,GRU1_Z_S,GRU1_Z_Z,
-        size_gru1_z, temp_sigmoid_x, temp_sigmoid_y)
+        size_gru1_z, temp_sigmoid_x, temp_sigmoid_y,GRU1_Z_NBITS)
 
     data_gru1_n1_q = (GRU1_N1_TYPE*) malloc(sizeof(GRU1_N1_TYPE) * size_gru1_n1);
     QMUL(data_gru1_r_q, data_gru1_f_q, data_gru1_n1_q,
         GRU1_R_S, GRU1_F_S, GRU1_N1_S,
-        GRU1_R_Z, GRU1_F_Z, GRU1_N1_Z, size_gru1_n1)
+        GRU1_R_Z, GRU1_F_Z, GRU1_N1_Z, size_gru1_n1, GRU1_N1_NBITS)
+    PRINT_DEBUG_INFO(data_gru1_n1_q, 0, 5, 0, 400, int, "%d ", "\n")
 
-    data_gru1_n2_q = (GRU1_N2_TYPE*) malloc(sizeof(GRU1_N2_TYPE) * size_gru1_n2);
+    /*data_gru1_n2_q = (GRU1_N2_TYPE*) malloc(sizeof(GRU1_N2_TYPE) * size_gru1_n2);
     QADD(size_gru1_n2, data_gru1_e_q, data_gru1_n1_q, data_gru1_n2_q, 
         GRU1_E_S, GRU1_N1_S, GRU1_N2_S, GRU1_E_Z, GRU1_N1_Z, GRU1_N2_Z)
     

@@ -114,11 +114,14 @@ for(int i=0; i<size; i++) { \
     tensor_out[i] = (ex - emx) / (ex + emx); \
 }
 
-#define QMUL(A,B,C,Sa,Sb,Sc,Za,Zb,Zc,size) \
+#define QMUL(A,B,C,Sa,Sb,Sc,Za,Zb,Zc,size,clip_val) \
 { \
+int64_t acc = 0; \
 float S = (Sa * Sb) / Sc; \
 for(int i=0; i<size; i++) { \
-    C[i] = NCAST_ROUND(S * (A[i] - Za) * (B[i] - Zb) + Zc); \
+    acc = NCAST_ROUND(S * (A[i] - Za) * (B[i] - Zb) + Zc); \
+    CLIP(acc, clip_val) \
+    C[i] = acc; \
 } \
 }
 
