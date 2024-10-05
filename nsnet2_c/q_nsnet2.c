@@ -298,19 +298,19 @@ int setup_nsnet2(const char* weights_path) {
     data_onnx__MatMul_207_q = (ONNX__MATMUL_207_TYPE*) malloc(sizeof(ONNX__MATMUL_207_TYPE) * size_onnx__MatMul_207);
     QUANTIZE(data_onnx__MatMul_207, data_onnx__MatMul_207_q, ONNX__MATMUL_207_S, ONNX__MATMUL_207_Z, size_onnx__MatMul_207, ONNX__MATMUL_207_NBITS)
     free(data_onnx__MatMul_207);
-    PRINT_DEBUG_INFO(data_onnx__MatMul_207_q, 0, 5, 0, 400*600, int, "%d ", "\n")
     
     // onnx__MatMul_208
-    /*flag = read_weights(weights_path, "onnx__MatMul_208.npy", &data_onnx__MatMul_208, &size_onnx__MatMul_208);
+    flag = read_weights(weights_path, "onnx__MatMul_208.npy", &data_onnx__MatMul_208, &size_onnx__MatMul_208);
     if(flag != 0)
         return -1;
     TRANSPOSE(600, 600, data_onnx__MatMul_208, float)
     data_onnx__MatMul_208_q = (ONNX__MATMUL_208_TYPE*) malloc(sizeof(ONNX__MATMUL_208_TYPE) * size_onnx__MatMul_208);
-    QUANTIZE(data_onnx__MatMul_208, data_onnx__MatMul_208_q, ONNX__MATMUL_208_S, ONNX__MATMUL_208_Z, size_onnx__MatMul_208)
+    QUANTIZE(data_onnx__MatMul_208, data_onnx__MatMul_208_q, ONNX__MATMUL_208_S, ONNX__MATMUL_208_Z, size_onnx__MatMul_208, ONNX__MATMUL_208_NBITS)
     free(data_onnx__MatMul_208);
+    PRINT_DEBUG_INFO(data_onnx__MatMul_208_q, 0, 5, 0, 600*600, int, "%d ", "\n")
     
     // onnx__MatMul_209
-    flag = read_weights(weights_path, "onnx__MatMul_209.npy", &data_onnx__MatMul_209, &size_onnx__MatMul_209);
+    /*flag = read_weights(weights_path, "onnx__MatMul_209.npy", &data_onnx__MatMul_209, &size_onnx__MatMul_209);
     if(flag != 0)
         return -1;
     TRANSPOSE(600, 257, data_onnx__MatMul_209, float)
