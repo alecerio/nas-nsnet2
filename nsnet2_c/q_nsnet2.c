@@ -316,15 +316,12 @@ int setup_nsnet2(const char* weights_path) {
     data_onnx__MatMul_209_q = (ONNX__MATMUL_209_TYPE*) malloc(sizeof(ONNX__MATMUL_209_TYPE) * size_onnx__MatMul_209);
     QUANTIZE(data_onnx__MatMul_209, data_onnx__MatMul_209_q, ONNX__MATMUL_209_S, ONNX__MATMUL_209_Z, size_onnx__MatMul_209, ONNX__MATMUL_209_NBITS)
     free(data_onnx__MatMul_209);
-    PRINT_DEBUG_INFO(data_onnx__MatMul_209_q, 0, 5, 0, 600*257, int, "%d ", "\n")
 
-    /*temp_sigmoid_x = (float*) malloc(sizeof(float) * size_h1);
+    temp_sigmoid_x = (float*) malloc(sizeof(float) * size_h1);
     temp_sigmoid_y = (float*) malloc(sizeof(float) * size_h1);
     temp_relu = (float*) malloc(sizeof(float) * size_relu);
 
     q_ones = 255;
-
-    */
 
     return 0;
 }
@@ -363,10 +360,11 @@ int read_weights(const char* weights_path, const char* weights_name, float** dat
 }
 
 void run_nsnet2(float* x, float* h1, float* h2) {
-    /*data_x_q = (X_TYPE*) malloc(sizeof(X_TYPE*) * size_x);
+    data_x_q = (X_TYPE*) malloc(sizeof(X_TYPE*) * size_x);
     QUANTIZE(x, data_x_q, X_S, X_Z, size_x, X_NBITS)
+    PRINT_DEBUG_INFO(data_x_q, 0, 5, 0, 257, int, "%d ", "\n")
     
-    data_h1_q = (H1_TYPE*) malloc(sizeof(H1_TYPE*) * size_h1);
+    /*data_h1_q = (H1_TYPE*) malloc(sizeof(H1_TYPE*) * size_h1);
     QUANTIZE(h1, data_h1_q, H1_S, H1_Z, size_h1)
 
     data_h2_q = (H2_TYPE*) malloc(sizeof(H2_TYPE*) * size_h2);
