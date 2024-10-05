@@ -262,6 +262,7 @@ free(transposed); \
 #define BIZ_2_S (0.0023688636574090696)
 #define BIZ_2_Z (189)
 
+#define BIR_2_NBITS 8
 #define BIR_2_TYPE uint8_t
 #define BIR_2_S (0.0007888194392709171)
 #define BIR_2_Z (111)
