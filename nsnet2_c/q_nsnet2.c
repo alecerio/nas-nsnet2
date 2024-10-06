@@ -327,6 +327,7 @@ int setup_nsnet2(const char* weights_path) {
 }
 
 void free_nsnet2() {
+    free(data_x_q);
     free(data_fc1_bias_q);
     free(data_fc2_bias_q);
     //free(data_fc3_bias);
