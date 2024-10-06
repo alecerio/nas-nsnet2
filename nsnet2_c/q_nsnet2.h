@@ -618,6 +618,11 @@ free(transposed); \
 #define FC4ADD_S (0.006303162434521843)
 #define FC4ADD_Z (408)
 
+#define SIGMOID_NBITS 255
+#define SIGMOID_TYPE uint8_t
+#define SIGMOID_S (0.000805279203489715)
+#define SIGMOID_Z (-88)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -892,6 +897,12 @@ static int size_fc4MatMul = 257;
 
 static FC4ADD_TYPE* data_fc4Add_q;
 static int size_fc4Add = 257;
+
+static SIGMOID_TYPE* data_sigmoid_q;
+static int size_sigmoid = 257;
+
+static float* data_output;
+static int size_output = 257;
 
 static float* temp_sigmoid_x;
 static float* temp_sigmoid_y;

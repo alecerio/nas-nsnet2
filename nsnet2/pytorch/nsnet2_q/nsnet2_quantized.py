@@ -25,8 +25,6 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.Wiz_1_q = self._quantize_tensor(self.Wiz_1, 'Wiz_1')
         self.Wir_1_q = self._quantize_tensor(self.Wir_1, 'Wir_1')
         self.Win_1_q = self._quantize_tensor(self.Win_1, 'Win_1')
-        self._print_debug_info(self.Wiz_1_q, 'Wiz_1', 0, 5, 0, 400*400)
-        #self._comprare_c_with_python("Wiz.txt", self.Wiz_1_q.flatten())
 
         self.onnxGRU_185 = np.load(numpy_weights_path + 'onnx__GRU_185.npy')
         self.Whz_1 = self.onnxGRU_185[:,:400,:]
@@ -52,6 +50,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         self.bhz_1_q = self._quantize_tensor(self.bhz_1, 'bhz_1')
         self.bhr_1_q = self._quantize_tensor(self.bhr_1, 'bhr_1')
         self.bhn_1_q = self._quantize_tensor(self.bhn_1, 'bhn_1')
+        #self._comprare_c_with_python("Wiz.txt", self.Wiz_1_q.flatten())
 
         self.onnxGRU_204 = np.load(numpy_weights_path + 'onnx__GRU_204.npy')
         self.Wiz_2 = self.onnxGRU_204[:,:400,:]
@@ -365,7 +364,14 @@ class Q_NsNet2_npy(torch.nn.Module):
         sigmoid = 1 / (1 + np.exp(-fc4Add))
         self._compare(sigmoid, sigmoid_q, self.calib['sigmoid'], "output")
 
-        return sigmoid_q
+        # output
+        outc = self.calib['sigmoid']
+        output =self._dequantize(sigmoid_q, outc.S(), outc.Z())
+
+        self._print_debug_info(output, 'sigmoid', 0, 5, 0, 257)
+        #self._comprare_c_with_python('gru1_f_q.txt', gru1_f_q.flatten())
+
+        return output
     
     def _quantize(self, tensor_fp32, S, z, n_bits):
         q = np.floor(tensor_fp32 / S) + z
@@ -445,7 +451,7 @@ class Q_NsNet2_npy(torch.nn.Module):
         print(self.calib[calib_info].Z())
         print(operator.shape)
         print(operator.flatten()[start:end])
-        print(np.sum(operator.flatten()[start_sum:end_sum]))
+        print(sum(operator.flatten()[start_sum:end_sum]))
     
     def _comprare_c_with_python(self, txtfile_c, tensor):
         try:

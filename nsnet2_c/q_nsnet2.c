@@ -624,6 +624,13 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     data_fc4Add_q = (FC4ADD_TYPE*) malloc(sizeof(FC4ADD_TYPE) * size_fc4Add);
     QADD(size_fc4Add, data_fc4MatMul_q, data_fc4_bias_q, data_fc4Add_q, 
         FC4MATMUL_S, FC4_BIAS_S, FC4ADD_S, FC4MATMUL_Z, FC4_BIAS_Z, FC4ADD_Z, FC4ADD_NBITS)
+    
+    data_sigmoid_q = (SIGMOID_TYPE*) malloc(sizeof(SIGMOID_TYPE) * size_sigmoid);
+    SIGMOID_OP(data_fc4Add_q, data_sigmoid_q, 
+        FC4ADD_S, FC4ADD_Z, SIGMOID_S, SIGMOID_Z, size_sigmoid, temp_sigmoid_x, temp_sigmoid_y, SIGMOID_NBITS)
+    
+    data_output = (float*) malloc(sizeof(float) * size_output);
+    DEQUANTIZE(data_sigmoid_q, data_output, SIGMOID_S, SIGMOID_Z, size_output)
 
-    PRINT_DEBUG_INFO(data_fc4Add_q, 0, 5, 0, 257, int, "%d ", "\n")
+    PRINT_DEBUG_INFO(data_output, 0, 5, 0, 257, float, "%f ", "\n")
 }
