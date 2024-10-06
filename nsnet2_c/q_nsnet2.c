@@ -616,5 +616,10 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     data_relu_1_q = (RELU_1_TYPE*) malloc(sizeof(RELU_1_TYPE) * size_relu);
     QRELU(data_fc3Add_q, data_relu_1_q, FC3ADD_S, RELU_1_S, FC3ADD_Z, RELU_1_Z, size_relu_1, temp_relu, RELU_1_NBITS)
 
-    PRINT_DEBUG_INFO(data_relu_1_q, 0, 5, 0, 600, int, "%d ", "\n")
+    data_fc4MatMul_q = (FC4MATMUL_TYPE*) malloc(sizeof(FC4MATMUL_TYPE*) * size_fc4MatMul);
+    QMATMUL(257, 600, data_onnx__MatMul_209_q, data_relu_1_q, data_fc4MatMul_q, 
+        ONNX__MATMUL_209_S,RELU_1_S,FC4MATMUL_S,
+        ONNX__MATMUL_209_Z,RELU_1_Z,FC4MATMUL_Z, FC4MATMUL_TYPE, FC4MATMUL_NBITS)
+
+    PRINT_DEBUG_INFO(data_fc4MatMul_q, 0, 5, 0, 257, int, "%d ", "\n")
 }
