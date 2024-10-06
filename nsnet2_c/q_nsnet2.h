@@ -102,10 +102,10 @@ for(int i=0; i<size; i++) { \
     tensor_out[i] = 1.0f / (1.0f + exp(-tensor_in[i])); \
 }
 
-#define TANH_OP(input,output,Si,Zi,So,Zo,size,temp_sigmoid_x,temp_sigmoid_y) \
+#define TANH_OP(input,output,Si,Zi,So,Zo,size,temp_sigmoid_x,temp_sigmoid_y,clip_val) \
 DEQUANTIZE(input, temp_sigmoid_x, Si, Zi, size) \
 TANH(temp_sigmoid_x, temp_sigmoid_y, size) \
-QUANTIZE(temp_sigmoid_y,output,So, Zo, size)
+QUANTIZE(temp_sigmoid_y,output,So, Zo, size,clip_val)
 
 #define TANH(tensor_in,tensor_out,size) \
 for(int i=0; i<size; i++) { \
