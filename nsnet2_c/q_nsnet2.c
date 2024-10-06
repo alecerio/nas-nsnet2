@@ -609,5 +609,9 @@ void run_nsnet2(float* x, float* h1, float* h2) {
         ONNX__MATMUL_208_S,RELU_S,FC3MATMUL_S,
         ONNX__MATMUL_208_Z,RELU_Z,FC3MATMUL_Z, FC3MATMUL_TYPE, FC3MATMUL_NBITS)
     
-    PRINT_DEBUG_INFO(data_fc3MatMul_q, 0, 5, 0, 400, int, "%d ", "\n")
+    data_fc3Add_q = (FC3ADD_TYPE*) malloc(sizeof(FC3ADD_TYPE) * size_fc3Add);
+    QADD(size_fc3Add, data_fc3MatMul_q, data_fc3_bias_q, data_fc3Add_q, 
+        FC3MATMUL_S, FC3_BIAS_S, FC3ADD_S, FC3MATMUL_Z, FC3_BIAS_Z, FC3ADD_Z, FC3ADD_NBITS)
+
+    PRINT_DEBUG_INFO(data_fc3Add_q, 0, 5, 0, 400, int, "%d ", "\n")
 }

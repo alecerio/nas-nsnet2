@@ -598,6 +598,11 @@ free(transposed); \
 #define FC3MATMUL_S (0.014787528795354507)
 #define FC3MATMUL_Z (194)
 
+#define FC3ADD_NBITS 255
+#define FC3ADD_TYPE uint8_t
+#define FC3ADD_S (0.014849604812322878)
+#define FC3ADD_Z (195)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -860,6 +865,9 @@ static int size_relu = 600;
 
 static FC3MATMUL_TYPE* data_fc3MatMul_q;
 static int size_fc3MatMul = 600;
+
+static FC3ADD_TYPE* data_fc3Add_q;
+static int size_fc3Add = 600;
 
 static float* temp_sigmoid_x;
 static float* temp_sigmoid_y;
