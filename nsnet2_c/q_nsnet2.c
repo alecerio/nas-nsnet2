@@ -612,6 +612,9 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     data_fc3Add_q = (FC3ADD_TYPE*) malloc(sizeof(FC3ADD_TYPE) * size_fc3Add);
     QADD(size_fc3Add, data_fc3MatMul_q, data_fc3_bias_q, data_fc3Add_q, 
         FC3MATMUL_S, FC3_BIAS_S, FC3ADD_S, FC3MATMUL_Z, FC3_BIAS_Z, FC3ADD_Z, FC3ADD_NBITS)
+    
+    data_relu_1_q = (RELU_1_TYPE*) malloc(sizeof(RELU_1_TYPE) * size_relu);
+    QRELU(data_fc3Add_q, data_relu_1_q, FC3ADD_S, RELU_1_S, FC3ADD_Z, RELU_1_Z, size_relu_1, temp_relu, RELU_1_NBITS)
 
-    PRINT_DEBUG_INFO(data_fc3Add_q, 0, 5, 0, 400, int, "%d ", "\n")
+    PRINT_DEBUG_INFO(data_relu_1_q, 0, 5, 0, 600, int, "%d ", "\n")
 }
