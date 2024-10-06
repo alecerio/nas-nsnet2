@@ -329,8 +329,46 @@ int setup_nsnet2(const char* weights_path) {
 void free_nsnet2() {
     free(data_x_q);
     free(data_h1_q);
+    free(data_h2_q);
     free(data_fc1_bias_q);
     free(data_fc2_bias_q);
+    free(data_fc3_bias_q);
+    free(data_fc4_bias_q);
+    free(data_Wiz_1_q);
+    free(data_Wir_1_q);
+    free(data_Win_1_q);
+    free(data_Whz_1_q);
+    free(data_Whr_1_q);
+    free(data_Whn_1_q);
+    free(data_biz_1_q);
+    free(data_bir_1_q);
+    free(data_bin_1_q);
+    free(data_bhz_1_q);
+    free(data_bhr_1_q);
+    free(data_bhn_1_q);
+    free(data_Wiz_2_q);
+    free(data_Wir_2_q);
+    free(data_Win_2_q);
+    free(data_Whz_2_q);
+    free(data_Whr_2_q);
+    free(data_Whn_2_q);
+    free(data_biz_2_q);
+    free(data_bir_2_q);
+    free(data_bin_2_q);
+    free(data_bhz_2_q);
+    free(data_bhr_2_q);
+    free(data_bhn_2_q);
+    free(data_onnx__MatMul_166_q);
+    free(data_onnx__MatMul_207_q);
+    free(data_onnx__MatMul_208_q);
+    free(data_onnx__MatMul_209_q);
+    free(data_fc1MatMul_q);
+    free(data_fc1Add_q);
+    free(data_gru1_a__q);
+    free(data_gru1_a_q);
+    free(data_gru1_b__q);
+
+
     //free(data_fc3_bias);
     //free(data_fc4_bias);
     //free(data_onnx__GRU_184);
