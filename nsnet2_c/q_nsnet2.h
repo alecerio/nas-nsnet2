@@ -125,13 +125,16 @@ for(int i=0; i<size; i++) { \
 } \
 }
 
-#define QUANTIZE_ONE_MINUS_X(x,y,Sx,Sy,Zx,Zy,size) \
+#define QUANTIZE_ONE_MINUS_X(x,y,Sx,Sy,Zx,Zy,size,clip_val) \
 { \
 float S1y = S_ones / Sy; \
 float Sxy = Sx / Sy; \
 float alpha = S1y * (q_ones - Z_ones); \
+int64_t acc; \
 for(int i=0; i<size; i++) { \
-    y[i] = NCAST_ROUND(alpha - Sxy * (x[i] - Zx) + Zy); \
+    acc = NCAST_ROUND(alpha - Sxy * (x[i] - Zx) + Zy); \
+    CLIP(acc, clip_val) \
+    y[i] = acc; \
 } \
 }
 

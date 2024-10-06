@@ -460,14 +460,14 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     data_gru1_n_q = (GRU1_N_TYPE*) malloc(sizeof(GRU1_N_TYPE) * size_gru1_n);
     TANH_OP(data_gru1_n2_q,data_gru1_n_q,GRU1_N2_S,GRU1_N2_Z,GRU1_N_S,GRU1_N_Z,
         size_gru1_n, temp_sigmoid_x, temp_sigmoid_y, GRU1_N_NBITS)
-    PRINT_DEBUG_INFO(data_gru1_n_q, 0, 5, 0, 400, int, "%d ", "\n")
     
-    /*data_gru1_hn1_q = (GRU1_HN1_TYPE*) malloc(sizeof(GRU1_HN1_TYPE) * size_gru1_hn1);
+    data_gru1_hn1_q = (GRU1_HN1_TYPE*) malloc(sizeof(GRU1_HN1_TYPE) * size_gru1_hn1);
     QUANTIZE_ONE_MINUS_X(data_gru1_z_q,data_gru1_hn1_q,
         GRU1_Z_S,GRU1_HN1_S,
-        GRU1_Z_Z,GRU1_HN1_Z,size_gru1_hn1)
+        GRU1_Z_Z,GRU1_HN1_Z,size_gru1_hn1,GRU1_HN1_NBITS)
+    PRINT_DEBUG_INFO(data_gru1_hn1_q, 0, 5, 0, 400, int, "%d ", "\n")
     
-    data_gru1_hn2_q = (GRU1_HN2_TYPE*) malloc(sizeof(GRU1_HN2_TYPE) * size_gru1_hn2);
+    /*data_gru1_hn2_q = (GRU1_HN2_TYPE*) malloc(sizeof(GRU1_HN2_TYPE) * size_gru1_hn2);
     QMUL(data_gru1_hn1_q, data_gru1_n_q, data_gru1_hn2_q, 
         GRU1_HN1_S, GRU1_N_S, GRU1_HN2_S,
         GRU1_HN1_Z, GRU1_N_Z, GRU1_HN2_Z, size_gru1_hn2)
