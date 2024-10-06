@@ -613,6 +613,11 @@ free(transposed); \
 #define FC4MATMUL_S (0.006203068003934972)
 #define FC4MATMUL_Z (413)
 
+#define FC4ADD_NBITS 255
+#define FC4ADD_TYPE uint8_t
+#define FC4ADD_S (0.006303162434521843)
+#define FC4ADD_Z (408)
+
 static X_TYPE* data_x_q;
 static int size_x = 257;
 
@@ -884,6 +889,9 @@ static int size_relu_1 = 600;
 
 static FC4MATMUL_TYPE* data_fc4MatMul_q;
 static int size_fc4MatMul = 257;
+
+static FC4ADD_TYPE* data_fc4Add_q;
+static int size_fc4Add = 257;
 
 static float* temp_sigmoid_x;
 static float* temp_sigmoid_y;
