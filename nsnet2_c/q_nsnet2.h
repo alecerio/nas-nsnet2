@@ -138,14 +138,14 @@ for(int i=0; i<size; i++) { \
 } \
 }
 
-#define QRELU(x, y, Sx, Sy, Zx, Zy, size, temp_relu) \
+#define QRELU(x,y,Sx,Sy,Zx,Zy,size,temp_relu,clip_val) \
 DEQUANTIZE(x, temp_relu, Sx, Zx, size) \
 for(int i=0; i<size; i++) { \
     if(temp_relu[i] < 0) { \
         temp_relu[i] = 0; \
     } \
 } \
-QUANTIZE(temp_relu, y, Sy, Zy, size)
+QUANTIZE(temp_relu, y, Sy, Zy, size, clip_val)
 
 #define TRANSPOSE(rows,cols,matrix,type) \
 { \

@@ -600,17 +600,14 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     data_fc2Add_q = (FC2ADD_TYPE*) malloc(sizeof(FC2ADD_TYPE) * size_fc2Add);
     QADD(size_fc2Add, data_fc2MatMul_q, data_fc2_bias_q, data_fc2Add_q, 
         FC2MATMUL_S, FC2_BIAS_S, FC2ADD_S, FC2MATMUL_Z, FC2_BIAS_Z, FC2ADD_Z, FC2ADD_NBITS)
-    PRINT_DEBUG_INFO(data_fc2Add_q, 0, 5, 0, 400, int, "%d ", "\n")
     
-    /*data_relu_q = (RELU_TYPE*) malloc(sizeof(RELU_TYPE) * size_relu);
-    QRELU(data_fc2Add_q, data_relu_q, FC2ADD_S, RELU_S, FC2ADD_Z, RELU_Z, size_relu, temp_relu)
+    data_relu_q = (RELU_TYPE*) malloc(sizeof(RELU_TYPE) * size_relu);
+    QRELU(data_fc2Add_q, data_relu_q, FC2ADD_S, RELU_S, FC2ADD_Z, RELU_Z, size_relu, temp_relu, RELU_NBITS)
 
     data_fc3MatMul_q = (FC3MATMUL_TYPE*) malloc(sizeof(FC3MATMUL_TYPE*) * size_fc3MatMul);
     QMATMUL(600, 600, data_onnx__MatMul_208_q, data_relu_q, data_fc3MatMul_q, 
         ONNX__MATMUL_208_S,RELU_S,FC3MATMUL_S,
-        ONNX__MATMUL_208_Z,RELU_Z,FC3MATMUL_Z, FC3MATMUL_TYPE)
-
-    PRINT_TENSOR(data_fc3MatMul_q, 0, 10, "%d ", "\n")
-    PRINT_TENSOR_SUM(data_fc3MatMul_q, 600, int, "%d\n")*/
+        ONNX__MATMUL_208_Z,RELU_Z,FC3MATMUL_Z, FC3MATMUL_TYPE, FC3MATMUL_NBITS)
     
+    PRINT_DEBUG_INFO(data_fc3MatMul_q, 0, 5, 0, 400, int, "%d ", "\n")
 }
