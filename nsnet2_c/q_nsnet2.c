@@ -420,6 +420,9 @@ void free_nsnet2() {
     free(data_fc4Add_q);
     free(data_sigmoid_q);
     free(data_output);
+    free(temp_sigmoid_x);
+    free(temp_sigmoid_y);
+    free(temp_relu);
 }
 
 int read_weights(const char* weights_path, const char* weights_name, float** data, int* size) {
