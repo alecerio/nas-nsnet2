@@ -367,11 +367,59 @@ void free_nsnet2() {
     free(data_gru1_a__q);
     free(data_gru1_a_q);
     free(data_gru1_b__q);
-
-
-    //free(data_fc3_bias);
-    //free(data_fc4_bias);
-    //free(data_onnx__GRU_184);
+    free(data_gru1_b_q);
+    free(data_gru1_c__q);
+    free(data_gru1_c_q);
+    free(data_gru1_d__q);
+    free(data_gru1_d_q);
+    free(data_gru1_e__q);
+    free(data_gru1_e_q);
+    free(data_gru1_f__q);
+    free(data_gru1_f_q);
+    free(data_gru1_r__q);
+    free(data_gru1_r_q);
+    free(data_gru1_z__q);
+    free(data_gru1_z_q);
+    free(data_gru1_n1_q);
+    free(data_gru1_n2_q);
+    free(data_gru1_n_q);
+    free(data_gru1_hn1_q);
+    free(data_gru1_hn2_q);
+    free(data_gru1_hn3_q);
+    free(data_rnn1gru_q);
+    free(data_gru2_a__q);
+    free(data_gru2_a_q);
+    free(data_gru2_b__q);
+    free(data_gru2_b_q);
+    free(data_gru2_c__q);
+    free(data_gru2_c_q);
+    free(data_gru2_d__q);
+    free(data_gru2_d_q);
+    free(data_gru2_e__q);
+    free(data_gru2_e_q);
+    free(data_gru2_f__q);
+    free(data_gru2_f_q);
+    free(data_gru2_r__q);
+    free(data_gru2_r_q);
+    free(data_gru2_z__q);
+    free(data_gru2_z_q);
+    free(data_gru2_n1_q);
+    free(data_gru2_n2_q);
+    free(data_gru2_n_q);
+    free(data_gru2_hn1_q);
+    free(data_gru2_hn2_q);
+    free(data_gru2_hn3_q);
+    free(data_rnn2gru_q);
+    free(data_fc2MatMul_q);
+    free(data_fc2Add_q);
+    free(data_relu_q);
+    free(data_fc3MatMul_q);
+    free(data_fc3Add_q);
+    free(data_relu_1_q);
+    free(data_fc4MatMul_q);
+    free(data_fc4Add_q);
+    free(data_sigmoid_q);
+    free(data_output);
 }
 
 int read_weights(const char* weights_path, const char* weights_name, float** data, int* size) {
