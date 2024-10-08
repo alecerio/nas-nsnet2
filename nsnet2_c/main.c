@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 #include "q_nsnet2.h"
 
 static float x[257] = {
@@ -275,6 +276,7 @@ static float h2[400] = {
    -1.15681870e-03, -1.76599598e-03, -2.53795087e-03, -3.34366305e-05,
 };
 
+#define ITERS (10000)
 
 int main() {
     int flag;
@@ -284,7 +286,21 @@ int main() {
         printf("Error in nsnet2 initialization\n");
         return -1;
     }
-    run_nsnet2(x, h1, h2);
+
+    clock_t start, end;
+    double cpu_time;
+    
+    start = clock();
+    for(int i=0; i<ITERS; i++) {
+        run_nsnet2(x, h1, h2);
+    }
+    end = clock();
+
+    cpu_time = ((double) (end - start)) / CLOCKS_PER_SEC;
+    cpu_time /= ITERS;
+    //printf("average cpu time: %.20f\n", cpu_time);
+    printf("%.20f\n", cpu_time);
+
     free_nsnet2();
     return 0;
 }
