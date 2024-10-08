@@ -5,7 +5,8 @@ def compute_inference_time(calib, root_path, build_path):
     _generate_nsnet2_mpq_file(calib, build_path)
     _copy_c_files_to_build(root_path, build_path)
     inference_time =_compile_c_and_run(build_path)
-    return inference_time
+    normalized = _normalize_matric(inference_time)
+    return normalized
 
 def _compile_c_and_run(build_path):
     result = subprocess.run(['gcc', '-o', 'nsnet2', 'main.c', 'npy_parser.c', 'q_nsnet2.c', '-lm'], cwd=build_path, capture_output=True, text=True)
@@ -70,3 +71,8 @@ def _end_header_file():
     code = "\n\n"
     code += "#endif // __MPQ__"
     return code
+
+def _normalize_matric(inference_time):
+    inference_time_i8 = 0.0055203006
+    inference_time_i32 = 0.006416350799999999
+    return (inference_time - inference_time_i8) / (inference_time_i32 - inference_time_i8)
