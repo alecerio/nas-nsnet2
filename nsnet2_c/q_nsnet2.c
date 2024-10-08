@@ -725,5 +725,5 @@ void run_nsnet2(float* x, float* h1, float* h2) {
     
     DEQUANTIZE(data_sigmoid_q, data_output, SIGMOID_S, SIGMOID_Z, size_output)
 
-    PRINT_DEBUG_INFO(data_output, 0, 5, 0, 257, float, "%f ", "\n")
+    //PRINT_DEBUG_INFO(data_output, 0, 5, 0, 257, float, "%f ", "\n")
 }
