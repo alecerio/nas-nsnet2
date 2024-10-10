@@ -73,6 +73,6 @@ def _end_header_file():
     return code
 
 def _normalize_matric(inference_time):
-    inference_time_i8 = 0.0055203006
-    inference_time_i32 = 0.006416350799999999
+    inference_time_i8 = 0.0069381173
+    inference_time_i32 = 0.0074065909
     return (inference_time - inference_time_i8) / (inference_time_i32 - inference_time_i8)
