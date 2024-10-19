@@ -3,6 +3,7 @@ from nsnet2.pytorch.nsnet2_q.nsnet2_quantized import Q_NsNet2_npy
 from objective_function.inference_time.compute_inference_time import compute_inference_time
 from objective_function.memory_footprint.compute_memory_footprint import compute_memory_footprint
 from objective_function.pesq.compute_pesq import compute_pesq
+from objective_function.objf.compute_objective_function import compute_objective_function
 import numpy as np
 import torch
 
@@ -21,13 +22,9 @@ yq = quantized(x, h1, h2)
 
 ref_path = '/home/alessandro/Desktop/nas-nsnet2/examples/pesq/reference2.wav'
 deg_path = '/home/alessandro/Desktop/nas-nsnet2/examples/pesq/degradated2.wav'
-norm_pesq = compute_pesq(ref_path, deg_path, quantized)
-print(f"normalized pesq: {norm_pesq}")
-
 root_path = '/home/alessandro/Desktop/nas-nsnet2/'
 build_path = '/home/alessandro/Desktop/build_nsnet2_nas/'
-norm_inference_time = compute_inference_time(quantized.calib, root_path, build_path)
-print(f"normalized inference time: {norm_inference_time}")
-
-norm_memory_footprint = compute_memory_footprint(mpq_config)
-print(f"normalized memory footprint: {norm_memory_footprint}")
+[pesq_metric, inference_metric, memory_metric] = compute_objective_function(mpq_config, numpy_weights_path, ref_path, deg_path, root_path, build_path)
+print(f"normalized pesq: {pesq_metric}")
+print(f"normalized inference time: {inference_metric}")
+print(f"normalized memory footprint: {memory_metric}")
