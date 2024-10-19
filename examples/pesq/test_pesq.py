@@ -45,5 +45,5 @@ print(deg.shape)
 print(reconstructed.shape)
 sf.write('rec.wav', reconstructed, sr)
 
-score = pesq(ref, deg, sr)
+score = pesq(ref, reconstructed, sr)
 print(score)

@@ -138,26 +138,26 @@ class NsNet2_npy(torch.nn.Module):
         fc4Add = np.add(fc4MatMul, self.fc4bias)
         sigmoid = 1 / (1 + np.exp(-fc4Add))
 
-        return sigmoid
+        return [sigmoid, rnn1GRU, rnn2GRU]
 
 class NsNet2(torch.nn.Module):
-    def __init__(self):
+    def __init__(self, torch_weights_path):
         super(NsNet2, self).__init__()
 
-        self.onnxMatMul_166 = torch.load('tensor_onnxMatMul_166.pt').transpose(0, 1)
-        self.fc1bias = torch.load('tensor_fc1bias.pt')
+        self.onnxMatMul_166 = torch.load(torch_weights_path + 'tensor_onnxMatMul_166.pt').transpose(0, 1)
+        self.fc1bias = torch.load(torch_weights_path + 'tensor_fc1bias.pt')
 
-        self.onnxGRU_184 = torch.load('tensor_onnxGRU_184.pt')
+        self.onnxGRU_184 = torch.load(torch_weights_path + 'tensor_onnxGRU_184.pt')
         self.Wiz_1 = self.onnxGRU_184[:,:400,:]
         self.Wir_1 = self.onnxGRU_184[:,400:800,:]
         self.Win_1 = self.onnxGRU_184[:,800:,:]
 
-        self.onnxGRU_185 = torch.load('tensor_onnxGRU_185.pt')
+        self.onnxGRU_185 = torch.load(torch_weights_path + 'tensor_onnxGRU_185.pt')
         self.Whz_1 = self.onnxGRU_185[:,:400,:]
         self.Whr_1 = self.onnxGRU_185[:,400:800,:]
         self.Whn_1 = self.onnxGRU_185[:,800:,:]
 
-        self.onnxGRU_186 = torch.load('tensor_onnxGRU_186.pt')
+        self.onnxGRU_186 = torch.load(torch_weights_path + 'tensor_onnxGRU_186.pt')
         self.biz_1 = self.onnxGRU_186[:,:400]
         self.bir_1 = self.onnxGRU_186[:,400:800]
         self.bin_1 = self.onnxGRU_186[:,800:1200]
@@ -165,17 +165,17 @@ class NsNet2(torch.nn.Module):
         self.bhr_1 = self.onnxGRU_186[:,1600:2000]
         self.bhn_1 = self.onnxGRU_186[:,2000:]
 
-        self.onnxGRU_204 = torch.load('tensor_onnxGRU_204.pt')
+        self.onnxGRU_204 = torch.load(torch_weights_path + 'tensor_onnxGRU_204.pt')
         self.Wiz_2 = self.onnxGRU_204[:,:400,:]
         self.Wir_2 = self.onnxGRU_204[:,400:800,:]
         self.Win_2 = self.onnxGRU_204[:,800:,:]
 
-        self.onnxGRU_205 = torch.load('tensor_onnxGRU_205.pt')
+        self.onnxGRU_205 = torch.load(torch_weights_path + 'tensor_onnxGRU_205.pt')
         self.Whz_2 = self.onnxGRU_205[:,:400,:]
         self.Whr_2 = self.onnxGRU_205[:,400:800,:]
         self.Whn_2 = self.onnxGRU_205[:,800:,:]
 
-        self.onnxGRU_206 = torch.load('tensor_onnxGRU_206.pt')
+        self.onnxGRU_206 = torch.load(torch_weights_path + 'tensor_onnxGRU_206.pt')
         self.biz_2 = self.onnxGRU_206[:,:400]
         self.bir_2 = self.onnxGRU_206[:,400:800]
         self.bin_2 = self.onnxGRU_206[:,800:1200]
@@ -183,14 +183,14 @@ class NsNet2(torch.nn.Module):
         self.bhr_2 = self.onnxGRU_206[:,1600:2000]
         self.bhn_2 = self.onnxGRU_206[:,2000:]
 
-        self.onnxMatMul_207 = torch.load('tensor_onnxMatMul_207.pt').transpose(0, 1)
-        self.fc2bias = torch.load('tensor_fc2bias.pt')
+        self.onnxMatMul_207 = torch.load(torch_weights_path + 'tensor_onnxMatMul_207.pt').transpose(0, 1)
+        self.fc2bias = torch.load(torch_weights_path + 'tensor_fc2bias.pt')
 
-        self.onnxMatMul_208 = torch.load('tensor_onnxMatMul_208.pt').transpose(0, 1)
-        self.fc3bias = torch.load('tensor_fc3bias.pt')
+        self.onnxMatMul_208 = torch.load(torch_weights_path + 'tensor_onnxMatMul_208.pt').transpose(0, 1)
+        self.fc3bias = torch.load(torch_weights_path + 'tensor_fc3bias.pt')
 
-        self.onnxMatMul_209 = torch.load('tensor_onnxMatMul_209.pt').transpose(0, 1)
-        self.fc4bias = torch.load('tensor_fc4bias.pt')
+        self.onnxMatMul_209 = torch.load(torch_weights_path + 'tensor_onnxMatMul_209.pt').transpose(0, 1)
+        self.fc4bias = torch.load(torch_weights_path + 'tensor_fc4bias.pt')
 
     def forward(self, x, h1, h2):
         torch.set_printoptions(precision=8)
@@ -276,8 +276,8 @@ class NsNet2(torch.nn.Module):
         fc4MatMul = torch.matmul(self.onnxMatMul_209, relu_1)
         fc4Add = torch.add(fc4MatMul, self.fc4bias)
         sigmoid = torch.sigmoid(fc4Add)
-
-        return sigmoid
+        
+        return [sigmoid, rnn1GRU, rnn2GRU]
 
 
 #nsnet = NsNet2()

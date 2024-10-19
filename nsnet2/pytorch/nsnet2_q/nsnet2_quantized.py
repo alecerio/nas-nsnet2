@@ -362,16 +362,20 @@ class Q_NsNet2_npy(torch.nn.Module):
         # sigmoid
         sigmoid_q = self._quantize_sigmoid(fc4Add_q, 'fc4Add', 'sigmoid')
         sigmoid = 1 / (1 + np.exp(-fc4Add))
-        self._compare(sigmoid, sigmoid_q, self.calib['sigmoid'], "output")
+        #self._compare(sigmoid, sigmoid_q, self.calib['sigmoid'], "output")
 
         # output
         outc = self.calib['sigmoid']
         output =self._dequantize(sigmoid_q, outc.S(), outc.Z())
+        h1nc = self.calib['rnn1GRU']
+        h1n = self._dequantize(rnn1GRU_q, h1nc.S(), h1nc.Z())
+        h2nc = self.calib['rnn2GRU']
+        h2n = self._dequantize(rnn2GRU_q, h2nc.S(), h2nc.Z())
 
-        self._print_debug_info(output, 'sigmoid', 0, 5, 0, 257)
+        #self._print_debug_info(output, 'sigmoid', 0, 5, 0, 257)
         #self._comprare_c_with_python('gru1_f_q.txt', gru1_f_q.flatten())
 
-        return output
+        return [output, h1n, h2n]
     
     def _quantize(self, tensor_fp32, S, z, n_bits):
         q = np.floor(tensor_fp32 / S) + z
