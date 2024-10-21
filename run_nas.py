@@ -39,7 +39,7 @@ def callback_function(algorithm):
         for var, metrics in zip(mpq_config, pareto_front):
             writer.writerow(np.concatenate((var, metrics)))
 
-population_size = 3
+population_size = 25
 generations = 50
 
 algorithm = NSGA2(
