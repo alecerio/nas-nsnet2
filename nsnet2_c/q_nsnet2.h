@@ -241,7 +241,7 @@ static float* data_Whr_2;
 static float* data_Whn_2;
 static WHZ_2_TYPE* data_Whz_2_q;
 static WHR_2_TYPE* data_Whr_2_q;
-static WHR_2_TYPE* data_Whn_2_q;
+static WHN_2_TYPE* data_Whn_2_q;
 static int size_onnx__GRU_205;
 
 static float* data_onnx__GRU_206;
@@ -371,7 +371,7 @@ static int size_gru2_c = 400;
 static GRU2_D__TYPE* data_gru2_d__q;
 static int size_gru2_d_ = 400;
 
-static GRU2_D__TYPE* data_gru2_d_q;
+static GRU2_D_TYPE* data_gru2_d_q;
 static int size_gru2_d = 400;
 
 static GRU2_E__TYPE* data_gru2_e__q;

@@ -13,6 +13,7 @@ def _compile_c_and_run(build_path):
     print(result.returncode)
     execute = subprocess.run(['./nsnet2'], cwd=build_path, capture_output=True, text=True)
     stdout = execute.stdout
+    print(f"stdout: {stdout}")
     inference_time = float(stdout)
     return inference_time
 
@@ -73,6 +74,6 @@ def _end_header_file():
     return code
 
 def _normalize_matric(inference_time):
-    inference_time_i8 = 0.0055992754
-    inference_time_i32 = 0.0058908421
+    inference_time_i8 = 0.005 #0.0055992754
+    inference_time_i32 = 0.008 #0.0058908421
     return (inference_time - inference_time_i8) / (inference_time_i32 - inference_time_i8)

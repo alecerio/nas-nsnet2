@@ -276,7 +276,7 @@ static float h2[400] = {
    -1.15681870e-03, -1.76599598e-03, -2.53795087e-03, -3.34366305e-05,
 };
 
-#define ITERS (10000)
+#define ITERS (1000)
 
 int main() {
     int flag;
@@ -299,7 +299,8 @@ int main() {
     cpu_time = ((double) (end - start)) / CLOCKS_PER_SEC;
     cpu_time /= ITERS;
     //printf("average cpu time: %.20f\n", cpu_time);
-    printf("%.20f\n", cpu_time);
+    printf("%.20f", cpu_time);
+    fflush(stdout);
 
     free_nsnet2();
     return 0;
