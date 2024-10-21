@@ -28,13 +28,18 @@ def objective_function(x, out, *args, **kwargs):
 
 def callback_function(algorithm):
     pareto_front = algorithm.opt.get("F")
+    mpq_config = algorithm.opt.get("X")
     gen_number = len(algorithm.history)
     with open(f'pareto_gen_{gen_number}.csv', mode='w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(["PESQ", "Inference Time", "Memory Footprint"]) 
-        writer.writerows(np.column_stack([-pareto_front[:, 0], pareto_front[:, 1], pareto_front[:, 2]]))
+        
+        header = [f'Var{i+1}' for i in range(mpq_config.shape[1])] + ["PESQ", "Inference Time", "Memory Footprint"]
+        writer.writerow(header)
 
-population_size = 25
+        for var, metrics in zip(mpq_config, pareto_front):
+            writer.writerow(np.concatenate((var, metrics)))
+
+population_size = 3
 generations = 50
 
 algorithm = NSGA2(
