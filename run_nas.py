@@ -52,29 +52,3 @@ algorithm = NSGA2(
 
 genetic = Genetic3D(objective_function, 93, 0, 0, 2, algorithm, callback_function)
 genetic.run(generations)
-
-fig = plt.figure(figsize=(10, 6))
-ax = fig.add_subplot(111, projection='3d')
-
-for i in range(0, generations):
-    pareto_front = np.loadtxt(f'pareto_gen_{i}.csv', delimiter=',', skiprows=1)  # Skip header
-    ax.scatter(pareto_front[:, 0], pareto_front[:, 1], pareto_front[:, 2], label=f'Gen {i}', alpha=0.3)
-
-ax.set_title("Pareto Front Evolution")
-ax.set_xlabel("PESQ normalized")
-ax.set_ylabel("Inference Time normalized")
-ax.set_zlabel("Memory Footprint normalized")
-
-plt.legend(["Final generation"])
-
-plt.show()
-
-
-#metric_x = 'pesq'
-#metric_y = 'inference time'
-#metric_z = 'memory footprint'
-#genetic.plot_pareto_optimal_3D()
-#genetic.plot_pareto_optimal_2D_12(metric_x, metric_y)
-#genetic.plot_pareto_optimal_2D_13(metric_x, metric_z)
-#genetic.plot_pareto_optimal_2D_23(metric_y, metric_z)
-#genetic.print_pareto_optimal()
