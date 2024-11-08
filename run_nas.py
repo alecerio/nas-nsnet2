@@ -7,8 +7,8 @@ from pymoo.operators.sampling.rnd import IntegerRandomSampling
 from nas.genetic3D import Genetic3D
 from objective_function.objf.compute_objective_function import compute_objective_function
 import csv
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
+#import matplotlib.pyplot as plt
+#from mpl_toolkits.mplot3d import Axes3D
 
 def objective_function(x, out, *args, **kwargs):
     x = x.astype(np.int32)
