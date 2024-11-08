@@ -25,17 +25,23 @@ The repository is divided into the following sections:
 
 ## Setup
 
-To setup the repository, install the conda environment:
+To setup the repository, first go to the repository top folder:
 
 ```bash
 cd /path/to/repository/
-conda env create -f environment.yml
 ```
 
-Then, activate the conda environment:
+Create and activate the environment:
 
 ```bash
-conda activate nas_nsnet2_env
+python3 -m venv nas_nsnet2_env
+source nas_nsnet2_env/bin/activate
+```
+
+Install the requirements:
+
+```bash
+pip install -r requirements.txt
 ```
 
 ## Usage
