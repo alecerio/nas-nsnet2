@@ -1,7 +1,6 @@
 import soundfile as sf
 from pypesq import pesq
 import torch
-import onnxruntime as ort
 import numpy as np
 
 def compute_pesq(ref_wav_path, deg_wav_path, nsnet2):
@@ -14,7 +13,7 @@ def compute_pesq(ref_wav_path, deg_wav_path, nsnet2):
     hop_length = int(window_size * (1 - overlap))
     stft_result = torch.stft(waveform, n_fft=window_size, hop_length=hop_length, win_length=window_size, return_complex=True)
 
-    output = np.zeros(stft_result.shape).astype(np.cfloat)
+    output = np.zeros(stft_result.shape).astype(np.complex128)
     output = torch.from_numpy(output)
     h1 = np.zeros([1, 1, 400]).astype(np.float32)
     h2 = np.zeros([1, 1, 400]).astype(np.float32)
