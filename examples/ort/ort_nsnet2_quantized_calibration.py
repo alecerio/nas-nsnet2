@@ -11,9 +11,9 @@ model = onnx.load(model_path)
 def get_calibration_data():
     calibration_data = []
     
-    input1_cal = np.load('/media/alessandro/SecondDisk1/out_calibration/x.npy')
-    input2_cal = np.load('/media/alessandro/SecondDisk1/out_calibration/h1.npy')
-    input3_cal = np.load('/media/alessandro/SecondDisk1/out_calibration/h2.npy')
+    input1_cal = np.load('anonimized-for-double-blind-review/out_calibration/x.npy')
+    input2_cal = np.load('anonimized-for-double-blind-review/out_calibration/h1.npy')
+    input3_cal = np.load('anonimized-for-double-blind-review/out_calibration/h2.npy')
     num_calibration_samples = int(input3_cal.shape[0] / 400)
     num_calibration_samples = 10
 
@@ -45,15 +45,15 @@ class MyCalibrationDataReader(CalibrationDataReader):
         return None
 
 calibration_data_reader = MyCalibrationDataReader()
-quantized_model_path = 'quantized_model_int8.onnx'
+quantized_model_path = 'quantized_model_int16.onnx'
 
-quant_format = QuantFormat.QOperator
+quant_format = QuantFormat.QDQ
 quantized_model = quantize_static(
     model_input=model_path,
     model_output=quantized_model_path,
     calibration_data_reader=calibration_data_reader,        
-    weight_type=QuantType.QInt8,
-    activation_type=QuantType.QInt8,
+    weight_type=QuantType.QInt16,
+    activation_type=QuantType.QInt16,
     quant_format=quant_format,
     #op_types_to_quantize=op_types_to_quantize,
 )

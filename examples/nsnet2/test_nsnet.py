@@ -4,8 +4,8 @@ from nsnet2.pytorch.nsnet2.nsnet2 import NsNet2_npy, NsNet2
 from nsnet2.pytorch.nsnet2_ort.nsnet2_ort import NsNetORT
 import torch.onnx
 
-numpy_weights_path = '/home/alessandro/Desktop/nas-nsnet2/nsnet2/pytorch/numpy_weights/'
-onnx_model_path = '/home/alessandro/Desktop/nas-nsnet2/nsnet2/pytorch/nsnet2_ort/nsnet2.onnx'
+numpy_weights_path = 'anonimized-for-double-blind-review/nas-nsnet2/nsnet2/pytorch/numpy_weights/'
+onnx_model_path = 'anonimized-for-double-blind-review/nas-nsnet2/nsnet2/pytorch/nsnet2_ort/nsnet2.onnx'
 
 result = True
 for i in range(0, 100):
@@ -31,7 +31,7 @@ for i in range(0, 100):
     print(f"{diff} -> {test_res}")
 
     if i == 0:
-        nsnet_torch = NsNet2('/home/alessandro/Desktop/nas-nsnet2/nsnet2/pytorch/pytorch_weights/')
+        nsnet_torch = NsNet2('anonimized-for-double-blind-review/nas-nsnet2/nsnet2/pytorch/pytorch_weights/')
         torch.onnx.export(
             nsnet_torch,
             (x, h1, h2),

@@ -15,11 +15,11 @@ def objective_function(x, out, *args, **kwargs):
     print(f"x: {x}")
     mapped_x = np.choose(x, [8, 16, 32])
     print(f"mapped x: {mapped_x}")
-    numpy_weights_path = '/home/alessandro/Desktop/nas-nsnet2/nsnet2/pytorch/numpy_weights/'
-    ref_path = '/home/alessandro/Desktop/nas-nsnet2/examples/pesq/reference2.wav'
-    deg_path = '/home/alessandro/Desktop/nas-nsnet2/examples/pesq/degradated2.wav'
-    root_path = '/home/alessandro/Desktop/nas-nsnet2/'
-    build_path = '/home/alessandro/Desktop/build_nsnet2_nas/'
+    numpy_weights_path = 'anonimized-for-double-blind-review/nas-nsnet2/nsnet2/pytorch/numpy_weights/'
+    ref_path = 'anonimized-for-double-blind-review/nas-nsnet2/examples/pesq/reference2.wav'
+    deg_path = 'anonimized-for-double-blind-review/Desktop/nas-nsnet2/examples/pesq/degradated2.wav'
+    root_path = 'anonimized-for-double-blind-review/Desktop/nas-nsnet2/'
+    build_path = 'anonimized-for-double-blind-review/Desktop/build_nsnet2_nas/'
     [pesq_metric, inference_metric, memory_metric] = compute_objective_function(mapped_x, numpy_weights_path, ref_path, deg_path, root_path, build_path)
     print(f"normalized pesq: {pesq_metric}")
     print(f"normalized inference time: {inference_metric}")

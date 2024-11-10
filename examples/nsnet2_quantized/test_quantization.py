@@ -12,7 +12,7 @@ x = torch.randn(1, 1, 257).numpy()*0.001
 h1 = torch.randn(1, 1, 400).numpy()*0.001
 h2 = torch.randn(1, 1, 400).numpy()*0.001
 
-numpy_weights_path = '/home/alessandro/Desktop/nas-nsnet2/nsnet2/pytorch/numpy_weights/'
+numpy_weights_path = 'anonimized-for-double-blind-review/nas-nsnet2/nsnet2/pytorch/numpy_weights/'
 baseline = NsNet2_npy(numpy_weights_path)
 y = baseline(x, h1, h2)
 
@@ -20,10 +20,10 @@ mpq_config = np.ones(93)*32
 quantized = Q_NsNet2_npy(numpy_weights_path, mpq_config)
 yq = quantized(x, h1, h2)
 
-ref_path = '/home/alessandro/Desktop/nas-nsnet2/examples/pesq/reference2.wav'
-deg_path = '/home/alessandro/Desktop/nas-nsnet2/examples/pesq/degradated2.wav'
-root_path = '/home/alessandro/Desktop/nas-nsnet2/'
-build_path = '/home/alessandro/Desktop/build_nsnet2_nas/'
+ref_path = 'anonimized-for-double-blind-review/nas-nsnet2/examples/pesq/reference2.wav'
+deg_path = 'anonimized-for-double-blind-review/nas-nsnet2/examples/pesq/degradated2.wav'
+root_path = 'anonimized-for-double-blind-review/nas-nsnet2/'
+build_path = 'anonimized-for-double-blind-review/build_nsnet2_nas/'
 [pesq_metric, inference_metric, memory_metric] = compute_objective_function(mpq_config, numpy_weights_path, ref_path, deg_path, root_path, build_path)
 print(f"normalized pesq: {pesq_metric}")
 print(f"normalized inference time: {inference_metric}")

@@ -280,7 +280,7 @@ static float h2[400] = {
 
 int main() {
     int flag;
-    char* weights_path = "/home/alessandro/Desktop/nas-nsnet2/nsnet2/pytorch/numpy_weights/";
+    char* weights_path = "anonimized-for-double-blind-review/nas-nsnet2/nsnet2/pytorch/numpy_weights/";
     flag = setup_nsnet2(weights_path);
     if(flag != 0) {
         printf("Error in nsnet2 initialization\n");
